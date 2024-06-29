@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 
 @Entity(tableName = MusicScoreBooksContract.TABLE_BOOK)
-data class Book (
+data class BookEntity (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_BOOK_COLUMN_BOOK_ID)
     val bookId: Int,

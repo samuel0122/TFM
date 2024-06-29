@@ -41,6 +41,7 @@ interface ImagenesCargadasDao {
     suspend fun getRowCount(): Int
 
     // Imagen en la posicion indicada
-    @Query("SELECT * FROM ${ImagenesCargadasContract.TABLE_IMAGENES_CARGADAS} LIMIT 1 OFFSET :position")
-    suspend fun getImageAtPosition(position: Int): ImagenesCargadas?
+    @Query("SELECT * FROM ${ImagenesCargadasContract.TABLE_IMAGENES_CARGADAS} " +
+            "WHERE ${ImagenesCargadasContract.COLUMN_ID} = :pId")
+    suspend fun getImageById(pId: Int): ImagenesCargadas?
 }

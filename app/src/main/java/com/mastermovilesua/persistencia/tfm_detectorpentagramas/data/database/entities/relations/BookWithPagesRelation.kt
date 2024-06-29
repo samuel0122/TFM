@@ -3,15 +3,15 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.e
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.Book
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.Page
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.BookEntity
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.PageEntity
 
-data class BookWithPages (
-    @Embedded val book: Book,
+data class BookWithPagesRelation (
+    @Embedded val book: BookEntity,
     @Relation(
-        entity = Page::class,
+        entity = PageEntity::class,
         parentColumn = MusicScoreBooksContract.TABLE_BOOK_COLUMN_BOOK_ID,
         entityColumn = MusicScoreBooksContract.TABLE_PAGE_COLUMN_BOOK_ID
     )
-    val pages: List<Page>
+    val pages: List<PageEntity>
 )

@@ -7,17 +7,17 @@ import androidx.room.RoomDatabase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.ImagenesCargadasDao
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.MusicScoreBooksDao
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.Book
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.Box
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.BookEntity
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.BoxEntity
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.ImagenesCargadas
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.Page
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.PageEntity
 
 @Database(
     version = MusicScoreBooksContract.DATABASE_VERSION,
     entities = [
-        Book::class,
-        Page::class,
-        Box::class,
+        BookEntity::class,
+        PageEntity::class,
+        BoxEntity::class,
         ImagenesCargadas::class
     ]
 )

@@ -1,6 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model
 
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.Book
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.BookEntity
 
 
 data class BookItem (
@@ -10,4 +10,4 @@ data class BookItem (
     var dataset: Int,
 )
 
-fun Book.toDomain() = BookItem(bookId, title, description, dataset)
+fun BookEntity.toDomain() = BookItem(bookId, title, description, dataset)

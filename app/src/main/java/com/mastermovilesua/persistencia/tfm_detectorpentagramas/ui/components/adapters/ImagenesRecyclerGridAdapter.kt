@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.adapters
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters
 
 import android.graphics.Rect
 import android.net.Uri

@@ -14,7 +14,7 @@ class ImagenesRepository  @Inject constructor(
     }
 
     suspend fun getImagenFromDatabase(id: Int): ImagenesItem {
-        val imagen = imagenesDao.getImageAtPosition(id)
+        val imagen = imagenesDao.getImageById(id)
 
         return imagen?.toDomain() ?: ImagenesItem(0, "")
     }

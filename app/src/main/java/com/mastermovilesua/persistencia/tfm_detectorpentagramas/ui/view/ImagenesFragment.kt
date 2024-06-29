@@ -13,12 +13,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.adapters.GridSpacingItemDecoration
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.adapters.ImagenesRecyclerGridAdapter
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.adapters.OnGridItemClickAction
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.GridSpacingItemDecoration
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.ImagenesRecyclerGridAdapter
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.OnGridItemClickAction
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.ImagenesCargadas
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ActivityMainBinding
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentImagenesBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.toDomain
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,14 +28,13 @@ import java.lang.ClassCastException
 @AndroidEntryPoint
 class ImagenesFragment: Fragment() {
     private val viewModel: MainViewModel by viewModels()
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: FragmentImagenesBinding
 
     private lateinit var onGridItemClickAction: OnGridItemClickAction
 
     private lateinit var recyclerGridAdapter: ImagenesRecyclerGridAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = ActivityMainBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -50,6 +50,7 @@ class ImagenesFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = FragmentImagenesBinding.inflate(layoutInflater)
 
         initImagesView()
         initListeners()

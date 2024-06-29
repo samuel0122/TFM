@@ -9,13 +9,13 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.co
 @Entity(
     tableName = MusicScoreBooksContract.TABLE_BOX,
     foreignKeys = [ForeignKey(
-        entity = Page::class,
+        entity = PageEntity::class,
         parentColumns = [MusicScoreBooksContract.TABLE_PAGE_COLUMN_PAGE_ID],
         childColumns = [MusicScoreBooksContract.TABLE_BOX_COLUMN_PAGE_ID],
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class Box (
+data class BoxEntity (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_BOX_COLUMN_BOX_ID)
     val boxId: Int,

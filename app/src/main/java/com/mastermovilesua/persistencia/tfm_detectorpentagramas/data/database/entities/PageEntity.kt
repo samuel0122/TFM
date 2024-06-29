@@ -3,20 +3,19 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.e
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 
 @Entity(
     tableName = MusicScoreBooksContract.TABLE_PAGE,
     foreignKeys = [ForeignKey(
-        entity = Book::class,
+        entity = BookEntity::class,
         parentColumns = [MusicScoreBooksContract.TABLE_BOOK_COLUMN_BOOK_ID],
-        childColumns = [MusicScoreBooksContract.TABLE_BOOK_COLUMN_BOOK_ID],
+        childColumns = [MusicScoreBooksContract.TABLE_PAGE_COLUMN_BOOK_ID],
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class Page(
+data class PageEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_PAGE_COLUMN_PAGE_ID)
     val pageId: Int,
