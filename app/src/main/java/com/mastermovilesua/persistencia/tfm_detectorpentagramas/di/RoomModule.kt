@@ -24,8 +24,18 @@ object RoomModule {
     @Provides
     fun provideImagenesDao(db: AppDatabase) = db.imagenesCargadasDao()
 
+
     @Singleton
     @Provides
-    fun provideMusicScoreBooksDao(db: AppDatabase) = db.musicScoreBooksDao()
+    fun provideBookDao(db: AppDatabase) = db.bookDao()
 
+
+    @Singleton
+    @Provides
+    fun providePageDao(db: AppDatabase) = db.pageDao()
+
+
+    @Singleton
+    @Provides
+    fun provideBoxDao(db: AppDatabase) = db.boxDao()
 }

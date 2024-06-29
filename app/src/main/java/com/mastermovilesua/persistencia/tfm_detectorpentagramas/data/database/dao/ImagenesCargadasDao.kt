@@ -17,11 +17,11 @@ interface ImagenesCargadasDao {
 
     // INSERT
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertImagen(imagen: ImagenesCargadas)
+    suspend fun insertImagen(imagen: ImagenesCargadas): Long
 
     // UPDATE
     @Update
-    suspend fun updateImagen(imagen: ImagenesCargadas)
+    suspend fun updateImagen(imagen: ImagenesCargadas): Int
 
     @Query("UPDATE ${ImagenesCargadasContract.TABLE_IMAGENES_CARGADAS} " +
             "SET ${ImagenesCargadasContract.COLUMN_DIR_IMAGEN} = :pDirImagen " +
@@ -30,7 +30,10 @@ interface ImagenesCargadasDao {
 
     // DELETE
     @Delete
-    suspend fun deleteImagen(imagen: ImagenesCargadas)
+    suspend fun deleteImagen(imagen: ImagenesCargadas): Int
+
+    @Query("DELETE FROM ${ImagenesCargadasContract.TABLE_IMAGENES_CARGADAS}")
+    suspend fun deleteAll(): Int
 
     @Query("DELETE FROM ${ImagenesCargadasContract.TABLE_IMAGENES_CARGADAS} " +
             "WHERE ${ImagenesCargadasContract.COLUMN_ID} = :pId")

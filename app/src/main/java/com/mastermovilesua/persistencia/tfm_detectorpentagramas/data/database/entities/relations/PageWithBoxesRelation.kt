@@ -6,7 +6,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.co
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.BoxEntity
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.PageEntity
 
-data class PageWithBoxes (
+data class PageWithBoxesRelation (
     @Embedded val page: PageEntity,
     @Relation(
         entity = BoxEntity::class,

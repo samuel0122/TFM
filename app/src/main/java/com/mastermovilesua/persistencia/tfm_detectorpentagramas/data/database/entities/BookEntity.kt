@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 
 @Entity(tableName = MusicScoreBooksContract.TABLE_BOOK)
 data class BookEntity (
@@ -20,3 +21,5 @@ data class BookEntity (
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_BOOK_COLUMN_DATASET)
     var dataset: Int,
 )
+
+fun BookItem.toDatabase() = BookEntity(bookId, title, description, dataset)

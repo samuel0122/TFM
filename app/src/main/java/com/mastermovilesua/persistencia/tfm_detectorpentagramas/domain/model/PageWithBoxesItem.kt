@@ -1,10 +1,10 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model
 
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.relations.PageWithBoxes
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.relations.PageWithBoxesRelation
 
 data class PageWithBoxesItem(
     val page: PageItem,
     val boxes: List<BoxItem>
 )
 
-fun PageWithBoxes.toDomain() = PageWithBoxesItem(page.toDomain(), boxes.map { it.toDomain() })
+fun PageWithBoxesRelation.toDomain() = PageWithBoxesItem(page.toDomain(), boxes.map { it.toDomain() })
