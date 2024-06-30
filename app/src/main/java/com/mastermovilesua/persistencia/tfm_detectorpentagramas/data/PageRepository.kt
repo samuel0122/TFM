@@ -21,8 +21,11 @@ class PageRepository @Inject constructor(
         return pageDao.getPageWithBoxes(pageId)?.toDomain()
     }
 
-    suspend fun insertPage(bookId: Int, pageItem: PageItem): Boolean {
-        return pageDao.insertPage(pageItem.toDatabase(bookId)) > 0
+    /**
+     * @return ID of inserted Page.
+     */
+    suspend fun insertPage(bookId: Int, pageItem: PageItem): Int {
+        return pageDao.insertPage(pageItem.toDatabase(bookId)).toInt()
     }
 
     suspend fun updatePage(pageItem: PageItem): Boolean {

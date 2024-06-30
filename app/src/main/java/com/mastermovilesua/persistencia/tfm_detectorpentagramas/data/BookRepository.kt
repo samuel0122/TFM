@@ -18,8 +18,11 @@ class BookRepository @Inject constructor(
         return bookDao.getBookWithPages(bookId)?.toDomain()
     }
 
-    suspend fun insertBook(bookItem: BookItem): Boolean {
-        return bookDao.insertBook(bookItem.toDatabase()) > 0
+    /**
+     * @return ID of inserted Book.
+     */
+    suspend fun insertBook(bookItem: BookItem): Int {
+        return bookDao.insertBook(bookItem.toDatabase()).toInt()
     }
 
     suspend fun updateBook(bookItem: BookItem): Boolean {
