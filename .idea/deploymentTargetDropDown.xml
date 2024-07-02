@@ -2,7 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="BookDaoTest">
+        <State />
+      </entry>
+      <entry key="BoxDaoTest">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="deleteBook_whenDatabaseHasElements_bookExistsWithPages()">
+        <State />
+      </entry>
+      <entry key="getPageWithBoxes_whenDatabaseHasElements_pageExistsWithBoxes()">
+        <State />
+      </entry>
+      <entry key="insertPage_whenDatabaseHasElements_withCollision()">
         <State />
       </entry>
     </value>

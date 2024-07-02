@@ -8,12 +8,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.GridSpacingItemDecoration
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.ImagenesRecyclerGridAdapter
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.OnGridItemClickAction
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
@@ -21,6 +21,8 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.en
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ActivityMainBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentImagenesBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.toDomain
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.GridSpacingItemDecoration
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.QuantityDialog
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.ClassCastException
@@ -102,6 +104,12 @@ class ImagenesFragment: Fragment() {
 
     private fun onClickAddAction() {
         launchImagePicker()
+        /*
+        QuantityDialog { quantity ->
+            Toast.makeText(requireContext(), "Usted ingreso: $quantity", Toast.LENGTH_SHORT).show()
+        }
+        .show(parentFragmentManager, "dialog")
+         */
     }
 
     private fun launchImagePicker() {

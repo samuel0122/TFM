@@ -4,10 +4,10 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.en
 
 
 data class BookItem (
-    val bookId: Int,
-    val title: String,
+    val bookId: Int = 0,
+    var title: String,
     var description: String,
-    var dataset: Int,
+    var dataset: Int = 0,
 )
 
 fun BookEntity.toDomain() = BookItem(bookId, title, description, dataset)

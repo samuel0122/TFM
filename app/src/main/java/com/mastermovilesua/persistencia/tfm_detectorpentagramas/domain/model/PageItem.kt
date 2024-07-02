@@ -6,10 +6,10 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.co
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.PageEntity
 
 data class PageItem(
-    val pageId: Int,
+    val pageId: Int = 0,
     val imageUri: String,
-    var processed: Boolean,
-    var order: Int,
+    var processed: Boolean = false,
+    var order: Int = 0,
 )
 
 fun PageEntity.toDomain() = PageItem(pageId, imageUri, processed, order)

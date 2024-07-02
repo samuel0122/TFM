@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/booksListFragment">
+
+    <fragment
+        android:id="@+id/booksListFragment"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.BooksListFragment"
+        android:label="BooksListFragment" >
+        <action
+            android:id="@+id/action_booksListFragment_to_pagesListFragment"
+            app:destination="@id/pagesListFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_booksListFragment_to_editBookDialog"
+            app:destination="@id/editBookDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagesListFragment"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.PagesListFragment"
+        android:label="PagesListFragment" >
+        <action
+            android:id="@+id/action_pagesListFragment_to_pageDetailFragment"
+            app:destination="@id/pageDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="bookId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/pageDetailFragment"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.PageDetailFragment"
+        android:label="PageDetailFragment" >
+        <argument
+            android:name="pageId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_pageDetailFragment_to_quantityDialog"
+            app:destination="@id/quantityDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/quantityDialog"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.QuantityDialog"
+        android:label="QuantityDialog" />
+    <dialog
+        android:id="@+id/editBookDialog"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.EditBookDialog"
+        android:label="dialog_edit_book"
+        tools:layout="@layout/dialog_edit_book" >
+        <argument
+            android:name="bookId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </dialog>
+</navigation>

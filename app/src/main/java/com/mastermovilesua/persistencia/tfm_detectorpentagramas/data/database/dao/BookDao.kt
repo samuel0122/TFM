@@ -9,6 +9,7 @@ import androidx.room.Update
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.BookEntity
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.relations.BookWithPagesRelation
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BookDao {
@@ -16,7 +17,7 @@ interface BookDao {
      * @return List with all BookEntity.
      */
     @Query("SELECT * FROM ${MusicScoreBooksContract.TABLE_BOOK}")
-    suspend fun getAllBooks(): List<BookEntity>
+    fun getAllBooks(): Flow<List<BookEntity>>
 
     /**
      * @return BookEntity if exists.
