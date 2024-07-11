@@ -34,6 +34,9 @@
         <argument
             android:name="bookId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_pagesListFragment_to_addPageDialog"
+            app:destination="@id/addPageDialog" />
     </fragment>
     <fragment
         android:id="@+id/pageDetailFragment"
@@ -60,4 +63,23 @@
             app:argType="integer"
             android:defaultValue="0" />
     </dialog>
+    <dialog
+        android:id="@+id/addPageDialog"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.AddPageDialog"
+        android:label="AddPageDialog" >
+        <argument
+            android:name="bookId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_addPageDialog_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.AddPageCameraFragment"
+        android:label="CameraFragment" >
+        <argument
+            android:name="bookId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

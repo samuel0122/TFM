@@ -21,8 +21,8 @@ class BookRepository @Inject constructor(
     suspend fun getBook(bookId: Int): BookItem? =
         bookDao.getBook(bookId)?.toDomain()
 
-    suspend fun getBookWithPages(bookId: Int): BookWithPagesItem? =
-        bookDao.getBookWithPages(bookId)?.toDomain()
+    suspend fun getBookWithPages(bookId: Int): Flow<BookWithPagesItem> =
+        bookDao.getBookWithPages(bookId).map { it.toDomain() }
 
     /**
      * @return ID of inserted Book.

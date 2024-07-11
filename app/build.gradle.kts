@@ -109,6 +109,16 @@ dependencies {
     val navVersion = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+
+    // CameraX
+    val cameraXVersion = "1.3.4"
+    implementation("androidx.camera:camera-core:$cameraXVersion")
+    implementation("androidx.camera:camera-camera2:${cameraXVersion}")
+    implementation("androidx.camera:camera-lifecycle:${cameraXVersion}")
+    implementation("androidx.camera:camera-video:${cameraXVersion}")
+
+    implementation("androidx.camera:camera-view:${cameraXVersion}")
+    implementation("androidx.camera:camera-extensions:${cameraXVersion}")
 }
 
 kapt {

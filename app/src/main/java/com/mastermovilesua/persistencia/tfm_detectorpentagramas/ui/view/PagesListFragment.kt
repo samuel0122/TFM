@@ -5,21 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentBooksListBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPagesListBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.GridSpacingItemDecoration
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.BooksListAdapter
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.PagesGridAdapter
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.BooksListViewModel
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.PagesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -76,32 +69,8 @@ class PagesListFragment : Fragment() {
     }
 
     private fun onClickAddAction() {
-        launchImagePicker()
-        /*
-        QuantityDialog { quantity ->
-            Toast.makeText(requireContext(), "Usted ingreso: $quantity", Toast.LENGTH_SHORT).show()
-        }
-        .show(parentFragmentManager, "dialog")
-         */
+        findNavController().navigate(
+            PagesListFragmentDirections.actionPagesListFragmentToAddPageDialog(bookId = args.bookId)
+        )
     }
-
-    private fun launchImagePicker() {
-        pickImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
-
-    private val pickImage =
-        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                val imageCopyUri = SaveToMediaStore.saveImageToInternalStorage(requireContext(), uri)
-                viewModel.insertPage(PageItem(imageUri = imageCopyUri.toString()))
-            }
-        }
-
-    private val pickMultipleImage =
-        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
-            for (uri in uris) {
-                val imageCopyUri = SaveToMediaStore.saveImageToInternalStorage(requireContext(), uri)
-                viewModel.insertPage(PageItem(imageUri = imageCopyUri.toString()))
-            }
-        }
 }

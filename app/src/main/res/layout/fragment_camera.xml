@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/constraint_guideline_horizontal_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/pvCamera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.VerticalSeekBar
+        android:id="@+id/sbExposure"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintBottom_toTopOf="@+id/btnShotPhoto"
+        app:layout_constraintTop_toBottomOf="@id/btnFlipCamera"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.FocusCircleView
+        android:id="@+id/focusCircleView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/pvCamera"
+        app:layout_constraintEnd_toEndOf="@+id/pvCamera"
+        app:layout_constraintStart_toStartOf="@+id/pvCamera"
+        app:layout_constraintTop_toTopOf="@+id/pvCamera" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnToggleFlash"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerCrop"
+        android:src="@drawable/flash_off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnFlipCamera"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerCrop"
+        android:src="@drawable/flip_camera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnToggleFlash"
+        app:tint="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnShotPhoto"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:tint="@color/white"
+        app:srcCompat="@drawable/ic_shutter"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_bottom" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:foregroundGravity="center"
+        android:scaleType="centerCrop" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

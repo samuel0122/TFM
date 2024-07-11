@@ -22,11 +22,6 @@ object RoomModule {
 
     @Singleton
     @Provides
-    fun provideImagenesDao(db: AppDatabase) = db.imagenesCargadasDao()
-
-
-    @Singleton
-    @Provides
     fun provideBookDao(db: AppDatabase) = db.bookDao()
 
 

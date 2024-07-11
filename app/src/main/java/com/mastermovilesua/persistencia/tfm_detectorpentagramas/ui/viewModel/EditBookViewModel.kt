@@ -1,5 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,31 +19,34 @@ class EditBookViewModel @Inject constructor(
     private val updateBookUseCase: UpdateBookUseCase
 ) : ViewModel() {
 
-    val bookModel = MutableLiveData<BookItem>()
-    val isLoading = MutableLiveData<Boolean>()
+    private val _bookModel = MutableLiveData<BookItem>()
+    private val _isLoading = MutableLiveData<Boolean>()
+
+    val bookModel: LiveData<BookItem> get() = _bookModel
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     private var isNewBook: Boolean = false
 
     fun onCreate(bookId: Int) {
         viewModelScope.launch {
-            isLoading.postValue(true)
+            _isLoading.postValue(true)
 
             val getBook = getBookUseCase(bookId)
 
             if (getBook != null) {
-                bookModel.postValue(getBook)
+                _bookModel.postValue(getBook)
             } else {
                 isNewBook = true
-                bookModel.postValue(BookItem(title = "", description = ""))
+                _bookModel.postValue(BookItem(title = "", description = ""))
             }
 
-            isLoading.postValue(false)
+            _isLoading.postValue(false)
         }
     }
 
     fun onSubmit(title: String, description: String) {
         viewModelScope.launch {
-            isLoading.postValue(true)
+            _isLoading.postValue(true)
 
             bookModel.value?.let { bookItem ->
 
@@ -58,7 +62,7 @@ class EditBookViewModel @Inject constructor(
                 }
             }
 
-            isLoading.postValue(false)
+            _isLoading.postValue(false)
         }
     }
 

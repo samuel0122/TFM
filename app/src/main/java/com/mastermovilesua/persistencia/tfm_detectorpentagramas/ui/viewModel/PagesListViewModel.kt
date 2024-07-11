@@ -1,5 +1,7 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +10,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPag
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,38 +20,37 @@ class PagesListViewModel @Inject constructor(
     private val insertPageUseCase: InsertPageUseCase
 ) : ViewModel() {
 
-    val bookModel = MutableLiveData<BookItem>()
-    val pagesModel = MutableLiveData<List<PageItem>>()
-    val isLoading = MutableLiveData<Boolean>()
+    private val _bookModel = MutableLiveData<BookItem>()
+    private val _pagesModel = MutableLiveData<List<PageItem>>()
+    private val _isLoading = MutableLiveData<Boolean>()
+
+    val bookModel : LiveData<BookItem> get() = _bookModel
+    val pagesModel : LiveData<List<PageItem>> get() = _pagesModel
+    val isLoading : LiveData<Boolean> get() = _isLoading
 
     private var bookId: Int = 0
 
     fun onCreate(bookId: Int) {
         this.bookId = bookId
         viewModelScope.launch {
-            isLoading.postValue(true)
+            _isLoading.postValue(true)
 
-            getBookWithPagesUseCase(bookId)?.let { bookWithPagesModel ->
-                bookModel.postValue(bookWithPagesModel.book)
-                pagesModel.postValue(bookWithPagesModel.pages)
+            getBookWithPagesUseCase(bookId).collect { bookWithPagesModel ->
+                _bookModel.postValue(bookWithPagesModel.book)
+                _pagesModel.postValue(bookWithPagesModel.pages)
             }
 
-            isLoading.postValue(false)
+            _isLoading.postValue(false)
         }
     }
 
     fun insertPage(page: PageItem) {
         viewModelScope.launch {
-            isLoading.postValue(true)
+            _isLoading.postValue(true)
 
             insertPageUseCase(bookId, page)
 
-            getBookWithPagesUseCase(bookId)?.let { bookWithPagesModel ->
-                bookModel.postValue(bookWithPagesModel.book)
-                pagesModel.postValue(bookWithPagesModel.pages)
-            }
-
-            isLoading.postValue(false)
+            _isLoading.postValue(false)
         }
     }
 }

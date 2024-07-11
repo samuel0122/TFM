@@ -2,7 +2,6 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain
 
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.BookRepository
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.ImagenesItem
 import javax.inject.Inject
 
 class InsertBookUseCase @Inject constructor(

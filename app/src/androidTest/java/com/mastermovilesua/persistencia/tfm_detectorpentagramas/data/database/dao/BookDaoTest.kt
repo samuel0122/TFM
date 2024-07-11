@@ -8,6 +8,7 @@ import com.google.common.truth.Truth.assertThat
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.AppDatabase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.BookEntity
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.PageEntity
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -69,7 +70,7 @@ class BookDaoTest {
         val insertResult = bookDao.insertBook(insertBook)
 
         // Then: Database only contains inserted book.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(insertResult).isEqualTo(insertBook.bookId)
         assertThat(allBooks).hasSize(1)
@@ -93,7 +94,7 @@ class BookDaoTest {
         val insertResult = bookDao.insertBook(insertBook)
 
         // Then: Database contains previous books and new one.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(insertResult).isEqualTo(insertBook.bookId)
         assertThat(allBooks).hasSize(finalBooks.size)
@@ -115,7 +116,7 @@ class BookDaoTest {
         val insertResult = bookDao.insertBook(insertBook)
 
         // Then: The previous book was replaced by the new one.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(insertResult).isEqualTo(insertBook.bookId)
         assertThat(allBooks).hasSize(1)
@@ -137,7 +138,7 @@ class BookDaoTest {
         val insertResult = bookDao.insertBook(insertBook)
 
         // Then: Verify that the new book was inserted with returned ID
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         val finalBooks = initialBooks.plusElement(BookEntity(insertResult.toInt(), insertBook.title, insertBook.description, insertBook.dataset))
 
@@ -158,7 +159,7 @@ class BookDaoTest {
         // Given: Empty dataset.
 
         // When: Get all books in empty dataset.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         // Then: Its an empty list.
         assertThat(allBooks).isEmpty()
@@ -175,7 +176,7 @@ class BookDaoTest {
         initialBooks.forEach { bookDao.insertBook(it) }
 
         // When: Get all books
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         // Then: List is the same than initial book
         assertThat(allBooks).hasSize(initialBooks.size)
@@ -255,7 +256,7 @@ class BookDaoTest {
         // Given: Empty dataset.
 
         // When: Get books in empty dataset.
-        val getBook = bookDao.getBookWithPages(1)
+        val getBook = bookDao.getBookWithPages(1).first()
 
         // Then: Its null.
         assertThat(getBook).isNull()
@@ -274,7 +275,7 @@ class BookDaoTest {
         initialBooks.forEach { bookDao.insertBook(it) }
 
         // When: Get book that exists.
-        val getBook = bookDao.getBookWithPages(bookIdToGet)
+        val getBook = bookDao.getBookWithPages(bookIdToGet).first()
 
         // Then: Get book is same than inserted and has no pages.
         assertThat(getBook).isNotNull()
@@ -302,7 +303,7 @@ class BookDaoTest {
         booksPages.forEach { pageDao.insertPage(it) }
 
         // When: Get book with pages that exists and has pages.
-        val getBook = bookDao.getBookWithPages(bookIdToGet)
+        val getBook = bookDao.getBookWithPages(bookIdToGet).first()
 
         // Then: Get book and pages are same than inserted.
         assertThat(getBook).isNotNull()
@@ -324,7 +325,7 @@ class BookDaoTest {
         initialBooks.forEach { bookDao.insertBook(it) }
 
         // When: Get book that does not exist.
-        val getBook = bookDao.getBookWithPages(bookIdToGet)
+        val getBook = bookDao.getBookWithPages(bookIdToGet).first()
 
         // Then: Get book is null.
         assertThat(getBook).isNull()
@@ -348,7 +349,7 @@ class BookDaoTest {
         val updateResult = bookDao.updateBook(updateBookEntity)
 
         // Then: affected rows is 0 and dataset continues empty.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(updateResult).isEqualTo(0)
         assertThat(allBooks).isEmpty()
@@ -369,7 +370,7 @@ class BookDaoTest {
         val updateResult = bookDao.updateBook(updateBookEntity)
 
         // Then: The book is updated with the new info and no more books inserted.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(updateResult).isEqualTo(1)
         assertThat(allBooks).hasSize(1)
@@ -392,7 +393,7 @@ class BookDaoTest {
         val updateResult = bookDao.updateBook(updateBookEntity)
 
         // Then: Affected rows is 0 and dataset remains unmodified.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(updateResult).isEqualTo(0)
         assertThat(allBooks).hasSize(1)
@@ -419,7 +420,7 @@ class BookDaoTest {
         val deleteResult = bookDao.deleteBook(bookIdToDelete)
 
         // Then: Affected rows is 0 and dataset remains empty.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(deleteResult).isEqualTo(0)
         assertThat(allBooks).isEmpty()
@@ -440,7 +441,7 @@ class BookDaoTest {
         val deleteResult = bookDao.deleteBook(bookIdToDelete)
 
         // Then: Affected rows is 1 and dataset turns empty.
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(deleteResult).isEqualTo(1)
         assertThat(allBooks).isEmpty()
@@ -463,7 +464,7 @@ class BookDaoTest {
         initialBooks.forEach { bookDao.insertBook(it) }
         booksPages.forEach { pageDao.insertPage(it) }
 
-        assertThat(bookDao.getAllBooks()).isNotEmpty()
+        assertThat(bookDao.getAllBooks().first()).isNotEmpty()
         assertThat(pageDao.getAllPages()).isNotEmpty()
 
         // When: Delete existing book with pages.
@@ -472,7 +473,7 @@ class BookDaoTest {
         // Then: Affected rows is 1 and book and page tables are empty
 
         assertThat(deleteResult).isEqualTo(1)
-        assertThat(bookDao.getAllBooks()).isEmpty()
+        assertThat(bookDao.getAllBooks().first()).isEmpty()
         assertThat(pageDao.getAllPages()).isEmpty()
     }
 
@@ -492,7 +493,7 @@ class BookDaoTest {
         val deleteResult = bookDao.deleteBook(bookIdToDelete)
 
         // Then: Affected rows is 0 and dataset remains unmodified
-        val allBooks = bookDao.getAllBooks()
+        val allBooks = bookDao.getAllBooks().first()
 
         assertThat(deleteResult).isEqualTo(0)
         assertThat(allBooks).hasSize(1)

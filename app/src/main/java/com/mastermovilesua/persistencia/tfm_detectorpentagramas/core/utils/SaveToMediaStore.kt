@@ -11,7 +11,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.ImagenesCargadasContract
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -21,12 +21,15 @@ import java.util.Locale
 
 object SaveToMediaStore {
 
-    fun saveImageToInternalStorage(context: Context, imageUri: Uri, imageName: String = "MyImage", index: Int = 1): Uri {
+    fun getImageFileName(imageName: String = "MyImage", index: Int = 1): String {
         val timeStamp: String = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis())
+        return "${imageName}_${timeStamp}_${index}.jpg"
+    }
 
-        val copyImageFileName = "${imageName}_${timeStamp}_${index}.jpg"
-        val copyImageFile = File(context.filesDir, copyImageFileName)
-        val copyImageUri: Uri = FileProvider.getUriForFile(context, ImagenesCargadasContract.AUTHORITY, copyImageFile)
+    fun saveImageToInternalStorage(context: Context, imageUri: Uri, imageName: String = "MyImage", index: Int = 1): Uri {
+
+        val copyImageFile = File(context.filesDir, getImageFileName(imageName, index))
+        val copyImageUri: Uri = FileProvider.getUriForFile(context, MusicScoreBooksContract.AUTHORITY, copyImageFile)
 
         try {
             val selectedImageStream = context.contentResolver.openInputStream(imageUri)
