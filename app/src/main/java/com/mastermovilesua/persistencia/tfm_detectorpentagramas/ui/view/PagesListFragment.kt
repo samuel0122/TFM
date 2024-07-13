@@ -65,7 +65,7 @@ class PagesListFragment : Fragment() {
         }
 
         // Add the new item decoration
-        binding.rvPagesList.addItemDecoration(GridSpacingItemDecoration(numColumns, 16, true))
+        binding.rvPagesList.addItemDecoration(GridSpacingItemDecoration(numColumns, 12, true))
     }
 
     private fun onClickAddAction() {

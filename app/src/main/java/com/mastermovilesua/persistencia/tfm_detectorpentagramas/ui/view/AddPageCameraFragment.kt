@@ -1,5 +1,7 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view
 
+import android.Manifest
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
@@ -9,6 +11,8 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,13 +20,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.eCameraState
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.Permissions
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentCameraBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.AddPageCameraViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 @AndroidEntryPoint
 class AddPageCameraFragment : Fragment() {
@@ -31,18 +33,27 @@ class AddPageCameraFragment : Fragment() {
 
     private lateinit var binding: FragmentCameraBinding
 
-    // VM
-    // private lateinit var cameraExecutor: ExecutorService
-
-
-    override fun onCreateView (
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "On CREATE VIEW")
+
         binding = FragmentCameraBinding.inflate(inflater)
 
+        binding.btnCloseCamera.setOnClickListener { findNavController().navigateUp() }
         binding.btnFlipCamera.setOnClickListener { viewModel.flipCamera() }
         binding.btnToggleFlash.setOnClickListener { viewModel.toggleFlash() }
         binding.btnShotPhoto.setOnClickListener { viewModel.takePhoto(requireContext()) }
+
+        binding.btnConfirmPhoto.setOnClickListener {
+            viewModel.insertCapturedPage()
+            findNavController().navigateUp()
+        }
+
+        binding.btnDiscardPhoto.setOnClickListener { viewModel.discardCapturedPage() }
+
+        binding.clLive.visibility = View.GONE
+        binding.clPreview.visibility = View.GONE
 
         return binding.root
     }
@@ -50,26 +61,58 @@ class AddPageCameraFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Log.d(TAG, "On CREATE")
+
+        viewModel.onCreate(args.bookId)
+
         if (Permissions.hasCameraPermission(requireContext())) {
             startCamera()
         } else {
-            Permissions.requestCameraePermission(requireContext(), requireActivity())
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    startCamera()
+                } else {
+                    // Manejar el caso en el que no se otorgó el permiso
+                    Toast.makeText(
+                        requireContext(),
+                        "Permission denied. Camera cannot be accessed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    findNavController().navigateUp()
+                }
+            }.launch(Permissions.useCameraPerm)
         }
 
-        // cameraExecutor = Executors.newSingleThreadExecutor()
-
-        viewModel.didFlipCamera.observe(this) { _ ->
+        viewModel.cameraFacing.observe(this) { _ ->
             bindCameraUserCases()
         }
 
-        viewModel.didToggleFlash.observe(this) { isFlashOn ->
-            if (isFlashOn)  binding.btnToggleFlash.setImageResource(R.drawable.flash_on)
-            else            binding.btnToggleFlash.setImageResource(R.drawable.flash_off)
+        viewModel.flashOn.observe(this) { isFlashOn ->
+            if (isFlashOn) binding.btnToggleFlash.setImageResource(R.drawable.ic_flash_on)
+            else binding.btnToggleFlash.setImageResource(R.drawable.ic_flash_off)
         }
 
-        viewModel.didTakePicture.observe(this) { savedUri ->
-            viewModel.insertPage(PageItem(imageUri = savedUri.toString()), args.bookId)
-            findNavController().navigateUp()
+        viewModel.pictureUri.observe(this) { savedUri ->
+            binding.ivPage.setImageURI(savedUri)
+        }
+
+        viewModel.cameraState.observe(this) { cameraState ->
+            when (cameraState) {
+                eCameraState.Live -> {
+                    binding.clLive.visibility = View.VISIBLE
+                    binding.clPreview.visibility = View.GONE
+                }
+
+                eCameraState.ImageCaptured -> {
+                    binding.clLive.visibility = View.GONE
+                    binding.clPreview.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        viewModel.isCapturingImage.observe(this) { isCapturingImage ->
+            if (isCapturingImage) binding.btnShotPhoto.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.dark_gray)
+            else binding.btnShotPhoto.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
         }
     }
 
@@ -77,18 +120,13 @@ class AddPageCameraFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
-            // Used to bind the lifecycle of cameras to the lifecycle owner
             viewModel.setCameraProvider(cameraProviderFuture.get())
 
-            // Preview
-            viewModel.onCreate(binding.pvCamera.display.rotation)
+            viewModel.onStartCamera(binding.pvCamera.display.rotation)
 
             viewModel.preview.apply {
                 setSurfaceProvider(binding.pvCamera.surfaceProvider)
             }
-
-            bindCameraUserCases()
-
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
@@ -111,7 +149,7 @@ class AddPageCameraFragment : Fragment() {
                 setUpZoomTapToFocusAndExposure()
             }
 
-        } catch(exc: Exception) {
+        } catch (exc: Exception) {
             Log.e(TAG, "Use case binding failed", exc)
         }
     }
@@ -169,8 +207,8 @@ class AddPageCameraFragment : Fragment() {
         }
     }
 
-
     override fun onDestroy() {
+        Log.d(TAG, "On DESTROY")
         viewModel.onDestroy()
         super.onDestroy()
     }

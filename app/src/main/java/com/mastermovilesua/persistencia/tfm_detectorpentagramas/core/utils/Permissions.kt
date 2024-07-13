@@ -5,13 +5,14 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 
 object Permissions {
 
     private const val wriExternalPerm = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     private const val readExternalPerm = android.Manifest.permission.READ_EXTERNAL_STORAGE
 
-    private const val useCameraPerm = android.Manifest.permission.CAMERA
+    const val useCameraPerm = android.Manifest.permission.CAMERA
 
     const val PERMISSION_REQUEST_CODE = 123
 

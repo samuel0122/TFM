@@ -6,9 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.fromUri
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.fromUriScaleDown
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ItemPageBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.OnItemClickListener
+import com.squareup.picasso.Picasso
 
 class PagesGridAdapter :
     ListAdapter<PageItem, PagesGridAdapter.PageItemHolder>(Companion),
@@ -37,12 +41,14 @@ class PagesGridAdapter :
     override fun onBindViewHolder(holder: PageItemHolder, position: Int) {
         val page = currentList[position]
 
-        holder.binding.ivPage.setImageURI(Uri.parse(page.imageUri))
-
         holder.itemView.post {
             val layoutParams =  holder.itemView.layoutParams
             layoutParams.height =  holder.itemView.width
             holder.itemView.layoutParams = layoutParams
+
+            holder.binding.cvHolder.radius = holder.itemView.width * 0.05f
+
+            holder.binding.ivPage.fromUriScaleDown(Uri.parse(page.imageUri), holder.itemView.width, holder.itemView.width)
         }
 
         holder.itemView.setOnClickListener {
