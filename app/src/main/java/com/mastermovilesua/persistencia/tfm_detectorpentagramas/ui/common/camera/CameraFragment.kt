@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.eCameraState
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.Permissions
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentCameraBinding
 
@@ -87,15 +86,17 @@ abstract class CameraFragment : Fragment() {
         }
 
         viewModel.cameraState.observe(this) { cameraState ->
-            when (cameraState) {
-                eCameraState.Live -> {
-                    binding.clLive.visibility = View.VISIBLE
-                    binding.clPreview.visibility = View.GONE
-                }
+            cameraState?.let {
+                when (cameraState) {
+                    eCameraState.Live -> {
+                        binding.clLive.visibility = View.VISIBLE
+                        binding.clPreview.visibility = View.GONE
+                    }
 
-                eCameraState.ImageCaptured -> {
-                    binding.clLive.visibility = View.GONE
-                    binding.clPreview.visibility = View.VISIBLE
+                    eCameraState.ImageCaptured -> {
+                        binding.clLive.visibility = View.GONE
+                        binding.clPreview.visibility = View.VISIBLE
+                    }
                 }
             }
         }

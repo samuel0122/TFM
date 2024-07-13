@@ -22,4 +22,4 @@ data class BookEntity (
     var dataset: Int,
 )
 
-fun BookItem.toDatabase() = BookEntity(bookId, title, description, dataset)
+fun BookItem.toDatabase() = BookEntity(bookId, title, description, dataset.value)

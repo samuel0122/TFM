@@ -42,9 +42,7 @@ class PagesGridAdapter :
         val page = currentList[position]
 
         holder.itemView.post {
-            val layoutParams =  holder.itemView.layoutParams
-            layoutParams.height =  holder.itemView.width
-            holder.itemView.layoutParams = layoutParams
+            holder.itemView.layoutParams = holder.itemView.layoutParams.also { it.height = holder.itemView.width }
 
             holder.binding.cvHolder.radius = holder.itemView.width * 0.05f
 

@@ -18,16 +18,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.eCameraFacing
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.eCameraState
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
+enum class eCameraState {
+    Live,
+    ImageCaptured
+}
+
+enum class eCameraFacing {
+    Front,
+    Back
+}
 
 open class CameraViewModel @Inject constructor() : ViewModel() {
     private val _flashOn = MutableLiveData<Boolean>()
