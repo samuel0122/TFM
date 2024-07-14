@@ -105,8 +105,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 
-    // Picasso
-    implementation("com.squareup.picasso:picasso:2.71828")
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // NavComponent
     val navVersion = "2.7.7"

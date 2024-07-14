@@ -1,9 +1,7 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain
 
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.PageRepository
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageWithBoxesItem
 import javax.inject.Inject
 
 class InsertPageUseCase @Inject constructor(

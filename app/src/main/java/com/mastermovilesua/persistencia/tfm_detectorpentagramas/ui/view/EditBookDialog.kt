@@ -9,7 +9,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.DialogEditBookBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.EditBookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

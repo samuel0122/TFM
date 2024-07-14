@@ -1,7 +1,5 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts
 
-import android.provider.BaseColumns
-
 object MusicScoreBooksContract {
     // Constantes para la base de datos
     const val DATABASE_NAME = "musicScoreBooks.db"

@@ -2,17 +2,22 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions
 
 import android.net.Uri
 import android.widget.ImageView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 fun ImageView.fromUri(uri: Uri) {
-    Picasso.get().load(uri).into(this)
+    Glide.with(this.context)
+        .load(uri)
+        .into(this)
 }
 
-fun ImageView.fromUriScaleDown(uri: Uri, targetWidth: Int, targetHeight: Int) {
-    Picasso.get()
+fun ImageView.fromUriScaleDown(uri: Uri, targetSize: Int) {
+    Glide.with(context)
         .load(uri)
-        .resize(targetWidth, targetHeight)
-        .onlyScaleDown()
-        .centerCrop()
+        .apply(
+            RequestOptions()
+                .override(targetSize)
+                .centerCrop()
+        )
         .into(this)
 }

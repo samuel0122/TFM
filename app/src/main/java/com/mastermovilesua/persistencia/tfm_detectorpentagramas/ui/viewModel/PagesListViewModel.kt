@@ -1,6 +1,5 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,6 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPag
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

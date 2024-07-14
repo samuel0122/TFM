@@ -1,9 +1,7 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

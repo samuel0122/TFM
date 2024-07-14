@@ -20,15 +20,11 @@ class AddPageCameraFragment : CameraFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-       val cameraView = super.onCreateView(inflater, container, savedInstanceState)
+        return super.onCreateView(inflater, container, savedInstanceState).also { viewModel.onCreate(args.bookId) }
+    }
 
-        binding.btnConfirmPhoto.setOnClickListener {
-            viewModel.insertCapturedPage()
-            findNavController().navigateUp()
-        }
-
-        viewModel.onCreate(args.bookId)
-
-        return cameraView
+    override fun onImageConfirmationAction() {
+        viewModel.insertCapturedPage()
+        findNavController().navigateUp()
     }
 }

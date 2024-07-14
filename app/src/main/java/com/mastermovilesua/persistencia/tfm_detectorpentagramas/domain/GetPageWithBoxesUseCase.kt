@@ -1,8 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain
 
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.BookRepository
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.PageRepository
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookWithPagesItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageWithBoxesItem
 import javax.inject.Inject
 

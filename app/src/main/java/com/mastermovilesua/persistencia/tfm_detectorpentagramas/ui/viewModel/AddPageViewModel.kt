@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBooksUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import dagger.hilt.android.lifecycle.HiltViewModel

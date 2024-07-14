@@ -5,10 +5,11 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Pag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import javax.inject.Inject
-import okhttp3.MultipartBody
+
 class PageService @Inject constructor(
     private val api: PageApiClient
 ) {

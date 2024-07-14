@@ -1,10 +1,7 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data
 
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.BookDao
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.PageDao
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.toDatabase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookWithPagesItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageWithBoxesItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.toDomain

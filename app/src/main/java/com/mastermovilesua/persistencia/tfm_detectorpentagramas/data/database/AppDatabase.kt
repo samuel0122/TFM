@@ -1,8 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.BookDao

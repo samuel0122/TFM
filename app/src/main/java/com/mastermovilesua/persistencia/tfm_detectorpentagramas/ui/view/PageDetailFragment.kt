@@ -7,12 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPageDetailBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPagesListBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.PageDetailViewModel
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.PagesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.DialogInputBinding

@@ -1,8 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.network.model
 
-import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.network.contracts.PageApiContract
 
 data class BoxModel (

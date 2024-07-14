@@ -24,6 +24,8 @@ abstract class CameraFragment : Fragment() {
 
     protected lateinit var binding: FragmentCameraBinding
 
+    protected abstract fun onImageConfirmationAction()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -39,6 +41,7 @@ abstract class CameraFragment : Fragment() {
         binding.btnShotPhoto.setOnClickListener { viewModel.takePhoto(requireContext()) }
 
         binding.btnDiscardPhoto.setOnClickListener { viewModel.discardCapturedPage() }
+        binding.btnConfirmPhoto.setOnClickListener { onImageConfirmationAction() }
 
         binding.clLive.visibility = View.GONE
         binding.clPreview.visibility = View.GONE
