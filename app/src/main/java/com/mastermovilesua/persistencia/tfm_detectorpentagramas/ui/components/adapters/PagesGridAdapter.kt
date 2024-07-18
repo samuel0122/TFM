@@ -10,8 +10,9 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ItemPageBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.OnItemClickListener
+import javax.inject.Inject
 
-class PagesGridAdapter :
+class PagesGridAdapter @Inject constructor() :
     ListAdapter<PageItem, PagesGridAdapter.PageItemHolder>(Companion),
     OnItemClickListener<PageItem>
 {

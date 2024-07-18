@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/booksListFragment"
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.BooksListFragment"
-        android:label="BooksListFragment" >
+        android:label="Books List" >
         <action
             android:id="@+id/action_booksListFragment_to_pagesListFragment"
             app:destination="@id/pagesListFragment"
@@ -23,7 +23,7 @@
     <fragment
         android:id="@+id/pagesListFragment"
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.PagesListFragment"
-        android:label="PagesListFragment" >
+        android:label="Pages List" >
         <action
             android:id="@+id/action_pagesListFragment_to_pageDetailFragment"
             app:destination="@id/pageDetailFragment"
@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_pagesListFragment_to_addPageDialog"
             app:destination="@id/addPageDialog" />
+        <action
+            android:id="@+id/action_pagesListFragment_to_editBookDialog"
+            app:destination="@id/editBookDialog" />
     </fragment>
     <fragment
         android:id="@+id/pageDetailFragment"
@@ -45,14 +48,7 @@
         <argument
             android:name="pageId"
             app:argType="integer" />
-        <action
-            android:id="@+id/action_pageDetailFragment_to_quantityDialog"
-            app:destination="@id/quantityDialog" />
     </fragment>
-    <dialog
-        android:id="@+id/quantityDialog"
-        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.QuantityDialog"
-        android:label="QuantityDialog" />
     <dialog
         android:id="@+id/editBookDialog"
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view.EditBookDialog"

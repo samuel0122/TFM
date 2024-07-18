@@ -8,6 +8,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookUs
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.UpdateBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Dataset
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,7 +45,7 @@ class EditBookViewModel @Inject constructor(
         }
     }
 
-    fun onSubmit(title: String, description: String) {
+    fun onSubmit(title: String, description: String, dataset: Int) {
         viewModelScope.launch {
             _isLoading.postValue(true)
 
@@ -53,6 +54,7 @@ class EditBookViewModel @Inject constructor(
                 bookItem.apply {
                     this.title = title
                     this.description = description
+                    this.dataset = Dataset.fromInt(dataset)
                 }
 
                 if (isNewBook) {
