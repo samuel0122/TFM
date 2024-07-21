@@ -3,6 +3,7 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions
 import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 
 fun ImageView.fromUri(uri: Uri) {
@@ -18,6 +19,7 @@ fun ImageView.fromUriScaleDown(uri: Uri, targetSize: Int) {
             RequestOptions()
                 .override(targetSize)
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
         )
         .into(this)
 }

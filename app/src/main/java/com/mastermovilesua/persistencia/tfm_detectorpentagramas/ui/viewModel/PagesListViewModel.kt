@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeletePageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookWithPagesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
@@ -15,16 +16,23 @@ import javax.inject.Inject
 @HiltViewModel
 class PagesListViewModel @Inject constructor(
     private val getBookWithPagesUseCase: GetBookWithPagesUseCase,
-    private val insertPageUseCase: InsertPageUseCase
+    private val insertPageUseCase: InsertPageUseCase,
+    private val deletePageUseCase: DeletePageUseCase
 ) : ViewModel() {
 
     private val _bookModel = MutableLiveData<BookItem>()
     private val _pagesModel = MutableLiveData<List<PageItem>>()
     private val _isLoading = MutableLiveData<Boolean>()
+    private val _isEditMode = MutableLiveData<Boolean>()
+    private val _isAllSelected = MutableLiveData<Boolean>()
+    private val _selectedPagesIds = MutableLiveData<Set<Int>>()
 
-    val bookModel : LiveData<BookItem> get() = _bookModel
-    val pagesModel : LiveData<List<PageItem>> get() = _pagesModel
-    val isLoading : LiveData<Boolean> get() = _isLoading
+    val bookModel: LiveData<BookItem> get() = _bookModel
+    val pagesModel: LiveData<List<PageItem>> get() = _pagesModel
+    val isLoading: LiveData<Boolean> get() = _isLoading
+    val isEditMode: LiveData<Boolean> get() = _isEditMode
+    val isAllSelected: LiveData<Boolean> get() = _isAllSelected
+    val selectedPagesIds: LiveData<Set<Int>> get() = _selectedPagesIds
 
     private var bookId: Int = 0
 
@@ -49,6 +57,54 @@ class PagesListViewModel @Inject constructor(
             insertPageUseCase(bookId, page)
 
             _isLoading.postValue(false)
+        }
+    }
+
+    fun selectPage(pageId: Int) {
+        if (selectedPagesIds.value?.contains(pageId) == true) {
+            val newSelectedPages = selectedPagesIds.value?.minus(pageId) ?: emptySet()
+            _selectedPagesIds.postValue(newSelectedPages)
+            if (_isAllSelected.value == true && newSelectedPages.size != pagesModel.value?.size) {
+                _isAllSelected.postValue(false)
+            }
+        } else {
+            val newSelectedPages = selectedPagesIds.value?.plus(pageId) ?: setOf(pageId)
+            _selectedPagesIds.postValue(newSelectedPages)
+            if (newSelectedPages.size == pagesModel.value?.size) {
+                _isAllSelected.postValue(true)
+            }
+        }
+    }
+
+    fun enableEditMode() {
+        _isEditMode.postValue(true)
+    }
+
+    fun disableEditMode() {
+        _selectedPagesIds.postValue(emptySet())
+        _isEditMode.postValue(false)
+    }
+
+    fun toggleAllSelection() {
+        if (selectedPagesIds.value?.size == pagesModel.value?.size) {
+            _selectedPagesIds.postValue(emptySet())
+            _isAllSelected.postValue(false)
+        } else {
+            _selectedPagesIds.postValue(pagesModel.value?.map { it.id }?.toSet())
+            _isAllSelected.postValue(true)
+        }
+    }
+
+    fun deletePages() {
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+
+            selectedPagesIds.value?.forEach { deletePageUseCase(it) }
+
+            _isLoading.postValue(false)
+
+            _selectedPagesIds.postValue(emptySet())
+            _isEditMode.postValue(false)
         }
     }
 }

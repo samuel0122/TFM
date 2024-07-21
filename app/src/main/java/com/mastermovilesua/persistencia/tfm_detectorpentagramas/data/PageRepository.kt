@@ -26,7 +26,7 @@ class PageRepository @Inject constructor(
     }
 
     suspend fun updatePage(pageItem: PageItem): Boolean {
-        return pageDao.getPage(pageItem.pageId)?.let {
+        return pageDao.getPage(pageItem.id)?.let {
             pageDao.updatePage(pageItem.toDatabase(it.bookId)) > 0
         } ?: false
     }

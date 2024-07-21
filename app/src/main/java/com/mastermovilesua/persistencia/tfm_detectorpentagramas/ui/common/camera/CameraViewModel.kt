@@ -26,12 +26,12 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-enum class eCameraState {
+enum class CameraState {
     Live,
     ImageCaptured
 }
 
-enum class eCameraFacing {
+enum class CameraFacing {
     Front,
     Back
 }
@@ -39,15 +39,15 @@ enum class eCameraFacing {
 open class CameraViewModel @Inject constructor() : ViewModel() {
     private val _flashOn = MutableLiveData<Boolean>()
     private val _isCapturingImage = MutableLiveData<Boolean>()
-    private val _cameraFacing = MutableLiveData<eCameraFacing>()
+    private val _cameraFacing = MutableLiveData<CameraFacing>()
     private val _pictureUri = MutableLiveData<Uri>()
-    private val _cameraState = MutableLiveData<eCameraState>()
+    private val _cameraState = MutableLiveData<CameraState>()
 
     val flashOn: LiveData<Boolean> get() = _flashOn
     val isCapturingImage: LiveData<Boolean> get() = _isCapturingImage
-    val cameraFacing: LiveData<eCameraFacing> get() = _cameraFacing
+    val cameraFacing: LiveData<CameraFacing> get() = _cameraFacing
     val pictureUri: LiveData<Uri> get() = _pictureUri
-    val cameraState: LiveData<eCameraState> get() = _cameraState
+    val cameraState: LiveData<CameraState> get() = _cameraState
 
     private var _cameraProvider: ProcessCameraProvider? = null
     private var _camera: Camera? = null
@@ -78,10 +78,10 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
 
             buildPreview(rotation)
 
-            _cameraState.postValue(cameraState.value ?: eCameraState.Live)
+            _cameraState.postValue(cameraState.value ?: CameraState.Live)
             _flashOn.postValue(flashOn.value ?: false)
             _isCapturingImage.postValue(isCapturingImage.value ?: false)
-            _cameraFacing.postValue(cameraFacing.value ?: eCameraFacing.Back)
+            _cameraFacing.postValue(cameraFacing.value ?: CameraFacing.Back)
         }
     }
 
@@ -130,7 +130,7 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
     }
 
     fun discardCapturedPage() {
-        _cameraState.postValue(eCameraState.Live)
+        _cameraState.postValue(CameraState.Live)
     }
 
     fun setCameraProvider(cameraProvider: ProcessCameraProvider) {
@@ -145,14 +145,14 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
         cameraFacing.value?.let { cameraFacing ->
             viewModelScope.launch {
                 when (cameraFacing) {
-                    eCameraFacing.Front -> {
+                    CameraFacing.Front -> {
                         lensFacing = CameraSelector.LENS_FACING_BACK
-                        _cameraFacing.postValue(eCameraFacing.Back)
+                        _cameraFacing.postValue(CameraFacing.Back)
                     }
 
-                    eCameraFacing.Back -> {
+                    CameraFacing.Back -> {
                         lensFacing = CameraSelector.LENS_FACING_FRONT
-                        _cameraFacing.postValue(eCameraFacing.Front)
+                        _cameraFacing.postValue(CameraFacing.Front)
                     }
                 }
 
@@ -219,7 +219,7 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                         _pictureUri.postValue(Uri.fromFile(file))
-                        _cameraState.postValue(eCameraState.ImageCaptured)
+                        _cameraState.postValue(CameraState.ImageCaptured)
                         _isCapturingImage.postValue(false)
                     }
 

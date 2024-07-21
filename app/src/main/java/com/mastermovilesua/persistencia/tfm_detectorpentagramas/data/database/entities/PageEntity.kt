@@ -34,4 +34,4 @@ data class PageEntity(
     val bookId: Int
 )
 
-fun PageItem.toDatabase(bookId: Int) = PageEntity(pageId, imageUri, processed, order, bookId)
+fun PageItem.toDatabase(bookId: Int) = PageEntity(id, imageUri, processed, order, bookId)

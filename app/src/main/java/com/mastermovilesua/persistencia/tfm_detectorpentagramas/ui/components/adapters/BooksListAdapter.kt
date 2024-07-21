@@ -2,52 +2,44 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.a
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ItemBookBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.OnItemClickListener
+import javax.inject.Inject
 
-class BooksListAdapter :
-    ListAdapter<BookItem, BooksListAdapter.BookItemHolder>(Companion),
-    OnItemClickListener<BookItem>
-{
+class BooksListAdapter @Inject constructor() :
+    SelectableListAdapter<BookItem, ItemBookBinding>(Companion) {
+
     companion object : DiffUtil.ItemCallback<BookItem>() {
         override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean =
-            oldItem.bookId == newItem.bookId
+            oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean =
             oldItem == newItem
     }
 
-    inner class BookItemHolder(val binding: ItemBookBinding) : RecyclerView.ViewHolder(binding.root)
+    override fun createBinding(parent: ViewGroup): ItemBookBinding =
+        ItemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookItemHolder {
-        return BookItemHolder(
-            ItemBookBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+    override fun bindLayout(holder: SelectableItemHolder<ItemBookBinding>, item: BookItem) {
+        holder.binding.tvTitle.text = item.title
+        holder.binding.tvDescription.text = item.description
+
+        holder.binding.vSelectedMark.isVisible = false
     }
 
-    override fun onBindViewHolder(holder: BookItemHolder, position: Int) {
-        val book = currentList[position]
+    override fun bindEditMode(binding: ItemBookBinding, isEditMode: Boolean, isSelected: Boolean) {
+        binding.vSelectedMark.isVisible = isEditMode
 
-        holder.binding.tvTitle.text = book.title
-        holder.binding.tvDescription.text = book.description
+        binding.cvBook.apply {
+            scaleX = if (isSelected) 0.9f else 1f
+            scaleY = if (isSelected) 0.9f else 1f
+        }
 
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.let { it(book) }
+        if (isEditMode) {
+            binding.vSelectedMark.setImageResource(if (isSelected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked)
         }
     }
-
-    private var onItemClickListener : ((BookItem) -> Unit)? = null
-
-    override fun setOnItemClickListener(listener: (BookItem) -> Unit) {
-        onItemClickListener = listener
-    }
-
 }

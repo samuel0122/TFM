@@ -37,4 +37,4 @@ data class BoxEntity (
     val pageId: Int
 )
 
-fun BoxItem.toDatabase(pageId: Int) = BoxEntity(boxId, x, y, width, height, pageId)
+fun BoxItem.toDatabase(pageId: Int) = BoxEntity(id, x, y, width, height, pageId)

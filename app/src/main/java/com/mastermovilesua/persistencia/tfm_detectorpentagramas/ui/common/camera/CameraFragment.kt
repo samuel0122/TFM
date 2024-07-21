@@ -91,12 +91,12 @@ abstract class CameraFragment : Fragment() {
         viewModel.cameraState.observe(this) { cameraState ->
             cameraState?.let {
                 when (cameraState) {
-                    eCameraState.Live -> {
+                    CameraState.Live -> {
                         binding.clLive.visibility = View.VISIBLE
                         binding.clPreview.visibility = View.GONE
                     }
 
-                    eCameraState.ImageCaptured -> {
+                    CameraState.ImageCaptured -> {
                         binding.clLive.visibility = View.GONE
                         binding.clPreview.visibility = View.VISIBLE
                     }

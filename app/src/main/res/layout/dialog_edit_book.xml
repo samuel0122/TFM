@@ -8,7 +8,7 @@
     tools:context=".ui.view.EditBookDialog">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/ccTrip"
+        android:id="@+id/cvBook"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="24dp"
@@ -111,7 +111,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
-            
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 

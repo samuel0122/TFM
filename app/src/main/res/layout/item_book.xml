@@ -8,7 +8,7 @@
     android:padding="10dp">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/ccTrip"
+        android:id="@+id/cvBook"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="24dp"
@@ -22,7 +22,13 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:padding="10dp" >
+
+            <ImageView
+                android:id="@+id/vSelectedMark"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_checkbox_unchecked" />
 
             <TextView
                 android:id="@+id/tvTitle"

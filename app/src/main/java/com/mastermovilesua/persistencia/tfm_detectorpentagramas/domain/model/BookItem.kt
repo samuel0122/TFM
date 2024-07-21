@@ -15,10 +15,10 @@ enum class Dataset(val value: Int) {
 }
 
 data class BookItem (
-    val bookId: Int = 0,
+    override val id: ID = 0,
     var title: String,
     var description: String,
     var dataset: Dataset = Dataset.Capitan,
-)
+): IdentifiableItem
 
 fun BookEntity.toDomain() = BookItem(bookId, title, description, Dataset.fromInt(dataset))

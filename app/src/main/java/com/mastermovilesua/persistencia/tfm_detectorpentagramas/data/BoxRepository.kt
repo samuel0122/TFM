@@ -21,7 +21,7 @@ class BoxRepository @Inject constructor(
     }
 
     suspend fun updateBox(boxItem: BoxItem): Boolean {
-        return boxDao.getBox(boxItem.boxId)?.let {
+        return boxDao.getBox(boxItem.id)?.let {
             boxDao.updateBox(boxItem.toDatabase(it.pageId)) > 0
         } ?: false
     }

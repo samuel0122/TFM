@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_delete_books"
-        android:title="Edit books list"
-        android:icon="@drawable/ic_delete"
-        app:showAsAction="ifRoom" />
+    <group
+        android:id="@+id/group_list_edit_mode"
+        android:visible="true">
+        <item
+            android:id="@+id/action_select_all"
+            android:checkable="true"
+            android:icon="@drawable/ic_checkbox_unchecked"
+            android:title="Select all"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_delete_pages"
+            android:icon="@drawable/ic_delete"
+            android:title="Edit books list"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_disable_edit_mode"
+            android:icon="@drawable/ic_close"
+            android:title="Clear selection"
+            app:showAsAction="ifRoom" />
+    </group>
+
+    <group
+        android:id="@+id/group_books_list"
+        android:visible="true">
+        <item
+            android:id="@+id/action_enable_edit_mode"
+            android:icon="@drawable/ic_list_edit_mode"
+            android:title="Edit books list"
+            app:showAsAction="ifRoom" />
+    </group>
 </menu>

@@ -18,7 +18,7 @@ class PageService @Inject constructor(
 
             val imageFile = File(pageItem.imageUri)
 
-            val idRequestBody = RequestBody.create(MediaType.get("text/plain"), pageItem.pageId.toString())
+            val idRequestBody = RequestBody.create(MediaType.get("text/plain"), pageItem.id.toString())
 
             val requestFile = RequestBody.create(MediaType.get("image/jpeg"), imageFile)
             val body = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
