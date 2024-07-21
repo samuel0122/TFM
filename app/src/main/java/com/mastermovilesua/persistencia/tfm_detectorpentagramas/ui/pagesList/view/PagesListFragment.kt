@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -12,15 +12,16 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPagesListBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.GridSpacingItemDecoration
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.PagesListAdapter
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.PagesListViewModel
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.GridSpacingItemDecoration
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.adapters.PagesListAdapter
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.viewModel.PagesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -58,12 +59,15 @@ class PagesListFragment : Fragment(), MenuProvider {
             )
         }
 
-        pagesGridAdapter.setOnItemClickListener { page ->
+        pagesGridAdapter.setOnItemClickListener { page, view ->
             if (isEditMode) {
                 viewModel.selectPage(page.id)
             } else {
                 findNavController().navigate(
-                    PagesListFragmentDirections.actionPagesListFragmentToPageDetailFragment(pageId = page.id)
+                    PagesListFragmentDirections.actionPagesListFragmentToPageDetailFragment(pageId = page.id),
+                    FragmentNavigatorExtras(
+                        view to view.transitionName
+                    )
                 )
             }
         }

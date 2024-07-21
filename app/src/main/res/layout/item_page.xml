@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_height="200dp"
+    tools:layout_width="200dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvHolder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@android:color/transparent" >
+        android:backgroundTint="@android:color/transparent"
+        tools:backgroundTint="@color/yellow">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivPage"
@@ -19,8 +22,9 @@
             android:id="@+id/vSelectedMark"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_checkbox_unchecked" />
+            android:layout_margin="3dp"
+            android:src="@drawable/ic_checkbox_unchecked"
+            android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
 

@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.editBook
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.view
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPageDetailBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.PageDetailViewModel
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.viewModel.PageDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,6 +26,8 @@ class PageDetailFragment : Fragment() {
     ): View {
         binding = FragmentPageDetailBinding.inflate(inflater)
 
+        binding.ivPage.transitionName = "pageTransition${args.pageId}"
+        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.page_transition)
         return binding.root
     }
 

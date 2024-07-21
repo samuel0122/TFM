@@ -1,11 +1,13 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.adapters
 
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.animatedFadeIn
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.animatedFadeOut
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.animatedScale
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.fromUriScaleDown
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ItemPageBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
@@ -21,30 +23,35 @@ class PagesListAdapter @Inject constructor(
 
     override fun bindLayout(
         holder: SelectableItemHolder<ItemPageBinding>,
-        item: PageItem,
-        isEditMode: Boolean
+        item: PageItem
     ) {
         holder.itemView.post {
             holder.itemView.layoutParams.height = holder.itemView.width
 
             holder.binding.apply {
+                root.transitionName = "pageTransition${item.id}"
                 cvHolder.radius = holder.itemView.width * 0.05f
                 ivPage.fromUriScaleDown(Uri.parse(item.imageUri), holder.itemView.width)
-                vSelectedMark.isVisible = isEditMode
             }
         }
     }
 
     override fun bindEditMode(binding: ItemPageBinding, isEditMode: Boolean, isSelected: Boolean) {
-        binding.vSelectedMark.isVisible = isEditMode
-
-        binding.cvHolder.apply {
-            scaleX = if (isSelected) 0.9f else 1f
-            scaleY = if (isSelected) 0.9f else 1f
+        binding.vSelectedMark.apply {
+            if (isEditMode) {
+                setImageResource(if (isSelected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked)
+                animatedFadeIn(150)
+            } else {
+                animatedFadeOut(150)
+            }
         }
 
-        if (isEditMode) {
-            binding.vSelectedMark.setImageResource(if (isSelected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked)
+        binding.cvHolder.apply {
+            if (isSelected) {
+                animatedScale(0.9f, 0.9f, 200)
+            } else {
+                animatedScale(1f, 1f, 200)
+            }
         }
     }
 }

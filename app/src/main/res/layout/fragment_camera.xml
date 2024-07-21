@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             app:scaleType="fitCenter"/>
 
-        <com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.FocusCircleView
+        <com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.FocusCircleView
             android:id="@+id/focusCircleView"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -33,7 +33,7 @@
             app:layout_constraintStart_toStartOf="@+id/pvCamera"
             app:layout_constraintTop_toTopOf="@+id/pvCamera" />
 
-        <com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.VerticalSeekBar
+        <com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.VerticalSeekBar
             android:id="@+id/sbExposure"
             android:layout_width="wrap_content"
             android:layout_height="0dp"

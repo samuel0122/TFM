@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.editBook
 
 import android.R
 import android.app.Dialog
@@ -13,7 +13,6 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.DialogEditBookBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Dataset
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.EditBookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

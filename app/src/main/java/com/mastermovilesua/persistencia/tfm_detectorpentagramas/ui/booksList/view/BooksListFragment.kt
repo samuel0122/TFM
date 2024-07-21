@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.view
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.booksList.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentBooksListBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.DialogsFactory
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.BooksListAdapter
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.BooksListViewModel
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.adapters.BooksListAdapter
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.booksList.viewModel.BooksListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -55,7 +55,7 @@ class BooksListFragment : Fragment(), MenuProvider {
             )
         }
 
-        booksListAdapter.setOnItemClickListener { book ->
+        booksListAdapter.setOnItemClickListener { book, _ ->
             if (isEditMode) {
                 viewModel.selectBook(book.id)
             } else {

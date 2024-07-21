@@ -16,8 +16,8 @@ class BoxRepository @Inject constructor(
     /**
      * @return ID of inserted Box.
      */
-    suspend fun insertBox(bookId: Int, boxItem: BoxItem): Int {
-        return boxDao.insertBox(boxItem.toDatabase(bookId)).toInt()
+    suspend fun insertBox(pageId: Int, boxItem: BoxItem): Int {
+        return boxDao.insertBox(boxItem.toDatabase(pageId)).toInt()
     }
 
     suspend fun updateBox(boxItem: BoxItem): Boolean {

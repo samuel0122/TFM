@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.viewModel
 
 import androidx.lifecycle.viewModelScope
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase

@@ -31,15 +31,15 @@ abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
         val item = currentList[position]
         val isSelected = selectedItemsIds.contains(item.id)
 
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(item)
+        holder.itemView.setOnClickListener { _ ->
+            onItemClickListener?.onItemClick(item, holder.binding.root)
         }
 
         Log.e(
             "SelectableListAdapter",
             "Update all interface of index [$position] isEditMode [$isEditMode] and selected [$isSelected]"
         )
-        bindLayout(holder, item, isEditMode)
+        bindLayout(holder, item)
         bindEditMode(holder.binding, isEditMode, isSelected)
     }
 
@@ -62,7 +62,7 @@ abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
         }
     }
 
-    abstract fun bindLayout(holder: SelectableItemHolder<VB>, item: T, isEditMode: Boolean)
+    abstract fun bindLayout(holder: SelectableItemHolder<VB>, item: T)
 
     abstract fun bindEditMode(binding: VB, isEditMode: Boolean, isSelected: Boolean)
 
