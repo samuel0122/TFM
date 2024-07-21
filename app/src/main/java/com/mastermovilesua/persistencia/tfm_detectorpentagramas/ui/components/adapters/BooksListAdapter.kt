@@ -7,27 +7,26 @@ import androidx.recyclerview.widget.DiffUtil
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ItemBookBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.adapters.SelectableListAdapter
 import javax.inject.Inject
 
-class BooksListAdapter @Inject constructor() :
-    SelectableListAdapter<BookItem, ItemBookBinding>(Companion) {
-
-    companion object : DiffUtil.ItemCallback<BookItem>() {
-        override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean =
-            oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean =
-            oldItem == newItem
-    }
+class BooksListAdapter @Inject constructor(
+    diffCallback: DiffUtil.ItemCallback<BookItem>
+) : SelectableListAdapter<BookItem, ItemBookBinding>(diffCallback) {
 
     override fun createBinding(parent: ViewGroup): ItemBookBinding =
         ItemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-    override fun bindLayout(holder: SelectableItemHolder<ItemBookBinding>, item: BookItem) {
-        holder.binding.tvTitle.text = item.title
-        holder.binding.tvDescription.text = item.description
-
-        holder.binding.vSelectedMark.isVisible = false
+    override fun bindLayout(
+        holder: SelectableItemHolder<ItemBookBinding>,
+        item: BookItem,
+        isEditMode: Boolean
+    ) {
+        holder.binding.apply {
+            tvTitle.text = item.title
+            tvDescription.text = item.description
+            vSelectedMark.isVisible = isEditMode
+        }
     }
 
     override fun bindEditMode(binding: ItemBookBinding, isEditMode: Boolean, isSelected: Boolean) {

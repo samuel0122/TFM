@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeleteBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeletePageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookWithPagesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class PagesListViewModel @Inject constructor(
     private val getBookWithPagesUseCase: GetBookWithPagesUseCase,
     private val insertPageUseCase: InsertPageUseCase,
-    private val deletePageUseCase: DeletePageUseCase
+    private val deletePageUseCase: DeletePageUseCase,
+    private val deleteBookUseCase: DeleteBookUseCase
 ) : ViewModel() {
 
     private val _bookModel = MutableLiveData<BookItem>()
@@ -101,10 +103,20 @@ class PagesListViewModel @Inject constructor(
 
             selectedPagesIds.value?.forEach { deletePageUseCase(it) }
 
-            _isLoading.postValue(false)
-
             _selectedPagesIds.postValue(emptySet())
             _isEditMode.postValue(false)
+
+            _isLoading.postValue(false)
+        }
+    }
+
+    fun deleteBook() {
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+
+            deleteBookUseCase(bookId)
+
+            _isLoading.postValue(false)
         }
     }
 }

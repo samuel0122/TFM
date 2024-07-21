@@ -9,30 +9,28 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.fromUriScaleDown
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ItemPageBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.adapters.SelectableListAdapter
 import javax.inject.Inject
 
-class PagesListAdapter @Inject constructor() :
-    SelectableListAdapter<PageItem, ItemPageBinding>(Companion) {
-    companion object : DiffUtil.ItemCallback<PageItem>() {
-        override fun areItemsTheSame(oldItem: PageItem, newItem: PageItem): Boolean =
-            oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: PageItem, newItem: PageItem): Boolean =
-            oldItem == newItem
-    }
+class PagesListAdapter @Inject constructor(
+    diffCallback: DiffUtil.ItemCallback<PageItem>
+) : SelectableListAdapter<PageItem, ItemPageBinding>(diffCallback) {
 
     override fun createBinding(parent: ViewGroup): ItemPageBinding =
         ItemPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-    override fun bindLayout(holder: SelectableItemHolder<ItemPageBinding>, item: PageItem) {
+    override fun bindLayout(
+        holder: SelectableItemHolder<ItemPageBinding>,
+        item: PageItem,
+        isEditMode: Boolean
+    ) {
         holder.itemView.post {
-            holder.itemView.layoutParams =
-                holder.itemView.layoutParams.also { it.height = holder.itemView.width }
+            holder.itemView.layoutParams.height = holder.itemView.width
 
             holder.binding.apply {
                 cvHolder.radius = holder.itemView.width * 0.05f
                 ivPage.fromUriScaleDown(Uri.parse(item.imageUri), holder.itemView.width)
-                vSelectedMark.isVisible = false
+                vSelectedMark.isVisible = isEditMode
             }
         }
     }

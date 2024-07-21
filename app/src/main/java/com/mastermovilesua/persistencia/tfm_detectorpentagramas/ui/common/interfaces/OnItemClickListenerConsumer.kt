@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.interfaces
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.interfaces
 
 fun interface OnItemClickListener<T> {
     fun onItemClick(item: T)

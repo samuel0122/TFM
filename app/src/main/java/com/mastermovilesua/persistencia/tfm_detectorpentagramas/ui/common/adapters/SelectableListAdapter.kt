@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.adapters
 
 import android.util.Log
 import android.view.ViewGroup
@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.ID
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.IdentifiableItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.interfaces.OnItemClickListener
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.interfaces.OnItemClickListenerConsumer
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.interfaces.OnItemClickListener
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.interfaces.OnItemClickListenerConsumer
 
 abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
     diffCallback: DiffUtil.ItemCallback<T>
@@ -29,12 +29,18 @@ abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
     // Binding view
     override fun onBindViewHolder(holder: SelectableItemHolder<VB>, position: Int) {
         val item = currentList[position]
+        val isSelected = selectedItemsIds.contains(item.id)
 
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(item)
         }
 
-        bindLayout(holder, item)
+        Log.e(
+            "SelectableListAdapter",
+            "Update all interface of index [$position] isEditMode [$isEditMode] and selected [$isSelected]"
+        )
+        bindLayout(holder, item, isEditMode)
+        bindEditMode(holder.binding, isEditMode, isSelected)
     }
 
     override fun onBindViewHolder(
@@ -42,16 +48,21 @@ abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        if (payloads.isEmpty()) super.onBindViewHolder(holder, position, payloads)
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            val item = currentList[position]
+            val isSelected = selectedItemsIds.contains(item.id)
+            Log.e(
+                "SelectableListAdapter",
+                "Update edit mode of index [$position] isEditMode [$isEditMode] and selected [$isSelected]"
+            )
 
-        val item = currentList[position]
-
-        val isSelected = selectedItemsIds.contains(item.id)
-
-        bindEditMode(holder.binding, isEditMode, isSelected)
+            bindEditMode(holder.binding, isEditMode, isSelected)
+        }
     }
 
-    abstract fun bindLayout(holder: SelectableItemHolder<VB>, item: T)
+    abstract fun bindLayout(holder: SelectableItemHolder<VB>, item: T, isEditMode: Boolean)
 
     abstract fun bindEditMode(binding: VB, isEditMode: Boolean, isSelected: Boolean)
 
@@ -88,14 +99,7 @@ abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
         )
 
         currentList.forEachIndexed { index, item ->
-            Log.e(
-                "SelectableListAdapter",
-                "Does changed item id [${item.id}] at index [$index]: ${
-                    changedElements.contains(item.id)
-                }"
-            )
             if (changedElements.contains(item.id)) {
-                Log.e("SelectableListAdapter", "Notify item [${item.id}] at index [$index].")
                 notifyItemChanged(index, isEditMode)
             }
         }

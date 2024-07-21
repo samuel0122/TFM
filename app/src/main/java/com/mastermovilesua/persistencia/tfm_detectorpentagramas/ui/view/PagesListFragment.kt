@@ -22,6 +22,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.Gr
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.PagesListAdapter
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.PagesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PagesListFragment : Fragment(), MenuProvider {
@@ -30,7 +31,8 @@ class PagesListFragment : Fragment(), MenuProvider {
 
     private lateinit var binding: FragmentPagesListBinding
 
-    private val pagesGridAdapter = PagesListAdapter()
+    @Inject
+    lateinit var pagesGridAdapter: PagesListAdapter
 
     private var isEditMode: Boolean = false
     private var menu: Menu? = null
@@ -117,7 +119,7 @@ class PagesListFragment : Fragment(), MenuProvider {
                 true
             }
 
-            R.id.action_delete_books -> {
+            R.id.action_delete_pages -> {
                 confirmDeleteSelectedPages()
                 true
             }
@@ -127,19 +129,20 @@ class PagesListFragment : Fragment(), MenuProvider {
                 true
             }
 
-            R.id.action_enable_edit_mode -> {
-                viewModel.enableEditMode()
-                true
-            }
-
-            R.id.action_delete_book -> {
-                true
-            }
-
             R.id.action_edit_book -> {
                 findNavController().navigate(
                     PagesListFragmentDirections.actionPagesListFragmentToEditBookDialog(args.bookId)
                 )
+                true
+            }
+
+            R.id.action_delete_book -> {
+                confirmDeleteSelectedBook()
+                true
+            }
+
+            R.id.action_enable_edit_mode -> {
+                viewModel.enableEditMode()
                 true
             }
 
@@ -159,6 +162,21 @@ class PagesListFragment : Fragment(), MenuProvider {
             }
             .show()
     }
+
+    private fun confirmDeleteSelectedBook() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Confirm delete current book")
+            .setMessage("Are you sure you want to delete current book (${viewModel.bookModel.value?.title})?")
+            .setPositiveButton("Delete") { _, _ ->
+                viewModel.deleteBook()
+                findNavController().navigateUp()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
 
     private fun updateMenuVisibility() {
         menu?.setGroupVisible(R.id.group_list_edit_mode, isEditMode)

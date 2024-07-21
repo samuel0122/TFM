@@ -11,7 +11,7 @@
             android:title="Select all"
             app:showAsAction="ifRoom" />
         <item
-            android:id="@+id/action_delete_pages"
+            android:id="@+id/action_delete_books"
             android:icon="@drawable/ic_delete"
             android:title="Edit books list"
             app:showAsAction="ifRoom" />

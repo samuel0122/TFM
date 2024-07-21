@@ -19,6 +19,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.Dialog
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.components.adapters.BooksListAdapter
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.viewModel.BooksListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BooksListFragment : Fragment(), MenuProvider {
@@ -26,7 +27,8 @@ class BooksListFragment : Fragment(), MenuProvider {
 
     private lateinit var binding: FragmentBooksListBinding
 
-    private val booksListAdapter = BooksListAdapter()
+    @Inject
+    lateinit var booksListAdapter: BooksListAdapter
 
     private var isEditMode: Boolean = false
     private var menu: Menu? = null
