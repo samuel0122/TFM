@@ -20,7 +20,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPagesListBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.GridSpacingItemDecoration
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.adapters.PagesListAdapter
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.viewModel.PagesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

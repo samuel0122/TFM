@@ -7,6 +7,5 @@ import javax.inject.Inject
 class UpdateBoxUseCase @Inject constructor(
     private val repository: BoxRepository
 ) {
-    suspend operator fun invoke(box: BoxItem): Boolean
-            = repository.updateBox(box)
+    suspend operator fun invoke(box: BoxItem): Boolean = repository.updateBox(box)
 }

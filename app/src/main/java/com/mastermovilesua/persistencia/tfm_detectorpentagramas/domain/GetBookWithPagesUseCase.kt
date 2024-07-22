@@ -8,6 +8,5 @@ import javax.inject.Inject
 class GetBookWithPagesUseCase @Inject constructor(
     private val repository: BookRepository
 ) {
-    suspend operator fun invoke(bookId: Int): Flow<BookWithPagesItem>
-    = repository.getBookWithPages(bookId)
+    operator fun invoke(bookId: Int): Flow<BookWithPagesItem> = repository.getBookWithPages(bookId)
 }

@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentBooksListBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.DialogsFactory
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.adapters.BooksListAdapter
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.booksList.viewModel.BooksListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

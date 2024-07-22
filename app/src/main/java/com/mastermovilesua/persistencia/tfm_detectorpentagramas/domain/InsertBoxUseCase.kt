@@ -7,6 +7,5 @@ import javax.inject.Inject
 class InsertBoxUseCase @Inject constructor(
     private val repository: BoxRepository
 ) {
-    suspend operator fun invoke(pageId: Int, box: BoxItem): Int
-            = repository.insertBox(pageId, box)
+    suspend operator fun invoke(pageId: Int, box: BoxItem): Int = repository.insertBox(pageId, box)
 }

@@ -5,6 +5,8 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.en
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageWithBoxesItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.toDomain
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PageRepository @Inject constructor(
@@ -14,8 +16,8 @@ class PageRepository @Inject constructor(
         return pageDao.getAllPages().map { it.toDomain() }
     }
 
-    suspend fun getPageWithBoxes(pageId: Int): PageWithBoxesItem? {
-        return pageDao.getPageWithBoxes(pageId)?.toDomain()
+    fun getPageWithBoxes(pageId: Int): Flow<PageWithBoxesItem> {
+        return pageDao.getPageWithBoxes(pageId).map { it.toDomain() }
     }
 
     /**

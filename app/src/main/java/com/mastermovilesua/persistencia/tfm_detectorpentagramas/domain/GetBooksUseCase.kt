@@ -5,9 +5,8 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Boo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-
 class GetBooksUseCase @Inject constructor(
     private val repository: BookRepository
-){
+) {
     suspend operator fun invoke(): Flow<List<BookItem>> = repository.getAllBooks()
 }

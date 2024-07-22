@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.adapters
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.booksList.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

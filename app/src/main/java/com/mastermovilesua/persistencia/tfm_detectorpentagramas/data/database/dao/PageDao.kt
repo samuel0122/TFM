@@ -9,6 +9,7 @@ import androidx.room.Update
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.PageEntity
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.relations.PageWithBoxesRelation
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PageDao {
@@ -31,7 +32,7 @@ interface PageDao {
     @Transaction
     @Query("SELECT * FROM ${MusicScoreBooksContract.TABLE_PAGE} " +
             "WHERE ${MusicScoreBooksContract.TABLE_PAGE_COLUMN_PAGE_ID} = :pageId")
-    suspend fun getPageWithBoxes(pageId: Int): PageWithBoxesRelation?
+    fun getPageWithBoxes(pageId: Int): Flow<PageWithBoxesRelation>
 
     /**
      * @return ID of inserted or replaced PageEntity.

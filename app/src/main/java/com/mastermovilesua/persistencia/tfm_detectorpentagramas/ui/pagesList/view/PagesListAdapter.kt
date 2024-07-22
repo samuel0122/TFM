@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.adapters
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view
 
 import android.net.Uri
 import android.view.LayoutInflater

@@ -7,6 +7,5 @@ import javax.inject.Inject
 class GetBookUseCase @Inject constructor(
     private val repository: BookRepository
 ) {
-    suspend operator fun invoke(bookId: Int): BookItem?
-            = repository.getBook(bookId)
+    suspend operator fun invoke(bookId: Int): BookItem? = repository.getBook(bookId)
 }
