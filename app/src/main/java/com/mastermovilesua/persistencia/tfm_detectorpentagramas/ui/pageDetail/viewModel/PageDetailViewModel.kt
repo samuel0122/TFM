@@ -1,10 +1,14 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeleteBoxUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeletePageUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBoxesForPageUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetPageWithBoxesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertBoxUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.UpdateBoxUseCase
@@ -14,10 +18,14 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Pag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.max
 
 @HiltViewModel
 class PageDetailViewModel @Inject constructor(
     private val getPageWithBoxesUseCase: GetPageWithBoxesUseCase,
+    private val getPageUseCase: GetPageUseCase,
+    private val getBoxesForPageUseCase: GetBoxesForPageUseCase,
+    private val deletePageUseCase: DeletePageUseCase,
     private val insertBoxUseCase: InsertBoxUseCase,
     private val deleteBoxUseCase: DeleteBoxUseCase,
     private val updateBoxUseCase: UpdateBoxUseCase
@@ -25,13 +33,15 @@ class PageDetailViewModel @Inject constructor(
 
     private val _pageModel = MutableLiveData<PageItem>()
     private val _boxesModel = MutableLiveData<List<BoxItem>>()
-    private val _selectedBox = MutableLiveData<BoxItem?>()
+    private val _selectedBoxId = MutableLiveData<Int?>()
     private val _isLoading = MutableLiveData<Boolean>()
+    private val _isEditMode = MutableLiveData<Boolean>()
 
     val pageModel: LiveData<PageItem> get() = _pageModel
     val boxesModel: LiveData<List<BoxItem>> get() = _boxesModel
-    val selectedBox: LiveData<BoxItem?> get() = _selectedBox
+    val selectedBoxId: LiveData<Int?> get() = _selectedBoxId
     val isLoading: LiveData<Boolean> get() = _isLoading
+    val isEditMode: LiveData<Boolean> get() = _isEditMode
 
     private var pageId: ID = -1
 
@@ -40,19 +50,37 @@ class PageDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            getPageWithBoxesUseCase(pageId).collect { bookWithPagesModel ->
-                _pageModel.postValue(bookWithPagesModel.page)
-                _boxesModel.postValue(bookWithPagesModel.boxes)
+            getPageUseCase(pageId)?.let { pageModel ->
+                _pageModel.postValue(pageModel)
+            }
 
+            getBoxesForPageUseCase(pageId).collect { boxesModel ->
+                Log.e("PageDetailViewModel", "COLLECTING BOXES")
+                _boxesModel.postValue(boxesModel)
             }
 
             _isLoading.postValue(false)
         }
     }
 
-    fun insertBox(box: BoxItem) {
+    fun insertNewBox() {
         viewModelScope.launch {
             _isLoading.postValue(true)
+
+            val box = boxesModel.value?.takeIf { it.isNotEmpty() }?.let { boxes ->
+                val totalX = boxes.sumOf { it.x.toDouble() }.toFloat()
+                val totalY = boxes.sumOf { it.y.toDouble() }.toFloat()
+                val totalWith = boxes.sumOf { it.width.toDouble() }.toFloat()
+                val totalHeight = boxes.sumOf { it.height.toDouble() }.toFloat()
+                val numBoxes = boxes.size
+                BoxItem(
+                    id = 0,
+                    x = totalX / numBoxes,
+                    y = totalY / numBoxes,
+                    width = totalWith / numBoxes,
+                    height = totalHeight / numBoxes
+                )
+            } ?: BoxItem(0, 0f, 0f, 0.3f, 0.1f)
 
             insertBoxUseCase(pageId, box)
 
@@ -64,27 +92,54 @@ class PageDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.postValue(true)
 
+            box.apply {
+                width = max(width, minBoxWidth)
+                height = max(height, minBoxHeight)
+            }
+
             updateBoxUseCase(box)
 
             _isLoading.postValue(false)
         }
     }
 
-    fun deleteBox(box: BoxItem) {
+    fun deleteBox(boxId: ID) {
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            deleteBoxUseCase(box.id)
+            deleteBoxUseCase(boxId)
 
             _isLoading.postValue(false)
         }
     }
 
-    fun selectBox(box: BoxItem) {
-        _selectedBox.postValue(box)
+    fun selectBox(boxId: ID?) {
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+
+            _selectedBoxId.postValue(boxId)
+
+            _isLoading.postValue(false)
+        }
     }
 
-    fun deselectBox() {
-        _selectedBox.postValue(null)
+    fun enableEditMode() {
+        _isEditMode.postValue(true)
+    }
+
+    fun disableEditMode() {
+        _isEditMode.postValue(false)
+        _selectedBoxId.postValue(null)
+    }
+
+    fun deletePage() {
+        viewModelScope.launch {
+            deletePageUseCase(pageId);
+        }
+    }
+
+    companion object {
+        private const val minBoxWidth = 0.1f
+        private const val minBoxHeight = 0.05f
     }
 }

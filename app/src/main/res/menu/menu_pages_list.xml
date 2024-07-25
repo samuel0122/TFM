@@ -12,7 +12,7 @@
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_delete_pages"
-            android:icon="@drawable/ic_delete"
+            android:icon="@drawable/ic_confirm_delete"
             android:title="Edit books list"
             app:showAsAction="ifRoom" />
         <item

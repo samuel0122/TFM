@@ -46,8 +46,8 @@
     <fragment
         android:id="@+id/pageDetailFragment"
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.view.PageDetailFragment"
-        android:label="PageDetailFragment"
-        tools:layout="@layout/fragment_page_detail" >
+        android:label="Page Detail"
+        tools:layout="@layout/fragment_page_detail">
         <argument
             android:name="pageId"
             app:argType="integer" />

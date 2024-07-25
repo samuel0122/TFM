@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.BoxEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BoxDao {
@@ -22,6 +23,13 @@ interface BoxDao {
     @Query("SELECT * FROM ${MusicScoreBooksContract.TABLE_BOX} " +
             "WHERE ${MusicScoreBooksContract.TABLE_BOX_COLUMN_BOX_ID} = :boxId")
     suspend fun getBox(boxId: Int): BoxEntity?
+
+    /**
+     * @return BoxEntity is exists.
+     */
+    @Query("SELECT * FROM ${MusicScoreBooksContract.TABLE_BOX} " +
+            "WHERE ${MusicScoreBooksContract.TABLE_BOX_COLUMN_PAGE_ID} = :pageId")
+    fun getBoxesForPage(pageId: Int): Flow<List<BoxEntity>>
 
     /**
      * @return ID of inserted or replaced BoxEntity.

@@ -3,41 +3,156 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.v
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPageDetailBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.viewModel.PageDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PageDetailFragment : Fragment() {
+class PageDetailFragment : Fragment(), MenuProvider {
     private val viewModel: PageDetailViewModel by viewModels()
     private val args: PageDetailFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentPageDetailBinding
 
-    override fun onCreateView (
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentPageDetailBinding.inflate(inflater)
-
-        binding.ivPage.transitionName = "pageTransition${args.pageId}"
-        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.page_transition)
-        return binding.root
-    }
+    private var isEditMode: Boolean = false
+    private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.pageModel.observe(this) {
-            binding.ivPage.setImageURI(Uri.parse(it.imageUri))
+        viewModel.onCreate(args.pageId)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentPageDetailBinding.inflate(inflater)
+
+        /*
+        binding.ivPage.transitionName = "pageTransition${args.pageId}"
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.page_transition)
+        */
+        binding.apply {
+            cvBoxesCanvas.setOnCanvasItemUpdateListener { canvasItem ->
+                val boxCanvasItem = canvasItem as BoxCanvasItem
+                boxCanvasItem.apply {
+                    x = if (x < 0f) {
+                        0f
+                    } else if (x > cvBoxesCanvas.width - width) {
+                        cvBoxesCanvas.width - width
+                    } else x
+
+                    y = if (y < 0f) {
+                        0f
+                    } else if (y > cvBoxesCanvas.height - height) {
+                        cvBoxesCanvas.height - height
+                    } else y
+                }
+
+                viewModel.updateBox(
+                    boxCanvasItem.toDomain(
+                        cvBoxesCanvas.width.toFloat(),
+                        cvBoxesCanvas.height.toFloat()
+                    )
+                )
+            }
+            cvBoxesCanvas.setOnCanvasItemSelectListener { canvasItem ->
+                if (isEditMode) viewModel.selectBox(canvasItem?.id)
+            }
+            cvBoxesCanvas.setOnCanvasItemDeleteListener { canvasItem ->
+                viewModel.deleteBox(canvasItem.id)
+            }
+
+            ivPage.transitionName = "pageTransition${args.pageId}"
         }
 
-        viewModel.onCreate(args.pageId)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        activity?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        viewModel.pageModel.observe(viewLifecycleOwner) { pageModel ->
+            binding.ivPage.setImageURI(Uri.parse(pageModel.imageUri))
+        }
+
+        viewModel.boxesModel.observe(viewLifecycleOwner) { boxesModel ->
+            binding.cvBoxesCanvas.run {
+                updateCanvasItems(boxesModel.map { boxModel ->
+                    boxModel.toCanvas(
+                        requireContext(),
+                        width.toFloat(),
+                        height.toFloat()
+                    )
+                })
+            }
+        }
+
+        viewModel.selectedBoxId.observe(viewLifecycleOwner) { selectedBoxId ->
+            binding.cvBoxesCanvas.selectCanvasItem(selectedBoxId)
+        }
+
+        viewModel.isEditMode.observe(viewLifecycleOwner) { isEditMode ->
+            this.isEditMode = isEditMode
+            updateMenuVisibility()
+        }
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_page_detail, menu)
+
+        this.menu = menu
+        updateMenuVisibility()
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.action_add_box -> {
+                viewModel.insertNewBox()
+                true
+            }
+
+            R.id.action_disable_edit_mode -> {
+                viewModel.disableEditMode()
+                true
+            }
+
+            R.id.action_enable_edit_mode -> {
+                viewModel.enableEditMode()
+                true
+            }
+
+            R.id.action_delete_page -> {
+                viewModel.deletePage()
+                findNavController().navigateUp()
+                true
+            }
+
+            R.id.action_share_page -> {
+                true
+            }
+
+            else -> false
+        }
+    }
+
+    private fun updateMenuVisibility() {
+        menu?.setGroupVisible(R.id.group_page_edit_mode, isEditMode)
+        menu?.setGroupVisible(R.id.group_page_detail, !isEditMode)
     }
 }

@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.ID
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.IdentifiableItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.interfaces.OnItemClickListener
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.interfaces.OnItemClickListenerConsumer
 
 abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
     diffCallback: DiffUtil.ItemCallback<T>

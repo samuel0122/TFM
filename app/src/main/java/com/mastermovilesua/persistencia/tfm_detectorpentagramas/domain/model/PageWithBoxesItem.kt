@@ -7,4 +7,6 @@ data class PageWithBoxesItem(
     val boxes: List<BoxItem>
 )
 
-fun PageWithBoxesRelation.toDomain() = PageWithBoxesItem(page.toDomain(), boxes.map { it.toDomain() })
+fun PageWithBoxesRelation.toDomain(): PageWithBoxesItem {
+    return PageWithBoxesItem(page.toDomain(), boxes.map { it.toDomain() })
+}

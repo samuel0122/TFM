@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.interfaces
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.adapters
 
 import android.view.View
 

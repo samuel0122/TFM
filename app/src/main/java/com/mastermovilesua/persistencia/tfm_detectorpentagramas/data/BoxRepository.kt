@@ -4,6 +4,8 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.da
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.toDatabase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BoxItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.toDomain
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BoxRepository @Inject constructor(
@@ -11,6 +13,12 @@ class BoxRepository @Inject constructor(
 ) {
     suspend fun getAllBoxes(): List<BoxItem> {
         return boxDao.getAllBoxes().map { it.toDomain() }
+    }
+
+    fun getBoxesForPage(pageId: Int): Flow<List<BoxItem>> {
+        return boxDao.getBoxesForPage(pageId).map { boxes ->
+            boxes.map { it.toDomain() }
+        }
     }
 
     /**

@@ -16,8 +16,14 @@ class PageRepository @Inject constructor(
         return pageDao.getAllPages().map { it.toDomain() }
     }
 
+    suspend fun getPage(pageId: Int) : PageItem? {
+        return pageDao.getPage(pageId)?.toDomain()
+    }
+
     fun getPageWithBoxes(pageId: Int): Flow<PageWithBoxesItem> {
-        return pageDao.getPageWithBoxes(pageId).map { it.toDomain() }
+        return pageDao.getPageWithBoxes(pageId).map {
+            it.toDomain()
+        }
     }
 
     /**

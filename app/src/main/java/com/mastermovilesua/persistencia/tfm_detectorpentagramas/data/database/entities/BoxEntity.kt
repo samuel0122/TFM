@@ -22,16 +22,16 @@ data class BoxEntity (
     val boxId: Int,
 
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_BOX_COLUMN_X)
-    var x: Int,
+    var x: Float,
 
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_BOX_COLUMN_Y)
-    var y: Int,
+    var y: Float,
 
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_BOX_COLUMN_WIDTH)
-    var width: Int,
+    var width: Float,
 
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_BOX_COLUMN_HEIGHT)
-    var height: Int,
+    var height: Float,
 
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_BOX_COLUMN_PAGE_ID)
     val pageId: Int
