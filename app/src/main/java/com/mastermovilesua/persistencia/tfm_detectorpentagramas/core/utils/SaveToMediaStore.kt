@@ -22,14 +22,33 @@ import java.util.Locale
 object SaveToMediaStore {
 
     fun getImageFileName(imageName: String = "MyImage", index: Int = 1): String {
-        val timeStamp: String = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis())
-        return "${imageName}_${timeStamp}_${index}.jpg"
+        val timeStamp: String = SimpleDateFormat(
+            "yyyy-MM-dd_HH-mm-ss-SSS",
+            Locale.US
+        ).format(System.currentTimeMillis())
+        return "${imageName}_${timeStamp}_${index}.jpeg"
     }
 
-    fun saveImageToInternalStorage(context: Context, imageUri: Uri, imageName: String = "MyImage", index: Int = 1): Uri {
+    fun getFileForImageFile(context: Context, imageFileName: String): File {
+        return File(context.filesDir, imageFileName)
+    }
 
-        val copyImageFile = File(context.filesDir, getImageFileName(imageName, index))
-        val copyImageUri: Uri = FileProvider.getUriForFile(context, MusicScoreBooksContract.AUTHORITY, copyImageFile)
+    fun getTemporalFileForImageFile(context: Context, imageFileName: String): File {
+        return File(context.cacheDir, imageFileName)
+    }
+
+    fun getImageUriForImageFile(context: Context, file: File): Uri {
+        return FileProvider.getUriForFile(context, MusicScoreBooksContract.AUTHORITY, file)
+    }
+
+    fun saveImageToInternalStorage(
+        context: Context,
+        imageUri: Uri,
+        imageName: String = "MyImage",
+        index: Int = 1
+    ): Uri {
+        val copyImageFile = getFileForImageFile(context, getImageFileName(imageName, index))
+        val copyImageUri = getImageUriForImageFile(context, copyImageFile)
 
         try {
             val selectedImageStream = context.contentResolver.openInputStream(imageUri)
@@ -46,6 +65,10 @@ object SaveToMediaStore {
         }
 
         return copyImageUri
+    }
+
+    fun deleteImage(context: Context, imageUri: Uri) {
+        context.contentResolver.delete(imageUri, null, null)
     }
 
     fun saveImageToStorage(context: Context, bitmap: Bitmap): Uri? {
@@ -70,11 +93,14 @@ object SaveToMediaStore {
                         put(
                             MediaStore.MediaColumns.RELATIVE_PATH,
                             Environment.DIRECTORY_PICTURES + File.separator + folderName
-                            )
+                        )
                     }
 
                     // Inserting the contentValues to contentResolver and getting the Uri
-                    imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValue)
+                    imageUri = contentResolver.insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        contentValue
+                    )
 
                     // Opening an outputStream with the Uri we got
                     outputStream = imageUri?.let { contentResolver.openOutputStream(it) }

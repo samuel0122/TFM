@@ -10,6 +10,8 @@ interface ICanvasItem {
 
     fun contains(x: Float, y: Float): Boolean
     fun onSelectedDown(x: Float, y: Float): CanvasInteractionType
+    fun onShowPress(x: Float, y: Float)
+    fun onClearPress(x: Float, y: Float)
 
     fun onDrag(xDistance: Float, yDistance: Float)
     fun onResize(xDistance: Float?, yDistance: Float?)

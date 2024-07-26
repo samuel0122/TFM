@@ -139,7 +139,7 @@ class PageDetailViewModel @Inject constructor(
     }
 
     companion object {
-        private const val minBoxWidth = 0.1f
+        private const val minBoxWidth = 0.15f
         private const val minBoxHeight = 0.05f
     }
 }

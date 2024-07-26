@@ -1,5 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.view
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.ImageManipulation
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPageDetailBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.viewModel.PageDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,9 +97,9 @@ class PageDetailFragment : Fragment(), MenuProvider {
             binding.cvBoxesCanvas.run {
                 updateCanvasItems(boxesModel.map { boxModel ->
                     boxModel.toCanvas(
-                        requireContext(),
                         width.toFloat(),
-                        height.toFloat()
+                        height.toFloat(),
+                        requireContext()
                     )
                 })
             }
@@ -144,6 +146,22 @@ class PageDetailFragment : Fragment(), MenuProvider {
             }
 
             R.id.action_share_page -> {
+                viewModel.pageModel.value?.let { pageModel ->
+                    val shareImage = ImageManipulation.drawRectanglesOnImage(requireContext(), Uri.parse(pageModel.imageUri), viewModel.boxesModel.value)
+                    val shareIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, "Mira esta foto!")
+                        putExtra(Intent.EXTRA_TITLE, "Comparte tu imagen!")
+                        putExtra(Intent.EXTRA_STREAM, shareImage)
+
+                        type = "image/jpeg"
+                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    }
+                    
+                    startActivity(Intent.createChooser(shareIntent, null))
+
+                    // SaveToMediaStore.deleteImage(requireContext(), shareImage)
+                }
                 true
             }
 

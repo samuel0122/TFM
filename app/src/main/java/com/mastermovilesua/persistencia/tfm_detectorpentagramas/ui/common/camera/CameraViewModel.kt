@@ -2,7 +2,6 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.camer
 
 import android.content.Context
 import android.net.Uri
-import androidx.annotation.NonNull
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -20,7 +19,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -129,7 +127,10 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
             .build()
     }
 
-    fun discardCapturedPage() {
+    fun discardCapturedPage(context: Context) {
+        _pictureUri.value?.let { pictureUri ->
+            SaveToMediaStore.deleteImage(context, pictureUri)
+        }
         _cameraState.postValue(CameraState.Live)
     }
 
@@ -205,11 +206,11 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun takePhoto(@NonNull context: Context) {
+    fun takePhoto(context: Context) {
         viewModelScope.launch {
             _isCapturingImage.postValue(true)
 
-            val file = File(context.filesDir, SaveToMediaStore.getImageFileName())
+            val file = SaveToMediaStore.getFileForImageFile(context, SaveToMediaStore.getImageFileName())
 
             val outputOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
@@ -218,7 +219,7 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
                 cameraExecutor,
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                        _pictureUri.postValue(Uri.fromFile(file))
+                        _pictureUri.postValue(SaveToMediaStore.getImageUriForImageFile(context, file))
                         _cameraState.postValue(CameraState.ImageCaptured)
                         _isCapturingImage.postValue(false)
                     }

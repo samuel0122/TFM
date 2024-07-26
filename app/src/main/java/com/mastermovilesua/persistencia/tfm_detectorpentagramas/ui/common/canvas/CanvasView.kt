@@ -13,9 +13,10 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.canvas
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.canvas.listeners.OnCanvasItemUpdateListener
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.canvas.listeners.OnCanvasItemUpdateListenerConsumer
 
-class CanvasView(
+class CanvasView (
     context: Context, attrs: AttributeSet? = null
-) : View(context, attrs), GestureDetector.OnGestureListener, OnCanvasItemUpdateListenerConsumer,
+) : View(context, attrs), GestureDetector.OnGestureListener,
+    OnCanvasItemUpdateListenerConsumer,
     OnCanvasItemSelectListenerConsumer,
     OnCanvasItemDeleteListenerConsumer {
     private var canvasItems = emptyMap<Int, ICanvasItem>()
@@ -28,6 +29,13 @@ class CanvasView(
     private val gestureDetector = GestureDetector(context, this)
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_UP) {
+            selectedItem?.let { selectedItem ->
+                // selectedItem.onClearPress(event.x, event.y)
+                onCanvasItemUpdateListener?.onItemUpdate(selectedItem)
+            }
+        }
+
         return gestureDetector.onTouchEvent(event)
     }
 
@@ -67,10 +75,13 @@ class CanvasView(
     override fun onDown(e1: MotionEvent): Boolean {
         canvasInteractionType = selectedItem?.onSelectedDown(e1.x, e1.y)
             ?: CanvasInteractionType.None
+
+        selectedItem?.onShowPress(e1.x, e1.y)
         return true
     }
 
-    override fun onShowPress(e1: MotionEvent) {}
+    override fun onShowPress(e1: MotionEvent) {
+    }
 
     override fun onSingleTapUp(e1: MotionEvent): Boolean {
         when (canvasInteractionType) {
@@ -103,7 +114,7 @@ class CanvasView(
                 CanvasInteractionType.Move -> selectedItem.onDrag(distanceX, distanceY)
                 else -> {}
             }
-            onCanvasItemUpdateListener?.onItemUpdate(selectedItem)
+            invalidate()
         }
 
         return true

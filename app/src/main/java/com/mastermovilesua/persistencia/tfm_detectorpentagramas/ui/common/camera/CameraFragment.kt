@@ -40,7 +40,7 @@ abstract class CameraFragment : Fragment() {
         binding.btnToggleFlash.setOnClickListener { viewModel.toggleFlash() }
         binding.btnShotPhoto.setOnClickListener { viewModel.takePhoto(requireContext()) }
 
-        binding.btnDiscardPhoto.setOnClickListener { viewModel.discardCapturedPage() }
+        binding.btnDiscardPhoto.setOnClickListener { viewModel.discardCapturedPage(requireContext()) }
         binding.btnConfirmPhoto.setOnClickListener { onImageConfirmationAction() }
 
         binding.clLive.visibility = View.GONE

@@ -29,29 +29,29 @@ class BoxCanvasItem(
     var y: Float,
     var width: Float,
     var height: Float,
-    context: Context
+    context: Context?
 ) : ICanvasItem {
 
-    private var paint = Paint().apply {
+    private val paint = Paint().apply {
         style = Paint.Style.STROKE
         color = Color.RED
         strokeWidth = 4f
     }
-
-    private var paintResizeButtons = Paint().apply {
+    private val paintResizeButtons = Paint().apply {
         style = Paint.Style.FILL
         color = Color.BLUE
     }
-    private var paintDeleteButton = Paint().apply {
+    private val paintDeleteButton = Paint().apply {
         style = Paint.Style.FILL
         color = Color.RED
     }
-    private val circleDelete: Circle get() = Circle(x, y, 20f)
-    private val circleFullResize: Circle get() = Circle(x + width, y + height, 20f)
-    private val circleVerticalResize: Circle get() = Circle(x + (width / 2f), y + height, 20f)
-    private val circleHorizontalResize: Circle get() = Circle(x + width, y + (height / 2f), 20f)
 
-    private val deleteIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_close)
+    private val circleDelete: Circle get() = Circle(x, y, 30f)
+    private val circleFullResize: Circle get() = Circle(x + width, y + height, 30f)
+    private val circleVerticalResize: Circle get() = Circle(x + (width / 2f), y + height, 30f)
+    private val circleHorizontalResize: Circle get() = Circle(x + width, y + (height / 2f), 30f)
+
+    private val deleteIcon: Drawable? = context?.let { ContextCompat.getDrawable(context, R.drawable.ic_close) }
 
     override fun draw(canvas: Canvas) {
         canvas.drawRect(x, y, x + width, y + height, paint)
@@ -93,6 +93,14 @@ class BoxCanvasItem(
         }
     }
 
+    override fun onShowPress(x: Float, y: Float) {
+        paint.color = Color.YELLOW
+    }
+
+    override fun onClearPress(x: Float, y: Float) {
+        paint.color = Color.RED
+    }
+
     override fun onDrag(xDistance: Float, yDistance: Float) {
         x -= xDistance
         y -= yDistance
@@ -104,7 +112,7 @@ class BoxCanvasItem(
     }
 }
 
-fun BoxItem.toCanvas(context: Context, canvasWidth: Float, canvasHeight: Float): BoxCanvasItem =
+fun BoxItem.toCanvas(canvasWidth: Float, canvasHeight: Float, context: Context? = null): BoxCanvasItem =
     BoxCanvasItem(id, x * canvasWidth, y * canvasHeight, width * canvasWidth, height * canvasHeight, context)
 
 fun BoxCanvasItem.toDomain(canvasWidth: Float, canvasHeight: Float): BoxItem =

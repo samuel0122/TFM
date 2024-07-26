@@ -29,5 +29,5 @@ object MusicScoreBooksContract {
     const val TABLE_BOX_COLUMN_HEIGHT = "height"
     const val TABLE_BOX_COLUMN_PAGE_ID = "pageId"
 
-    const val AUTHORITY = "com.mastermovilesua.persistencia.tfm_detectorpentagramas"
+    const val AUTHORITY = "com.mastermovilesua.persistencia.tfm_detectorpentagramas.fileprovider"
 }

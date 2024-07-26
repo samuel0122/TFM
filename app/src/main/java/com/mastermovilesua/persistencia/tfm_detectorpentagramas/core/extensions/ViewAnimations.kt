@@ -17,7 +17,13 @@ fun View.animatedFadeIn(milliseconds: Long) {
         animate()
             .alpha(1f)
             .setDuration(milliseconds)
-            .setListener(null)
+            .setListener(object : Animator.AnimatorListener {
+                override fun onAnimationCancel(p0: Animator) { alpha = 1f }
+
+                override fun onAnimationEnd(p0: Animator) {}
+                override fun onAnimationStart(p0: Animator) {}
+                override fun onAnimationRepeat(p0: Animator) {}
+            })
 }
 
 fun View.animatedFadeOut(milliseconds: Long) {
@@ -27,7 +33,7 @@ fun View.animatedFadeOut(milliseconds: Long) {
             .setDuration(milliseconds)
             .setListener(object : Animator.AnimatorListener {
                 override fun onAnimationEnd(p0: Animator) { isVisible = false }
-                override fun onAnimationCancel(p0: Animator) { isVisible = false }
+                override fun onAnimationCancel(p0: Animator) { isVisible = false; alpha = 0f }
 
                 override fun onAnimationStart(p0: Animator) {}
                 override fun onAnimationRepeat(p0: Animator) {}
