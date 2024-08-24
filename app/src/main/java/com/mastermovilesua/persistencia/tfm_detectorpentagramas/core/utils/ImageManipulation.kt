@@ -29,7 +29,7 @@ object ImageManipulation {
             canvasRectangle.draw(canvas)
         }
 
-        val tempFile = SaveToMediaStore.getFileForImageFile(
+        val tempFile = SaveToMediaStore.getTemporalFileForImageFile(
             context,
             SaveToMediaStore.getImageFileName("SharePage")
         )

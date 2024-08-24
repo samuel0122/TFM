@@ -1,18 +1,20 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data
 
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.BookDao
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.toDatabase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.PageDao
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.mappers.toDatabase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.mappers.toDomain
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookWithPagesItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BookRepository @Inject constructor(
-    private val bookDao: BookDao
+    private val bookDao: BookDao,
+    private val pageDao: PageDao
 ) {
-    suspend fun getAllBooks(): Flow<List<BookItem>> =
+    fun getAllBooks(): Flow<List<BookItem>> =
         bookDao.getAllBooks().map { booksList ->
             booksList.map { book -> book.toDomain() }
         }
@@ -20,6 +22,12 @@ class BookRepository @Inject constructor(
 
     suspend fun getBook(bookId: Int): BookItem? =
         bookDao.getBook(bookId)?.toDomain()
+
+    suspend fun getBookOfPage(pageId: Int): BookItem? =
+        pageDao.getPage(pageId)?.let { page ->
+            bookDao.getBook(page.bookId)
+        }?.toDomain()
+
 
     fun getBookWithPages(bookId: Int): Flow<BookWithPagesItem> =
         bookDao.getBookWithPages(bookId).map { it.toDomain() }

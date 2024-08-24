@@ -5,5 +5,6 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.network.con
 
 data class PageWithBoxesModel (
     @SerializedName(PageApiContract.PAGE_FIELD_ID) val pageId: Int,
+    @SerializedName(PageApiContract.BOOK_FIELD_DATASET) val dataset: Int,
     @SerializedName(PageApiContract.PAGE_FIELD_BOXES) val boxes: List<BoxModel>
 )

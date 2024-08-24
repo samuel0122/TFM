@@ -34,5 +34,10 @@
             android:icon="@drawable/ic_share"
             android:title="Share page"
             app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_process_page"
+            android:icon="@drawable/ic_flip_camera"
+            android:title="Process page"
+            app:showAsAction="ifRoom" />
     </group>
 </menu>

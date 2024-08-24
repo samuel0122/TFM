@@ -1,5 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.di
 
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.network.PageApiClient
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.network.contracts.PageApiContract
 import dagger.Module
 import dagger.Provides
@@ -21,4 +22,9 @@ object NetworkModule {
             .build()
     }
 
+    @Singleton
+    @Provides
+    fun providePageApiClient(retrofit: Retrofit): PageApiClient {
+        return retrofit.create(PageApiClient::class.java)
+    }
 }

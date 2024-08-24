@@ -23,13 +23,13 @@ fun Circle.contains(x: Float, y: Float): Boolean {
     return dx * dx + dy * dy <= this.radius * this.radius
 }
 
-class BoxCanvasItem(
+class BoxCanvasItem (
     override var id: Int,
     var x: Float,
     var y: Float,
     var width: Float,
     var height: Float,
-    context: Context?
+    private val context: Context?
 ) : ICanvasItem {
 
     private val paint = Paint().apply {

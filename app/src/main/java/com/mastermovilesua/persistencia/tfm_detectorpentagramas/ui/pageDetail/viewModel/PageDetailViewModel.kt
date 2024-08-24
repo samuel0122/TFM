@@ -11,6 +11,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBoxesF
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetPageWithBoxesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertBoxUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.ProcessPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.UpdateBoxUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BoxItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.ID
@@ -28,7 +29,8 @@ class PageDetailViewModel @Inject constructor(
     private val deletePageUseCase: DeletePageUseCase,
     private val insertBoxUseCase: InsertBoxUseCase,
     private val deleteBoxUseCase: DeleteBoxUseCase,
-    private val updateBoxUseCase: UpdateBoxUseCase
+    private val updateBoxUseCase: UpdateBoxUseCase,
+    private val processPageUseCase: ProcessPageUseCase
 ) : ViewModel() {
 
     private val _pageModel = MutableLiveData<PageItem>()
@@ -54,12 +56,16 @@ class PageDetailViewModel @Inject constructor(
                 _pageModel.postValue(pageModel)
             }
 
+            _isLoading.postValue(false)
+        }
+    }
+
+    fun getBoxes() {
+        viewModelScope.launch {
             getBoxesForPageUseCase(pageId).collect { boxesModel ->
                 Log.e("PageDetailViewModel", "COLLECTING BOXES")
                 _boxesModel.postValue(boxesModel)
             }
-
-            _isLoading.postValue(false)
         }
     }
 
@@ -82,7 +88,8 @@ class PageDetailViewModel @Inject constructor(
                 )
             } ?: BoxItem(0, 0f, 0f, 0.3f, 0.1f)
 
-            insertBoxUseCase(pageId, box)
+            val insertedBoxId = insertBoxUseCase(pageId, box)
+            _selectedBoxId.postValue(insertedBoxId)
 
             _isLoading.postValue(false)
         }
@@ -108,6 +115,16 @@ class PageDetailViewModel @Inject constructor(
             _isLoading.postValue(true)
 
             deleteBoxUseCase(boxId)
+
+            _isLoading.postValue(false)
+        }
+    }
+
+    fun processPage(){
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+
+            processPageUseCase(pageId)
 
             _isLoading.postValue(false)
         }

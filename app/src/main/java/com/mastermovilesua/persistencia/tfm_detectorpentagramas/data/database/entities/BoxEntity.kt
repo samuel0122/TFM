@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BoxItem
 
 @Entity(
     tableName = MusicScoreBooksContract.TABLE_BOX,
@@ -37,4 +36,3 @@ data class BoxEntity (
     val pageId: Int
 )
 
-fun BoxItem.toDatabase(pageId: Int) = BoxEntity(id, x, y, width, height, pageId)

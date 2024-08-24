@@ -1,9 +1,9 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data
 
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.BoxDao
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.entities.toDatabase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.mappers.toDatabase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.mappers.toDomain
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BoxItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +21,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.Image
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPageDetailBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.viewModel.PageDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.min
 
 @AndroidEntryPoint
 class PageDetailFragment : Fragment(), MenuProvider {
@@ -51,17 +53,8 @@ class PageDetailFragment : Fragment(), MenuProvider {
             cvBoxesCanvas.setOnCanvasItemUpdateListener { canvasItem ->
                 val boxCanvasItem = canvasItem as BoxCanvasItem
                 boxCanvasItem.apply {
-                    x = if (x < 0f) {
-                        0f
-                    } else if (x > cvBoxesCanvas.width - width) {
-                        cvBoxesCanvas.width - width
-                    } else x
-
-                    y = if (y < 0f) {
-                        0f
-                    } else if (y > cvBoxesCanvas.height - height) {
-                        cvBoxesCanvas.height - height
-                    } else y
+                    x = x.coerceIn(0f, cvBoxesCanvas.width - width)
+                    y = y.coerceIn(0f, cvBoxesCanvas.height - height)
                 }
 
                 viewModel.updateBox(
@@ -71,14 +64,16 @@ class PageDetailFragment : Fragment(), MenuProvider {
                     )
                 )
             }
+
             cvBoxesCanvas.setOnCanvasItemSelectListener { canvasItem ->
                 if (isEditMode) viewModel.selectBox(canvasItem?.id)
             }
+
             cvBoxesCanvas.setOnCanvasItemDeleteListener { canvasItem ->
                 viewModel.deleteBox(canvasItem.id)
             }
 
-            ivPage.transitionName = "pageTransition${args.pageId}"
+            // ivPage.transitionName = "pageTransition${args.pageId}"
         }
 
         return binding.root
@@ -89,16 +84,36 @@ class PageDetailFragment : Fragment(), MenuProvider {
 
         activity?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility =
+                if (isLoading) View.VISIBLE
+                else View.GONE
+        }
+
         viewModel.pageModel.observe(viewLifecycleOwner) { pageModel ->
-            binding.ivPage.setImageURI(Uri.parse(pageModel.imageUri))
+            binding.apply {
+                ivPage.setImageURI(pageModel.imageUri.toUri())
+                ivPage.post {
+                    cvBoxesCanvas.layoutParams = cvBoxesCanvas.layoutParams.apply {
+                        val scaleWith: Double = ivPage.width.toDouble() / ivPage.drawable.intrinsicWidth
+                        val scaleHeight: Double = ivPage.height.toDouble() / ivPage.drawable.intrinsicHeight
+                        val scaleBoth = min(scaleWith, scaleHeight)
+
+                        height = (ivPage.drawable.intrinsicHeight.toDouble() * scaleBoth).toInt()
+                        width = (ivPage.drawable.intrinsicWidth.toDouble() * scaleBoth).toInt()
+                    }
+
+                    viewModel.getBoxes()
+                }
+            }
         }
 
         viewModel.boxesModel.observe(viewLifecycleOwner) { boxesModel ->
             binding.cvBoxesCanvas.run {
                 updateCanvasItems(boxesModel.map { boxModel ->
                     boxModel.toCanvas(
-                        width.toFloat(),
-                        height.toFloat(),
+                        layoutParams.width.toFloat(),
+                        layoutParams.height.toFloat(),
                         requireContext()
                     )
                 })
@@ -147,7 +162,11 @@ class PageDetailFragment : Fragment(), MenuProvider {
 
             R.id.action_share_page -> {
                 viewModel.pageModel.value?.let { pageModel ->
-                    val shareImage = ImageManipulation.drawRectanglesOnImage(requireContext(), Uri.parse(pageModel.imageUri), viewModel.boxesModel.value)
+                    val shareImage = ImageManipulation.drawRectanglesOnImage(
+                        requireContext(),
+                        Uri.parse(pageModel.imageUri),
+                        viewModel.boxesModel.value
+                    )
                     val shareIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(Intent.EXTRA_TEXT, "Mira esta foto!")
@@ -157,11 +176,16 @@ class PageDetailFragment : Fragment(), MenuProvider {
                         type = "image/jpeg"
                         flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                     }
-                    
+
                     startActivity(Intent.createChooser(shareIntent, null))
 
                     // SaveToMediaStore.deleteImage(requireContext(), shareImage)
                 }
+                true
+            }
+
+            R.id.action_process_page -> {
+                viewModel.processPage()
                 true
             }
 

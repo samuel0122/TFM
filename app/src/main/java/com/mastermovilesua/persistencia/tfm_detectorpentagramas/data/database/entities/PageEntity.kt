@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 
 @Entity(
     tableName = MusicScoreBooksContract.TABLE_PAGE,
@@ -34,4 +33,3 @@ data class PageEntity(
     val bookId: Int
 )
 
-fun PageItem.toDatabase(bookId: Int) = PageEntity(id, imageUri, processed, order, bookId)

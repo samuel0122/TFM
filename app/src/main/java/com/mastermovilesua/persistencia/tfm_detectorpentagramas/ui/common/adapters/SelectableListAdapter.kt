@@ -1,6 +1,5 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.adapters
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -33,10 +32,6 @@ abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
             onItemClickListener?.onItemClick(item, holder.binding.root)
         }
 
-        Log.e(
-            "SelectableListAdapter",
-            "Update all interface of index [$position] isEditMode [$isEditMode] and selected [$isSelected]"
-        )
         bindLayout(holder, item)
         bindEditMode(holder.binding, isEditMode, isSelected)
     }
@@ -51,10 +46,6 @@ abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
         } else {
             val item = currentList[position]
             val isSelected = selectedItemsIds.contains(item.id)
-            Log.e(
-                "SelectableListAdapter",
-                "Update edit mode of index [$position] isEditMode [$isEditMode] and selected [$isSelected]"
-            )
 
             bindEditMode(holder.binding, isEditMode, isSelected)
         }
@@ -90,11 +81,6 @@ abstract class SelectableListAdapter<T : IdentifiableItem, VB : ViewBinding>(
         val newElements: Set<ID> = newSelectedPagesIds.minus(nonChangedElements)
         val deletedElements: Set<ID> = previouslySelectedItemsIds.minus(nonChangedElements)
         val changedElements: HashSet<ID> = newElements.plus(deletedElements).toHashSet()
-
-        Log.e(
-            "SelectableListAdapter",
-            "Number of new [${newElements.size}] and of deleted: [${deletedElements.size}] for total of: [${changedElements.size}] -> [$changedElements]"
-        )
 
         currentList.forEachIndexed { index, item ->
             if (changedElements.contains(item.id)) {
