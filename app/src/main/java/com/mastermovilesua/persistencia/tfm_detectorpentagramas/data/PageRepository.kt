@@ -1,5 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data
 
+import android.util.Log
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.dao.PageDao
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.network.PageService
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.mappers.toDatabase
@@ -15,10 +16,6 @@ class PageRepository @Inject constructor(
     private val pageDao: PageDao,
     private val pageService: PageService
 ) {
-    suspend fun getAllPages(): List<PageItem> {
-        return pageDao.getAllPages().map { it.toDomain() }
-    }
-
     suspend fun getPage(pageId: Int): PageItem? {
         return pageDao.getPage(pageId)?.toDomain()
     }
@@ -29,7 +26,16 @@ class PageRepository @Inject constructor(
         }
     }
 
+    suspend fun getOrderedBookPages(bookId: Int): List<PageItem> {
+        return pageDao.getOrderedBookPages(bookId).map { it.toDomain() }
+    }
+
     suspend fun getProcessedPageBoxes(bookDataset: Int, pageId: Int): List<BoxItem>? {
+        val auto = pageService.status()
+
+        auto?.apply {
+            Log.e("PageRepo", "${status} -> $timestamp")
+        }
         return pageDao.getPage(pageId)?.let { pageEntity ->
             pageService.getBoxes(bookDataset, pageEntity.toDomain())?.boxes?.map { it.toDomain() }
         }
@@ -39,6 +45,7 @@ class PageRepository @Inject constructor(
      * @return ID of inserted Page.
      */
     suspend fun insertPage(bookId: Int, pageItem: PageItem): Int {
+        pageItem.order = pageDao.getLastPageOfBook(bookId).size
         return pageDao.insertPage(pageItem.toDatabase(bookId)).toInt()
     }
 
@@ -48,7 +55,15 @@ class PageRepository @Inject constructor(
         } ?: false
     }
 
+    suspend fun updatePages(pagesItems: List<PageItem>): Int {
+        return pageDao.updatePages(
+            pagesItems.mapNotNull { pageItem ->
+                pageDao.getPage(pageItem.id)?.let { pageItem.toDatabase(it.bookId) }
+            }
+        )
+    }
+
     suspend fun deletePage(pageId: Int): Boolean {
-        return pageDao.deletePage(pageId) > 0
+        return pageDao.deletePageAndReorder(pageId)
     }
 }

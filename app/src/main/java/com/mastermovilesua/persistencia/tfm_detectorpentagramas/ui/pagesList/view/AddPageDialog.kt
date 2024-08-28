@@ -21,9 +21,13 @@ class AddPageDialog : BottomSheetDialogFragment() {
     private val viewModel: AddPageViewModel by viewModels()
     private val args: AddPageDialogArgs by navArgs()
 
-    private lateinit var binding : DialogAddPageBinding
+    private lateinit var binding: DialogAddPageBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = DialogAddPageBinding.inflate(inflater)
 
         viewModel.onCreate(args.bookId)
@@ -41,23 +45,32 @@ class AddPageDialog : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.pageInserted.observe(viewLifecycleOwner) { isPagesInserted ->
+            if (isPagesInserted) {
+                findNavController().navigateUp()
+            }
+        }
+    }
+
     private val pickImage =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                val imageCopyUri = SaveToMediaStore.saveImageToInternalStorage(requireContext(), uri)
-                viewModel.insertPage(PageItem(imageUri = imageCopyUri.toString()))
+                val imageCopyUri =
+                    SaveToMediaStore.saveImageToInternalStorage(requireContext(), uri)
+                viewModel.insertPages(listOf(PageItem(imageUri = imageCopyUri.toString())))
             }
-            findNavController().navigateUp()
         }
 
     private val pickMultipleImage =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
-            for (uri in uris) {
+            viewModel.insertPages(uris.map { uri ->
                 val imageCopyUri =
                     SaveToMediaStore.saveImageToInternalStorage(requireContext(), uri)
-                viewModel.insertPage(PageItem(imageUri = imageCopyUri.toString()))
-            }
-            findNavController().navigateUp()
+                PageItem(imageUri = imageCopyUri.toString())
+            })
         }
 
     private fun takePhoto() {

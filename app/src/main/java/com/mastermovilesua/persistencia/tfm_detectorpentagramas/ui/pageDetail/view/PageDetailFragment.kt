@@ -44,12 +44,13 @@ class PageDetailFragment : Fragment(), MenuProvider {
     ): View {
         binding = FragmentPageDetailBinding.inflate(inflater)
 
-        /*
-        binding.ivPage.transitionName = "pageTransition${args.pageId}"
-        sharedElementEnterTransition = TransitionInflater.from(requireContext())
-            .inflateTransition(R.transition.page_transition)
-        */
+
+        // binding.ivPage.transitionName = "pageTransition${args.pageId}"
+        // sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.page_transition)
+
         binding.apply {
+            // ivPage.transitionName = "pageTransition${args.pageId}"
+
             cvBoxesCanvas.setOnCanvasItemUpdateListener { canvasItem ->
                 val boxCanvasItem = canvasItem as BoxCanvasItem
                 boxCanvasItem.apply {
@@ -72,8 +73,6 @@ class PageDetailFragment : Fragment(), MenuProvider {
             cvBoxesCanvas.setOnCanvasItemDeleteListener { canvasItem ->
                 viewModel.deleteBox(canvasItem.id)
             }
-
-            // ivPage.transitionName = "pageTransition${args.pageId}"
         }
 
         return binding.root

@@ -29,7 +29,7 @@ class PagesListAdapter @Inject constructor(
             holder.itemView.layoutParams.height = holder.itemView.width
 
             holder.binding.apply {
-                root.transitionName = "pageTransition${item.id}"
+                // root.transitionName = "pageTransition${item.id}"
                 cvHolder.radius = holder.itemView.width * 0.05f
                 ivPage.fromUriScaleDown(Uri.parse(item.imageUri), holder.itemView.width)
             }

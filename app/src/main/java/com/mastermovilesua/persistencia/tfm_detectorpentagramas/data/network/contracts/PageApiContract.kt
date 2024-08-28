@@ -1,7 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.network.contracts
 
 object PageApiContract {
-
     const val API_BASE_URL = "https://tfm-detector-pentagramas-api-a15aebd93b08.herokuapp.com/"
 
     const val BOOK_FIELD_DATASET = "dataset"
@@ -17,9 +16,9 @@ object PageApiContract {
 
     const val API_VERSION = "/api/v1/"
     object GETRequests {
-       const val STATUS = "status"
+       const val STATUS = "${API_VERSION}status"
     }
     object POSTRequests {
-        const val PROCESS_IMAGE = "process-image"
+        const val PROCESS_IMAGE = "${API_VERSION}process-image"
     }
 }

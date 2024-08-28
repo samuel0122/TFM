@@ -32,6 +32,6 @@ object DiffUtils {
                 oldItem.id == newItem.id
 
             override fun areContentsTheSame(oldItem: PageItem, newItem: PageItem): Boolean =
-                oldItem == newItem
+                (oldItem.id == newItem.id) && (oldItem.imageUri == newItem.imageUri)
         }
 }

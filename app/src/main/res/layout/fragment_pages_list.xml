@@ -2,51 +2,71 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvPageInfo"
+    <LinearLayout
+        android:id="@+id/llBookInformation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" >
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_margin="5dp"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            tools:text="TITLE"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="TITLE"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            tools:text="TITLE"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="italic" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvDataset"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                android:layout_margin="16dp"
-                android:text="Dataset"
-                android:textSize="16sp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDataset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
+            android:layout_marginHorizontal="16dp"
+            tools:text="Dataset"
+            android:textSize="16sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPagesList"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cvPageInfo"
+        app:layout_constraintTop_toBottomOf="@id/llBookInformation"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:numColumns="3"
-        android:gravity="center"
-        android:stretchMode="columnWidth" />
+        app:cardCornerRadius="10dp"
+        android:layout_marginHorizontal="3dp"
+        android:layout_marginVertical="3dp"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPagesList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="3"
+            android:gravity="center"
+            android:stretchMode="columnWidth"
+            android:paddingBottom="0dp" />
+
+    </androidx.cardview.widget.CardView>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addButton"

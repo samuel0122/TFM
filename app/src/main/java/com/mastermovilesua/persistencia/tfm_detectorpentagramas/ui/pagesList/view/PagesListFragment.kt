@@ -12,10 +12,16 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
+import androidx.recyclerview.widget.ItemTouchHelper.DOWN
+import androidx.recyclerview.widget.ItemTouchHelper.END
+import androidx.recyclerview.widget.ItemTouchHelper.START
+import androidx.recyclerview.widget.ItemTouchHelper.UP
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPagesListBinding
@@ -48,9 +54,12 @@ class PagesListFragment : Fragment(), MenuProvider {
     ): View {
         binding = FragmentPagesListBinding.inflate(inflater)
 
+        changeImageGridNumColumns()
         binding.rvPagesList.apply {
             adapter = pagesGridAdapter
+            setHasFixedSize(true)
         }
+        itemTouchHelper.attachToRecyclerView(binding.rvPagesList)
 
         binding.addButton.setOnClickListener { _ ->
             findNavController().navigate(
@@ -63,10 +72,10 @@ class PagesListFragment : Fragment(), MenuProvider {
                 viewModel.selectPage(page.id)
             } else {
                 findNavController().navigate(
-                    PagesListFragmentDirections.actionPagesListFragmentToPageDetailFragment(pageId = page.id),
-                    FragmentNavigatorExtras(
-                        view to view.transitionName
-                    )
+                    PagesListFragmentDirections.actionPagesListFragmentToPageDetailFragment(pageId = page.id)
+                    // , FragmentNavigatorExtras(
+                    //     view to view.transitionName
+                    // )
                 )
             }
         }
@@ -79,11 +88,12 @@ class PagesListFragment : Fragment(), MenuProvider {
 
         activity?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        changeImageGridNumColumns()
-
         viewModel.bookModel.observe(viewLifecycleOwner) { bookModel ->
-            binding.tvTitle.text = bookModel.title
-            binding.tvDataset.text = bookModel.dataset.name
+            binding.apply {
+                tvTitle.text = bookModel.title
+                tvDescription.text = bookModel.description
+                tvDataset.text = bookModel.dataset.name
+            }
         }
 
         viewModel.pagesModel.observe(viewLifecycleOwner) { pagesList ->
@@ -106,6 +116,50 @@ class PagesListFragment : Fragment(), MenuProvider {
         viewModel.selectedPagesIds.observe(viewLifecycleOwner) { selectedPagesIds ->
             pagesGridAdapter.setSelectedItemsIds(selectedPagesIds)
         }
+    }
+
+    private val itemTouchHelper by lazy {
+
+        val simpleItemTouchCallBack =
+            object : ItemTouchHelper.SimpleCallback(UP or DOWN or START or END, 0) {
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    val adapter = recyclerView.adapter as PagesListAdapter
+                    val from = viewHolder.adapterPosition
+                    val to = target.adapterPosition
+
+                    viewModel.changePageOrder(adapter.currentList[from].id, to)
+
+                    return true
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+                override fun onSelectedChanged(
+                    viewHolder: RecyclerView.ViewHolder?,
+                    actionState: Int
+                ) {
+                    super.onSelectedChanged(viewHolder, actionState)
+                    if (actionState == ACTION_STATE_DRAG) {
+                        viewHolder?.itemView?.alpha = 0.8f
+                    }
+                }
+
+                override fun clearView(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ) {
+                    super.clearView(recyclerView, viewHolder)
+
+                    viewHolder.itemView.alpha = 1f
+                }
+            }
+
+        ItemTouchHelper(simpleItemTouchCallBack)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

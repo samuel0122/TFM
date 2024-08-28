@@ -13,13 +13,13 @@ import retrofit2.http.Part
 
 interface PageApiClient {
     @Multipart
-    @POST("${PageApiContract.API_VERSION}${PageApiContract.POSTRequests.PROCESS_IMAGE}")
+    @POST(PageApiContract.POSTRequests.PROCESS_IMAGE)
     suspend fun uploadImage(
         @Part(PageApiContract.PAGE_FIELD_ID) pageId: RequestBody,
         @Part(PageApiContract.BOOK_FIELD_DATASET) dataset: RequestBody,
         @Part image: MultipartBody.Part
     ): Response<PageWithBoxesModel>
 
-    @GET("${PageApiContract.API_VERSION}${PageApiContract.GETRequests.STATUS}")
+    @GET(PageApiContract.GETRequests.STATUS)
     suspend fun getStatus(): Response<StatusModel>
 }

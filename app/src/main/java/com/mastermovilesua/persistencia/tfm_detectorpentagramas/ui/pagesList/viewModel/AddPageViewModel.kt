@@ -16,22 +16,29 @@ class AddPageViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
+    private val _pageInserted = MutableLiveData<Boolean>()
 
-    val isLoading : LiveData<Boolean> get() = _isLoading
+    val isLoading: LiveData<Boolean> get() = _isLoading
+    val pageInserted: LiveData<Boolean> get() = _pageInserted
 
     private var bookId: Int = 0
 
     fun onCreate(bookId: Int) {
         this.bookId = bookId
+
+        _pageInserted.postValue(false)
     }
 
-    fun insertPage(page: PageItem) {
+    fun insertPages(pages: List<PageItem>) {
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            insertPageUseCase(bookId, page)
+            pages.forEach { page ->
+                insertPageUseCase(bookId, page)
+            }
 
             _isLoading.postValue(false)
+            _pageInserted.postValue(true)
         }
     }
 }

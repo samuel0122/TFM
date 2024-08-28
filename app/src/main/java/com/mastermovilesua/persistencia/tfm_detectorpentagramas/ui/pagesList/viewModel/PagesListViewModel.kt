@@ -8,6 +8,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeleteBoo
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeletePageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookWithPagesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.UpdatePageOrderUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,8 @@ class PagesListViewModel @Inject constructor(
     private val getBookWithPagesUseCase: GetBookWithPagesUseCase,
     private val insertPageUseCase: InsertPageUseCase,
     private val deletePageUseCase: DeletePageUseCase,
-    private val deleteBookUseCase: DeleteBookUseCase
+    private val deleteBookUseCase: DeleteBookUseCase,
+    private val updatePageOrderUseCase: UpdatePageOrderUseCase
 ) : ViewModel() {
 
     private val _bookModel = MutableLiveData<BookItem>()
@@ -115,6 +117,16 @@ class PagesListViewModel @Inject constructor(
             _isLoading.postValue(true)
 
             deleteBookUseCase(bookId)
+
+            _isLoading.postValue(false)
+        }
+    }
+
+    fun changePageOrder(pageId: Int, newOrder: Int) {
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+
+            updatePageOrderUseCase(pageId, newOrder)
 
             _isLoading.postValue(false)
         }
