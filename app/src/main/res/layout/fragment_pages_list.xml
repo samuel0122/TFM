@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/llBookInformation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,19 +14,33 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             tools:text="TITLE"
             app:layout_constraintTop_toTopOf="parent"
-            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvDataset"
+            android:textAlignment="textStart"
             android:textSize="24sp"
             android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDataset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/tvTitle"
+            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="16dp"
+            tools:text="Dataset"
+            android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginHorizontal="16dp"
             tools:text="TITLE"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
@@ -34,16 +48,7 @@
             android:textSize="16sp"
             android:textStyle="italic" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvDataset"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tvDescription"
-            android:layout_marginHorizontal="16dp"
-            tools:text="Dataset"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.cardview.widget.CardView

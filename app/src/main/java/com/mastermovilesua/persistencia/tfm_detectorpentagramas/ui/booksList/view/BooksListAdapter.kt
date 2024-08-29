@@ -2,30 +2,37 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.booksList.vi
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.animatedFadeIn
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.animatedFadeOut
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.animatedScale
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.fromUri
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ItemBookBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookWithPagesItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.adapters.SelectableListAdapter
 import javax.inject.Inject
 
 class BooksListAdapter @Inject constructor(
-    diffCallback: DiffUtil.ItemCallback<BookItem>
-) : SelectableListAdapter<BookItem, ItemBookBinding>(diffCallback) {
+    diffCallback: DiffUtil.ItemCallback<BookWithPagesItem>
+) : SelectableListAdapter<BookWithPagesItem, ItemBookBinding>(diffCallback) {
 
     override fun createBinding(parent: ViewGroup): ItemBookBinding =
         ItemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
     override fun bindLayout(
         holder: SelectableItemHolder<ItemBookBinding>,
-        item: BookItem
+        item: BookWithPagesItem
     ) {
         holder.binding.apply {
-            tvTitle.text = item.title
-            tvDescription.text = item.description
+            tvTitle.text = item.book.title
+            tvDescription.text = item.book.description
+
+            item.pages.firstOrNull()?.let { page ->
+                ivThumbnail.fromUri(page.imageUri.toUri())
+            }
+
         }
     }
 

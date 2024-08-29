@@ -5,25 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeleteBookUseCase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBooksUseCase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBooksWithPagesUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookWithPagesItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BooksListViewModel @Inject constructor(
-    private val getBooksUseCase: GetBooksUseCase,
+    private val getBooksWithPagesUseCase: GetBooksWithPagesUseCase,
     private val deleteBookUseCase: DeleteBookUseCase
 ) : ViewModel() {
 
-    private val _booksModel = MutableLiveData<List<BookItem>>()
+    private val _booksModel = MutableLiveData<List<BookWithPagesItem>>()
     private val _isLoading = MutableLiveData<Boolean>()
     private val _isEditMode = MutableLiveData<Boolean>()
     private val _isAllSelected = MutableLiveData<Boolean>()
     private val _selectedBooksIds = MutableLiveData<Set<Int>>()
 
-    val booksModel: LiveData<List<BookItem>> get() = _booksModel
+    val booksModel: LiveData<List<BookWithPagesItem>> get() = _booksModel
     val isLoading: LiveData<Boolean> get() = _isLoading
     val isEditMode: LiveData<Boolean> get() = _isEditMode
     val isAllSelected: LiveData<Boolean> get() = _isAllSelected
@@ -37,8 +37,8 @@ class BooksListViewModel @Inject constructor(
 
             _isLoading.postValue(true)
 
-            getBooksUseCase().collect { booksList ->
-                _booksModel.postValue(booksList)
+            getBooksWithPagesUseCase().collect { booksWithPagesList ->
+                _booksModel.postValue(booksWithPagesList)
             }
 
             _isLoading.postValue(false)
@@ -67,6 +67,7 @@ class BooksListViewModel @Inject constructor(
 
     fun disableEditMode() {
         _selectedBooksIds.postValue(emptySet())
+        _isAllSelected.postValue(false)
         _isEditMode.postValue(false)
     }
 
@@ -75,7 +76,7 @@ class BooksListViewModel @Inject constructor(
             _selectedBooksIds.postValue(emptySet())
             _isAllSelected.postValue(false)
         } else {
-            _selectedBooksIds.postValue(booksModel.value?.map { it.id }?.toSet())
+            _selectedBooksIds.postValue(booksModel.value?.map { it.book.id }?.toSet())
             _isAllSelected.postValue(true)
         }
     }
@@ -89,6 +90,7 @@ class BooksListViewModel @Inject constructor(
             _isLoading.postValue(false)
 
             _selectedBooksIds.postValue(emptySet())
+            _isAllSelected.postValue(false)
             _isEditMode.postValue(false)
         }
     }

@@ -1,7 +1,7 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.di
 
 import androidx.recyclerview.widget.DiffUtil
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookWithPagesItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import dagger.Module
 import dagger.Provides
@@ -15,13 +15,20 @@ object DiffUtils {
 
     @Singleton
     @Provides
-    fun provideBookItemDiffUtil(): DiffUtil.ItemCallback<BookItem> =
-        object : DiffUtil.ItemCallback<BookItem>() {
-            override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean =
+    fun provideBookItemDiffUtil(): DiffUtil.ItemCallback<BookWithPagesItem> =
+        object : DiffUtil.ItemCallback<BookWithPagesItem>() {
+            override fun areItemsTheSame(
+                oldItem: BookWithPagesItem,
+                newItem: BookWithPagesItem
+            ): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean =
-                oldItem == newItem
+            override fun areContentsTheSame(
+                oldItem: BookWithPagesItem,
+                newItem: BookWithPagesItem
+            ): Boolean =
+                oldItem.book == newItem.book &&
+                        oldItem.pages.firstOrNull()?.imageUri == newItem.pages.firstOrNull()?.imageUri
         }
 
     @Singleton

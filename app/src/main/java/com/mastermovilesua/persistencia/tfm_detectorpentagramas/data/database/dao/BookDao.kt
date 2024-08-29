@@ -35,6 +35,13 @@ interface BookDao {
     fun getBookWithPages(bookId: Int): Flow<BookWithPagesRelation>
 
     /**
+     * @return BookWithPagesRelation that contains the BookEntity with a list of related PageEntity.
+     */
+    @Transaction
+    @Query("SELECT * FROM ${MusicScoreBooksContract.TABLE_BOOK}")
+    fun getAllBooksWithPages(): Flow<List<BookWithPagesRelation>>
+
+    /**
      * @return ID of inserted or replaced BookEntity.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)

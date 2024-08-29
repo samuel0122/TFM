@@ -54,16 +54,6 @@ class PagesListViewModel @Inject constructor(
         }
     }
 
-    fun insertPage(page: PageItem) {
-        viewModelScope.launch {
-            _isLoading.postValue(true)
-
-            insertPageUseCase(bookId, page)
-
-            _isLoading.postValue(false)
-        }
-    }
-
     fun selectPage(pageId: Int) {
         if (selectedPagesIds.value?.contains(pageId) == true) {
             val newSelectedPages = selectedPagesIds.value?.minus(pageId) ?: emptySet()
@@ -86,6 +76,7 @@ class PagesListViewModel @Inject constructor(
 
     fun disableEditMode() {
         _selectedPagesIds.postValue(emptySet())
+        _isAllSelected.postValue(false)
         _isEditMode.postValue(false)
     }
 
@@ -106,6 +97,7 @@ class PagesListViewModel @Inject constructor(
             selectedPagesIds.value?.forEach { deletePageUseCase(it) }
 
             _selectedPagesIds.postValue(emptySet())
+            _isAllSelected.postValue(false)
             _isEditMode.postValue(false)
 
             _isLoading.postValue(false)

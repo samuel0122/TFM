@@ -23,8 +23,15 @@ class AddPageCameraFragment : CameraFragment() {
         return super.onCreateView(inflater, container, savedInstanceState).also { viewModel.onCreate(args.bookId) }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.didInsertPage.observe(viewLifecycleOwner) { didInsertPage ->
+            if (didInsertPage) findNavController().navigateUp()
+        }
+    }
+
     override fun onImageConfirmationAction() {
         viewModel.insertCapturedPage()
-        findNavController().navigateUp()
     }
 }

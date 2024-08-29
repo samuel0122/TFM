@@ -74,21 +74,26 @@ abstract class CameraFragment : Fragment() {
                 }
             }.launch(Permissions.useCameraPerm)
         }
+    }
 
-        viewModel.cameraFacing.observe(this) { _ ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        viewModel.cameraFacing.observe(viewLifecycleOwner) { _ ->
             bindCameraUserCases()
         }
 
-        viewModel.flashOn.observe(this) { isFlashOn ->
+        viewModel.flashOn.observe(viewLifecycleOwner) { isFlashOn ->
             if (isFlashOn) binding.btnToggleFlash.setImageResource(R.drawable.ic_flash_on)
             else binding.btnToggleFlash.setImageResource(R.drawable.ic_flash_off)
         }
 
-        viewModel.pictureUri.observe(this) { savedUri ->
+        viewModel.pictureUri.observe(viewLifecycleOwner) { savedUri ->
             binding.ivPage.setImageURI(savedUri)
         }
 
-        viewModel.cameraState.observe(this) { cameraState ->
+        viewModel.cameraState.observe(viewLifecycleOwner) { cameraState ->
             cameraState?.let {
                 when (cameraState) {
                     CameraState.Live -> {
@@ -104,7 +109,7 @@ abstract class CameraFragment : Fragment() {
             }
         }
 
-        viewModel.isCapturingImage.observe(this) { isCapturingImage ->
+        viewModel.isCapturingImage.observe(viewLifecycleOwner) { isCapturingImage ->
             if (isCapturingImage) binding.btnShotPhoto.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.dark_gray)
             else binding.btnShotPhoto.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
         }
