@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    app:layout_constraintDimensionRatio="1:1" >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvHolder"
@@ -10,6 +12,18 @@
         android:layout_height="match_parent"
         android:backgroundTint="@android:color/transparent"
         tools:backgroundTint="@color/yellow">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivPageShimmer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivPage"

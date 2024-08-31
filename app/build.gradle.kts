@@ -123,6 +123,9 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
+    //  Shimmer
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
     // CameraX
     val cameraXVersion = "1.3.4"
     implementation("androidx.camera:camera-core:$cameraXVersion")

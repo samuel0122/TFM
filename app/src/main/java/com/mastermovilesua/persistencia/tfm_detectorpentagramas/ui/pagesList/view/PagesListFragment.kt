@@ -56,6 +56,7 @@ class PagesListFragment : Fragment(), MenuProvider {
 
         changeImageGridNumColumns()
         binding.rvPagesList.apply {
+            isNestedScrollingEnabled = false
             adapter = pagesGridAdapter
             setHasFixedSize(true)
         }

@@ -93,10 +93,17 @@ class PageDetailFragment : Fragment(), MenuProvider {
 
         viewModel.pageModel.observe(viewLifecycleOwner) { pageModel ->
             binding.apply {
-                progressBar.visibility =
-                    if (pageModel.processState == PageState.Processing) View.VISIBLE
-                    else View.GONE
+                if (pageModel.processState == PageState.Processing) {
+                    shimmer.visibility = View.VISIBLE
+                    clPageDetail.visibility = View.GONE
+                    shimmer.startShimmer()
+                } else {
+                    shimmer.stopShimmer()
+                    clPageDetail.visibility = View.VISIBLE
+                    shimmer.visibility = View.GONE
+                }
 
+                ivPageShimmer.setImageURI(pageModel.imageUri.toUri())
                 ivPage.setImageURI(pageModel.imageUri.toUri())
                 ivPage.post {
                     alignCanvasToImage()

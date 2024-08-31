@@ -4,36 +4,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivPage"
-        android:src="@mipmap/ic_launcher"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.canvas.CanvasView
-        android:id="@+id/cvBoxesCanvas"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/ivPage"
-        app:layout_constraintEnd_toEndOf="@id/ivPage"
-        app:layout_constraintStart_toStartOf="@id/ivPage"
-        app:layout_constraintTop_toTopOf="@id/ivPage" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivPageShimmer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_launcher" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clPageDetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivPage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.canvas.CanvasView
+            android:id="@+id/cvBoxesCanvas"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivPage"
+            app:layout_constraintEnd_toEndOf="@id/ivPage"
+            app:layout_constraintStart_toStartOf="@id/ivPage"
+            app:layout_constraintTop_toTopOf="@id/ivPage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.vi
 
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
@@ -11,6 +12,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.fromUriScaleDown
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.ItemPageBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageState
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.adapters.SelectableListAdapter
 import javax.inject.Inject
 
@@ -31,6 +33,18 @@ class PagesListAdapter @Inject constructor(
             holder.binding.apply {
                 // root.transitionName = "pageTransition${item.id}"
                 cvHolder.radius = holder.itemView.width * 0.05f
+
+                if (item.processState == PageState.Processing) {
+                    shimmer.visibility = View.VISIBLE
+                    ivPage.visibility = View.GONE
+                    shimmer.startShimmer()
+                } else {
+                    shimmer.stopShimmer()
+                    ivPage.visibility = View.VISIBLE
+                    shimmer.visibility = View.GONE
+                }
+
+                ivPageShimmer.fromUriScaleDown(Uri.parse(item.imageUri), holder.itemView.width)
                 ivPage.fromUriScaleDown(Uri.parse(item.imageUri), holder.itemView.width)
             }
         }
