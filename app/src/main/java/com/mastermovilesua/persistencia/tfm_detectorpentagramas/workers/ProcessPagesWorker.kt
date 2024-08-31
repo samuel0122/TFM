@@ -37,15 +37,16 @@ class ProcessPagesWorker @AssistedInject constructor(
         }
 
         try {
-            pagesId.forEachIndexed { index, pageId ->
-                setForeground(createForegroundInfo(index, pagesId.size))
-
+            pagesId.forEach { pageId ->
                 pageRepository.getPage(pageId)?.let { pageToProcess ->
                     pageRepository.updatePages(listOf(pageToProcess.apply {
                         processState = PageState.Processing
                     }))
                 } ?: return Result.failure()
+            }
 
+            pagesId.forEachIndexed { index, pageId ->
+                setForeground(createForegroundInfo(index, pagesId.size))
 
                 val processResult = pageRepository.getProcessedPageBoxes(bookDataset, pageId)
                 Log.d("ProcessPagesWorker", "Got response from server: $processResult")
@@ -74,7 +75,7 @@ class ProcessPagesWorker @AssistedInject constructor(
                 Log.d("ProcessPagesWorker", "UnknownHostException: ${e}! Retrying...")
                 return Result.retry()
             } else {
-                Log.e("ProcessPagesWorker", "UnknownHostException: ${e}! Retrying...")
+                Log.e("ProcessPagesWorker", "EXECPTION: ${e}! Retrying...")
                 return Result.failure()
             }
         }
@@ -88,7 +89,7 @@ class ProcessPagesWorker @AssistedInject constructor(
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,
             NOTIFICATION_TITLE,
-            "Processing page ${progress}/${total} by the server."
+            "Server is processing page $progress of ${total}."
         )
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
