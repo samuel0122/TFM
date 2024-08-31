@@ -24,8 +24,6 @@ import kotlin.math.max
 @HiltViewModel
 class PageDetailViewModel @Inject constructor(
     private val getPageWithBoxesUseCase: GetPageWithBoxesUseCase,
-    private val getPageUseCase: GetPageUseCase,
-    private val getBoxesForPageUseCase: GetBoxesForPageUseCase,
     private val deletePageUseCase: DeletePageUseCase,
     private val insertBoxUseCase: InsertBoxUseCase,
     private val deleteBoxUseCase: DeleteBoxUseCase,
@@ -52,20 +50,12 @@ class PageDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            getPageUseCase(pageId)?.let { pageModel ->
-                _pageModel.postValue(pageModel)
+            getPageWithBoxesUseCase(pageId).collect { pageWithBoxesModel ->
+                _pageModel.postValue(pageWithBoxesModel.page)
+                _boxesModel.postValue(pageWithBoxesModel.boxes)
             }
 
             _isLoading.postValue(false)
-        }
-    }
-
-    fun getBoxes() {
-        viewModelScope.launch {
-            getBoxesForPageUseCase(pageId).collect { boxesModel ->
-                Log.e("PageDetailViewModel", "COLLECTING BOXES")
-                _boxesModel.postValue(boxesModel)
-            }
         }
     }
 

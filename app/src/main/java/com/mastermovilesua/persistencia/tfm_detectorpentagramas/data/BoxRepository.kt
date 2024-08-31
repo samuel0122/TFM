@@ -34,6 +34,10 @@ class BoxRepository @Inject constructor(
         } ?: false
     }
 
+    suspend fun deleteBoxesFromPage(pageId: Int): Int {
+        return boxDao.deleteBoxesFromPage(pageId)
+    }
+
     suspend fun deleteBox(boxId: Int): Boolean {
         return boxDao.deleteBox(boxId) > 0
     }

@@ -32,7 +32,8 @@ class PageService @Inject constructor(
 
         val response = api.uploadImage(idRequestBody, datasetRequestBody, body)
 
-        return response.body()
+        return if (response.isSuccessful) response.body()
+        else null
     }
 
     suspend fun status(): StatusModel? = api.getStatus().body()

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,8 +17,11 @@ import androidx.navigation.fragment.findNavController
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.Permissions
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentCameraBinding
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
+import com.vmadalin.easypermissions.dialogs.SettingsDialog
 
-abstract class CameraFragment : Fragment() {
+abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     protected abstract val viewModel: CameraViewModel
 
     protected lateinit var binding: FragmentCameraBinding
@@ -57,23 +59,7 @@ abstract class CameraFragment : Fragment() {
 
         viewModel.onCreate()
 
-        if (Permissions.hasCameraPermission(requireContext())) {
-            startCamera()
-        } else {
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    startCamera()
-                } else {
-                    // Manejar el caso en el que no se otorgó el permiso
-                    Toast.makeText(
-                        requireContext(),
-                        "Permission denied. Camera cannot be accessed.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    findNavController().navigateUp()
-                }
-            }.launch(Permissions.useCameraPerm)
-        }
+        startCamera()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -110,23 +96,58 @@ abstract class CameraFragment : Fragment() {
         }
 
         viewModel.isCapturingImage.observe(viewLifecycleOwner) { isCapturingImage ->
-            if (isCapturingImage) binding.btnShotPhoto.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.dark_gray)
-            else binding.btnShotPhoto.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+            if (isCapturingImage) binding.btnShotPhoto.imageTintList =
+                ContextCompat.getColorStateList(requireContext(), R.color.dark_gray)
+            else binding.btnShotPhoto.imageTintList =
+                ContextCompat.getColorStateList(requireContext(), R.color.white)
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        Toast.makeText(requireContext(), "Camera Permission Granted!", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            SettingsDialog.Builder(requireActivity())
+                .title("Camera Permission Required")
+                .rationale("Camera permission is required to work correctly. Please, open the app settings to modify app permissions.")
+                .positiveButtonText("OK")
+                .negativeButtonText("Cancel")
+                .build()
+                .show()
+            findNavController().navigateUp()
+        } else {
+            Permissions.requestCameraPermissions(this)
+        }
+    }
+
+    @AfterPermissionGranted(Permissions.REQUEST_CODE_CAMERA)
     private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        if (EasyPermissions.hasPermissions(requireContext(), android.Manifest.permission.CAMERA)) {
+            val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
-        cameraProviderFuture.addListener({
-            viewModel.setCameraProvider(cameraProviderFuture.get())
+            cameraProviderFuture.addListener({
+                viewModel.setCameraProvider(cameraProviderFuture.get())
 
-            viewModel.onStartCamera(binding.pvCamera.display.rotation)
+                viewModel.onStartCamera(binding.pvCamera.display.rotation)
 
-            viewModel.preview.apply {
-                setSurfaceProvider(binding.pvCamera.surfaceProvider)
-            }
-        }, ContextCompat.getMainExecutor(requireContext()))
+                viewModel.preview.apply {
+                    setSurfaceProvider(binding.pvCamera.surfaceProvider)
+                }
+            }, ContextCompat.getMainExecutor(requireContext()))
+        } else {
+            Permissions.requestCameraPermissions(this)
+        }
     }
 
     private fun bindCameraUserCases() {

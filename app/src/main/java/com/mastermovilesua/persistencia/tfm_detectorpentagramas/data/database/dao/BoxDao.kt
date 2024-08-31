@@ -47,6 +47,13 @@ interface BoxDao {
      * @return Number of entities affected.
      */
     @Query("DELETE FROM ${MusicScoreBooksContract.TABLE_BOX} " +
+            "WHERE ${MusicScoreBooksContract.TABLE_BOX_COLUMN_PAGE_ID} = :pageId")
+    suspend fun deleteBoxesFromPage(pageId: Int): Int
+
+    /**
+     * @return Number of entities affected.
+     */
+    @Query("DELETE FROM ${MusicScoreBooksContract.TABLE_BOX} " +
             "WHERE ${MusicScoreBooksContract.TABLE_BOX_COLUMN_BOX_ID} = :boxId")
     suspend fun deleteBox(boxId: Int): Int
 }

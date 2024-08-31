@@ -1,36 +1,52 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils
 
 import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import android.os.Build
+import androidx.fragment.app.Fragment
+import com.vmadalin.easypermissions.EasyPermissions
 
 object Permissions {
 
-    private const val wriExternalPerm = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-    private const val readExternalPerm = android.Manifest.permission.READ_EXTERNAL_STORAGE
+    const val REQUEST_CODE_CAMERA = 100
+    const val REQUEST_CODE_NOTIFICATIONS = 101
 
-    const val useCameraPerm = android.Manifest.permission.CAMERA
+    fun requestCameraPermissions(activity: Activity) {
+        EasyPermissions.requestPermissions(
+            host = activity,
+            rationale = "Oiaio",
+            requestCode = REQUEST_CODE_CAMERA,
+            perms = arrayOf(android.Manifest.permission.CAMERA)
+        )
+    }
 
-    const val PERMISSION_REQUEST_CODE = 123
+    fun requestCameraPermissions(fragment: Fragment) {
+        EasyPermissions.requestPermissions(
+            host = fragment,
+            rationale = "Oiaio",
+            requestCode = REQUEST_CODE_CAMERA,
+            perms = arrayOf(android.Manifest.permission.CAMERA)
+        )
+    }
 
-    fun hasWritePermission(context: Context): Boolean =
-        ContextCompat.checkSelfPermission(context, wriExternalPerm) == PackageManager.PERMISSION_GRANTED
-
-    fun requestWritePermission(context: Context, activity: Activity) {
-        if (!hasWritePermission(context)) {
-            ActivityCompat.requestPermissions(activity, arrayOf(wriExternalPerm), PERMISSION_REQUEST_CODE)
+    fun requestNotificationsPermissions(activity: Activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            EasyPermissions.requestPermissions(
+                host = activity,
+                rationale = "Notifications permission is recommended to notify of background activity.",
+                requestCode = REQUEST_CODE_NOTIFICATIONS,
+                perms = arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
+            )
         }
     }
 
-    fun hasCameraPermission(context: Context): Boolean =
-        ContextCompat.checkSelfPermission(context, useCameraPerm) == PackageManager.PERMISSION_GRANTED
-
-
-    fun requestCameraePermission(context: Context, activity: Activity) {
-        if (!hasCameraPermission(context)) {
-            ActivityCompat.requestPermissions(activity, arrayOf(useCameraPerm), PERMISSION_REQUEST_CODE)
+    fun requestNotificationsPermissions(fragment: Fragment) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            EasyPermissions.requestPermissions(
+                host = fragment,
+                rationale = "Notifications permission is recommended to notify of background activity.",
+                requestCode = REQUEST_CODE_NOTIFICATIONS,
+                perms = arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
+            )
         }
     }
 

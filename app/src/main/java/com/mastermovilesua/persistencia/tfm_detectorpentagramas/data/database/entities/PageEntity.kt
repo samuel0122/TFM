@@ -24,7 +24,7 @@ data class PageEntity(
     val imageUri: String,
 
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_PAGE_COLUMN_PROCESSED)
-    var processed: Boolean,
+    var processed: Int,
 
     @ColumnInfo(name = MusicScoreBooksContract.TABLE_PAGE_COLUMN_ORDER)
     var order: Int,

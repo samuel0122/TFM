@@ -19,6 +19,8 @@ import androidx.navigation.fragment.navArgs
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.ImageManipulation
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPageDetailBinding
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BoxItem
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageState
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.viewModel.PageDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.min
@@ -84,39 +86,30 @@ class PageDetailFragment : Fragment(), MenuProvider {
         activity?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.visibility =
-                if (isLoading) View.VISIBLE
-                else View.GONE
+            // binding.progressBar.visibility =
+            //     if (isLoading) View.VISIBLE
+            //     else View.GONE
         }
 
         viewModel.pageModel.observe(viewLifecycleOwner) { pageModel ->
             binding.apply {
+                progressBar.visibility =
+                    if (pageModel.processState == PageState.Processing) View.VISIBLE
+                    else View.GONE
+
                 ivPage.setImageURI(pageModel.imageUri.toUri())
                 ivPage.post {
-                    cvBoxesCanvas.layoutParams = cvBoxesCanvas.layoutParams.apply {
-                        val scaleWith: Double = ivPage.width.toDouble() / ivPage.drawable.intrinsicWidth
-                        val scaleHeight: Double = ivPage.height.toDouble() / ivPage.drawable.intrinsicHeight
-                        val scaleBoth = min(scaleWith, scaleHeight)
+                    alignCanvasToImage()
 
-                        height = (ivPage.drawable.intrinsicHeight.toDouble() * scaleBoth).toInt()
-                        width = (ivPage.drawable.intrinsicWidth.toDouble() * scaleBoth).toInt()
+                    viewModel.boxesModel.value?.let { boxesModel ->
+                        updateCanvasItems(boxesModel)
                     }
-
-                    viewModel.getBoxes()
                 }
             }
         }
 
         viewModel.boxesModel.observe(viewLifecycleOwner) { boxesModel ->
-            binding.cvBoxesCanvas.run {
-                updateCanvasItems(boxesModel.map { boxModel ->
-                    boxModel.toCanvas(
-                        layoutParams.width.toFloat(),
-                        layoutParams.height.toFloat(),
-                        requireContext()
-                    )
-                })
-            }
+            updateCanvasItems(boxesModel)
         }
 
         viewModel.selectedBoxId.observe(viewLifecycleOwner) { selectedBoxId ->
@@ -126,6 +119,33 @@ class PageDetailFragment : Fragment(), MenuProvider {
         viewModel.isEditMode.observe(viewLifecycleOwner) { isEditMode ->
             this.isEditMode = isEditMode
             updateMenuVisibility()
+        }
+    }
+
+    private fun alignCanvasToImage() {
+        binding.apply {
+            cvBoxesCanvas.layoutParams = cvBoxesCanvas.layoutParams.apply {
+                val scaleWith: Double =
+                    ivPage.width.toDouble() / ivPage.drawable.intrinsicWidth
+                val scaleHeight: Double =
+                    ivPage.height.toDouble() / ivPage.drawable.intrinsicHeight
+                val scaleBoth = min(scaleWith, scaleHeight)
+
+                height = (ivPage.drawable.intrinsicHeight.toDouble() * scaleBoth).toInt()
+                width = (ivPage.drawable.intrinsicWidth.toDouble() * scaleBoth).toInt()
+            }
+        }
+    }
+
+    private fun updateCanvasItems(boxesModel: List<BoxItem>) {
+        binding.cvBoxesCanvas.run {
+            updateCanvasItems(boxesModel.map { boxModel ->
+                boxModel.toCanvas(
+                    layoutParams.width.toFloat(),
+                    layoutParams.height.toFloat(),
+                    requireContext()
+                )
+            })
         }
     }
 
@@ -177,8 +197,6 @@ class PageDetailFragment : Fragment(), MenuProvider {
                     }
 
                     startActivity(Intent.createChooser(shareIntent, null))
-
-                    // SaveToMediaStore.deleteImage(requireContext(), shareImage)
                 }
                 true
             }
