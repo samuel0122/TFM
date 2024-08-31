@@ -32,7 +32,7 @@ interface BookDao {
     @Transaction
     @Query("SELECT * FROM ${MusicScoreBooksContract.TABLE_BOOK} " +
             "WHERE ${MusicScoreBooksContract.TABLE_BOOK_COLUMN_BOOK_ID} = :bookId")
-    fun getBookWithPages(bookId: Int): Flow<BookWithPagesRelation>
+    fun getBookWithPages(bookId: Int): Flow<BookWithPagesRelation?>
 
     /**
      * @return BookWithPagesRelation that contains the BookEntity with a list of related PageEntity.

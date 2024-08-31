@@ -8,6 +8,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Boo
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookWithPagesItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.takeWhile
 import javax.inject.Inject
 
 class BookRepository @Inject constructor(
@@ -35,7 +36,9 @@ class BookRepository @Inject constructor(
 
 
     fun getBookWithPages(bookId: Int): Flow<BookWithPagesItem> =
-        bookDao.getBookWithPages(bookId).map { it.toDomain() }
+        bookDao.getBookWithPages(bookId)
+            .takeWhile { it != null }
+            .map { bookWithPages -> bookWithPages!!.toDomain() }
 
     /**
      * @return ID of inserted Book.

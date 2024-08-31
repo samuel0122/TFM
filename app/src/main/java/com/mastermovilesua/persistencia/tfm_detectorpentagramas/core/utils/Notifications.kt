@@ -19,8 +19,42 @@ object Notifications {
             .setSmallIcon(android.R.drawable.ic_notification_overlay)
             .setContentTitle(title)
             .setContentText(text)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .setAutoCancel(true)
+
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        return builder.build()
+    }
+
+    fun createProgressNotification(
+        context: Context,
+        channelId: String,
+        channelName: String,
+        title: String,
+        text: String
+    ): Notification {
+        val builder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(android.R.drawable.ic_notification_overlay)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_PROGRESS)
+            .setOngoing(true)
+            .setAutoCancel(true)
+            .setOnlyAlertOnce(true)
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

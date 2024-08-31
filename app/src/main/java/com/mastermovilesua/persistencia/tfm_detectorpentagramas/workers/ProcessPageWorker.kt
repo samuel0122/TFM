@@ -37,7 +37,7 @@ class ProcessPageWorker @AssistedInject constructor(
         }
 
         try {
-            setForeground(createForegroundInfo())
+            setForeground(createForegroundInfo(pageId))
 
             pageRepository.getPage(pageId)?.let { pageToProcess ->
                 pageRepository.updatePages(listOf(pageToProcess.apply {
@@ -75,13 +75,15 @@ class ProcessPageWorker @AssistedInject constructor(
                 Log.d("ProcessPageWorker", "UnknownHostException: ${e}! Retrying...")
                 return Result.retry()
             }
+
+            Log.e("ProcessPageWorker", "UnknownHostException: ${e}! Retrying...")
         }
 
         Log.d("ProcessPageWorker", "Failure at the end!")
         return Result.failure()
     }
 
-    private fun createForegroundInfo(): ForegroundInfo {
+    private fun createForegroundInfo(pageId: Int): ForegroundInfo {
         val notification = Notifications.createNotification(
             applicationContext,
             NOTIFICATION_CHANNEL_ID,
@@ -92,13 +94,13 @@ class ProcessPageWorker @AssistedInject constructor(
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ForegroundInfo(
-                NOTIFICATION_ID,
+                pageId,
                 notification,
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
             )
         } else {
             ForegroundInfo(
-                NOTIFICATION_ID,
+                pageId,
                 notification
             )
         }

@@ -10,6 +10,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Pag
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageWithBoxesItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.takeWhile
 import javax.inject.Inject
 
 class PageRepository @Inject constructor(
@@ -21,9 +22,9 @@ class PageRepository @Inject constructor(
     }
 
     fun getPageWithBoxes(pageId: Int): Flow<PageWithBoxesItem> {
-        return pageDao.getPageWithBoxes(pageId).map {
-            it.toDomain()
-        }
+        return pageDao.getPageWithBoxes(pageId)
+            .takeWhile { it != null }
+            .map { it!!.toDomain() }
     }
 
     suspend fun getOrderedBookPages(bookId: Int): List<PageItem> {

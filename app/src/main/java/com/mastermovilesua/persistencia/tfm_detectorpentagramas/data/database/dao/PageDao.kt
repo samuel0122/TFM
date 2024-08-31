@@ -52,7 +52,7 @@ interface PageDao {
         "SELECT * FROM ${MusicScoreBooksContract.TABLE_PAGE} " +
                 "WHERE ${MusicScoreBooksContract.TABLE_PAGE_COLUMN_PAGE_ID} = :pageId"
     )
-    fun getPageWithBoxes(pageId: Int): Flow<PageWithBoxesRelation>
+    fun getPageWithBoxes(pageId: Int): Flow<PageWithBoxesRelation?>
 
     @Query(
         "SELECT * FROM ${MusicScoreBooksContract.TABLE_PAGE} " +
