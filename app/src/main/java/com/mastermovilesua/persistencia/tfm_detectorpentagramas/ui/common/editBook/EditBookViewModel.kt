@@ -22,23 +22,30 @@ class EditBookViewModel @Inject constructor(
 
     private val _bookModel = MutableLiveData<BookItem>()
     private val _isLoading = MutableLiveData<Boolean>()
+    private val _titleError = MutableLiveData<String?>()
+    private val _descriptionError = MutableLiveData<String?>()
+    private val _bookSubmited = MutableLiveData<Boolean>()
 
     val bookModel: LiveData<BookItem> get() = _bookModel
     val isLoading: LiveData<Boolean> get() = _isLoading
+    val titleError: LiveData<String?> get() = _titleError
+    val descriptionError: LiveData<String?> get() = _descriptionError
+    val bookSubmited: LiveData<Boolean> get() = _bookSubmited
 
     private var isNewBook: Boolean = false
+    private var bookId: Int = -1
 
-    fun onCreate(bookId: Int) {
+    fun onCreate(bookId: Int, isEditing: Boolean) {
+        this.bookId = bookId
+        isNewBook = !isEditing
+
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            val getBook = getBookUseCase(bookId)
-
-            if (getBook != null) {
-                _bookModel.postValue(getBook)
-            } else {
-                isNewBook = true
+            if (isNewBook) {
                 _bookModel.postValue(BookItem(title = "", description = ""))
+            } else {
+                getBookUseCase(bookId)?.let { book -> _bookModel.postValue(book) }
             }
 
             _isLoading.postValue(false)
@@ -49,18 +56,33 @@ class EditBookViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            bookModel.value?.let { bookItem ->
+            var hasError = false
 
-                bookItem.apply {
-                    this.title = title
-                    this.description = description
-                    this.dataset = Dataset.fromInt(dataset)
-                }
+            if (title.isEmpty()) {
+                _titleError.postValue("Title can not be empty.")
+                hasError = true
+            }
+            if (description.isEmpty()) {
+                _descriptionError.postValue("Description can not be empty.")
+                hasError = true
+            }
 
-                if (isNewBook) {
-                    insertBookUseCase(bookItem)
-                } else {
-                    updateBookUseCase(bookItem)
+            if (!hasError) {
+                bookModel.value?.let { bookItem ->
+
+                    bookItem.apply {
+                        this.title = title
+                        this.description = description
+                        this.dataset = Dataset.fromInt(dataset)
+                    }
+
+                    if (isNewBook) {
+                        insertBookUseCase(bookItem)
+                    } else {
+                        updateBookUseCase(bookItem)
+                    }
+
+                    _bookSubmited.postValue(true)
                 }
             }
 

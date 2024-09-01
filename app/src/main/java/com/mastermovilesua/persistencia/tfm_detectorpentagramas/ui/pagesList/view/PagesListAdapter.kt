@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.extensions.animatedFadeIn
@@ -45,7 +46,7 @@ class PagesListAdapter @Inject constructor(
                 }
 
                 ivPageShimmer.fromUriScaleDown(Uri.parse(item.imageUri), holder.itemView.width)
-                ivPage.fromUriScaleDown(Uri.parse(item.imageUri), holder.itemView.width)
+                ivPage.fromUriScaleDown(item.imageUri.toUri(), holder.itemView.width)
             }
         }
     }

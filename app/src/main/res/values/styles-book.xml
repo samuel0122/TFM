@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TFM_DetectorPentagramas.Book.BookItem" parent="TFM_DetectorPentagramas.CustomViews.BorderlessCardView">
+        <item name="cardBackgroundColor">@color/bookColorSurface</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+    </style>
+
+    <style name="TFM_DetectorPentagramas.Book.BookTitleText" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="TFM_DetectorPentagramas.Book.BookDatasetText" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="TFM_DetectorPentagramas.Book.BookDescriptionText" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="TFM_DetectorPentagramas.Book.EditBookDialog" parent="TFM_DetectorPentagramas.CustomViews.BorderlessCardView">
+        <item name="cardCornerRadius">24dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+</resources>

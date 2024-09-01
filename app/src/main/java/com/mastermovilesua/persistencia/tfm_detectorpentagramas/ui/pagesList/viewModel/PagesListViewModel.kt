@@ -30,6 +30,7 @@ class PagesListViewModel @Inject constructor(
     private val _isEditMode = MutableLiveData<Boolean>()
     private val _isAllSelected = MutableLiveData<Boolean>()
     private val _selectedPagesIds = MutableLiveData<Set<Int>>()
+    private val _bookDeleted = MutableLiveData<Boolean>()
 
     val bookModel: LiveData<BookItem> get() = _bookModel
     val pagesModel: LiveData<List<PageItem>> get() = _pagesModel
@@ -37,6 +38,7 @@ class PagesListViewModel @Inject constructor(
     val isEditMode: LiveData<Boolean> get() = _isEditMode
     val isAllSelected: LiveData<Boolean> get() = _isAllSelected
     val selectedPagesIds: LiveData<Set<Int>> get() = _selectedPagesIds
+    val bookDeleted: LiveData<Boolean> get() = _bookDeleted
 
     private var bookId: Int = 0
 
@@ -108,7 +110,7 @@ class PagesListViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            deleteBookUseCase(bookId)
+            if (deleteBookUseCase(bookId)) _bookDeleted.postValue(true)
 
             _isLoading.postValue(false)
         }

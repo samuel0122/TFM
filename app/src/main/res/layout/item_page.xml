@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    app:layout_constraintDimensionRatio="1:1" >
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvHolder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="@android:color/transparent"
-        tools:backgroundTint="@color/yellow">
+        style="@style/TFM_DetectorPentagramas.Page.PageItem"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer"
@@ -20,6 +22,7 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivPageShimmer"
+                style="@style/TFM_DetectorPentagramas.Page.PageThumbnailImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -27,6 +30,7 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivPage"
+            style="@style/TFM_DetectorPentagramas.Page.PageThumbnailImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -40,4 +44,4 @@
 
     </androidx.cardview.widget.CardView>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

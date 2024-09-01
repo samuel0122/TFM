@@ -6,13 +6,13 @@
         android:visible="false">
         <item
             android:id="@+id/action_add_box"
-            android:icon="@drawable/ic_add"
+            android:icon="@drawable/ic_edit_add"
             android:title="Add box"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_disable_edit_mode"
             android:icon="@drawable/ic_check"
-            android:title="Close editing"
+            android:title="Finish editing"
             app:showAsAction="ifRoom" />
     </group>
 
@@ -23,6 +23,7 @@
             android:id="@+id/action_enable_edit_mode"
             android:icon="@drawable/ic_edit"
             android:title="Edit page"
+            android:iconTint="@color/menuIconEdit"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_delete_page"
@@ -36,7 +37,7 @@
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_process_page"
-            android:icon="@drawable/ic_flip_camera"
+            android:icon="@drawable/ic_upload"
             android:title="Process page"
             app:showAsAction="ifRoom" />
     </group>

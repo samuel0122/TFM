@@ -22,9 +22,9 @@ import androidx.recyclerview.widget.ItemTouchHelper.END
 import androidx.recyclerview.widget.ItemTouchHelper.START
 import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPagesListBinding
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.DialogsFactory
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.GridSpacingItemDecoration
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.viewModel.PagesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -117,10 +117,13 @@ class PagesListFragment : Fragment(), MenuProvider {
         viewModel.selectedPagesIds.observe(viewLifecycleOwner) { selectedPagesIds ->
             pagesGridAdapter.setSelectedItemsIds(selectedPagesIds)
         }
+
+        viewModel.bookDeleted.observe(viewLifecycleOwner) { isBookDeleted ->
+            if (isBookDeleted) findNavController().navigateUp()
+        }
     }
 
     private val itemTouchHelper by lazy {
-
         val simpleItemTouchCallBack =
             object : ItemTouchHelper.SimpleCallback(UP or DOWN or START or END, 0) {
 
@@ -189,7 +192,10 @@ class PagesListFragment : Fragment(), MenuProvider {
 
             R.id.action_edit_book -> {
                 findNavController().navigate(
-                    PagesListFragmentDirections.actionPagesListFragmentToEditBookDialog(args.bookId)
+                    PagesListFragmentDirections.actionPagesListFragmentToEditBookDialog(
+                        bookId = args.bookId,
+                        isEditing = true
+                    )
                 )
                 true
             }
@@ -209,30 +215,23 @@ class PagesListFragment : Fragment(), MenuProvider {
     }
 
     private fun confirmDeleteSelectedPages() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Confirm delete selected pages")
-            .setMessage("Are you sure you want to delete the selected pages?")
-            .setPositiveButton("Delete") { _, _ ->
-                viewModel.deletePages()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
+        DialogsFactory.confirmationDialog(
+            context = requireContext(),
+            title = "Confirm delete selected pages",
+            question = "Are you sure you want to delete the selected pages?",
+            onConfirmAction = { viewModel.deletePages() },
+            onCancelAction = { dialog -> dialog.dismiss() }
+        )
     }
 
     private fun confirmDeleteSelectedBook() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Confirm delete current book")
-            .setMessage("Are you sure you want to delete current book (${viewModel.bookModel.value?.title})?")
-            .setPositiveButton("Delete") { _, _ ->
-                viewModel.deleteBook()
-                findNavController().navigateUp()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
+        DialogsFactory.confirmationDialog(
+            context = requireContext(),
+            title = "Confirm delete current book",
+            question = "Are you sure you want to delete current book: ${viewModel.bookModel.value?.title}?",
+            onConfirmAction = { viewModel.deleteBook() },
+            onCancelAction = { dialog -> dialog.dismiss() }
+        )
     }
 
 

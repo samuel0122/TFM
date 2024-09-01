@@ -1,14 +1,11 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeleteBoxUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeletePageUseCase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBoxesForPageUseCase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetPageWithBoxesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertBoxUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.ProcessPageUseCase
@@ -36,12 +33,14 @@ class PageDetailViewModel @Inject constructor(
     private val _selectedBoxId = MutableLiveData<Int?>()
     private val _isLoading = MutableLiveData<Boolean>()
     private val _isEditMode = MutableLiveData<Boolean>()
+    private val _isPageDeleted = MutableLiveData<Boolean>()
 
     val pageModel: LiveData<PageItem> get() = _pageModel
     val boxesModel: LiveData<List<BoxItem>> get() = _boxesModel
     val selectedBoxId: LiveData<Int?> get() = _selectedBoxId
     val isLoading: LiveData<Boolean> get() = _isLoading
     val isEditMode: LiveData<Boolean> get() = _isEditMode
+    val isPageDeleted: LiveData<Boolean> get() = _isPageDeleted
 
     private var pageId: ID = -1
 
@@ -141,7 +140,7 @@ class PageDetailViewModel @Inject constructor(
 
     fun deletePage() {
         viewModelScope.launch {
-            deletePageUseCase(pageId);
+            if (deletePageUseCase(pageId)) _isPageDeleted.postValue(true)
         }
     }
 

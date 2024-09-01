@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentBooksListBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.DialogsFactory
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.booksList.viewModel.BooksListViewModel
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.DialogsFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -50,7 +50,9 @@ class BooksListFragment : Fragment(), MenuProvider {
 
         binding.addButton.setOnClickListener {
             findNavController().navigate(
-                BooksListFragmentDirections.actionBooksListFragmentToEditBookDialog()
+                BooksListFragmentDirections.actionBooksListFragmentToEditBookDialog(
+                    isEditing = false
+                )
             )
         }
 

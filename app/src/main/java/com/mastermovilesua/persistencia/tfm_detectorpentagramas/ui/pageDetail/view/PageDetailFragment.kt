@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -16,11 +17,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.ImageManipulation
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPageDetailBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BoxItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageState
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.DialogsFactory
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.viewModel.PageDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.min
@@ -52,6 +55,43 @@ class PageDetailFragment : Fragment(), MenuProvider {
 
         binding.apply {
             // ivPage.transitionName = "pageTransition${args.pageId}"
+
+            ivProcessedState.elevation = 15f
+            ivProcessedState.setOnLongClickListener {
+                viewModel.pageModel.value?.let { page ->
+                    when (page.processState) {
+                        PageState.Processing -> {
+                            Snackbar.make(
+                                it,
+                                "Page is being processed by server.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            true
+                        }
+
+                        PageState.Processed -> {
+                            Snackbar.make(
+                                it,
+                                "Page has been successfully processed by server.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            true
+                        }
+
+                        PageState.FailedToProcess -> {
+                            Snackbar.make(
+                                it,
+                                "Page has failed to be processed by server.",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+                false
+            }
 
             cvBoxesCanvas.setOnCanvasItemUpdateListener { canvasItem ->
                 val boxCanvasItem = canvasItem as BoxCanvasItem
@@ -94,13 +134,60 @@ class PageDetailFragment : Fragment(), MenuProvider {
         viewModel.pageModel.observe(viewLifecycleOwner) { pageModel ->
             binding.apply {
                 if (pageModel.processState == PageState.Processing) {
-                    shimmer.visibility = View.VISIBLE
+                    shimmer.apply {
+                        startShimmer()
+                        visibility = View.VISIBLE
+                    }
+
                     clPageDetail.visibility = View.GONE
-                    shimmer.startShimmer()
+
+                    ivProcessedState.apply {
+                        visibility = View.VISIBLE
+                        setImageResource(R.drawable.ic_upload)
+                        setColorFilter(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.gray
+                            )
+                        )
+                    }
                 } else {
-                    shimmer.stopShimmer()
+                    ivProcessedState.apply {
+                        when (pageModel.processState) {
+                            PageState.Processed -> {
+                                visibility = View.VISIBLE
+                                setImageResource(R.drawable.ic_check)
+                                setColorFilter(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.green
+                                    )
+                                )
+                            }
+
+                            PageState.FailedToProcess -> {
+                                visibility = View.VISIBLE
+                                setImageResource(R.drawable.ic_close)
+                                setColorFilter(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.red
+                                    )
+                                )
+                            }
+
+                            else -> {
+                                visibility = View.GONE
+                            }
+                        }
+                    }
+
                     clPageDetail.visibility = View.VISIBLE
-                    shimmer.visibility = View.GONE
+
+                    shimmer.apply {
+                        visibility = View.GONE
+                        stopShimmer()
+                    }
                 }
 
                 ivPageShimmer.setImageURI(pageModel.imageUri.toUri())
@@ -126,6 +213,10 @@ class PageDetailFragment : Fragment(), MenuProvider {
         viewModel.isEditMode.observe(viewLifecycleOwner) { isEditMode ->
             this.isEditMode = isEditMode
             updateMenuVisibility()
+        }
+
+        viewModel.isPageDeleted.observe(viewLifecycleOwner) { isPageDeleted ->
+            if (isPageDeleted) findNavController().navigateUp()
         }
     }
 
@@ -181,35 +272,17 @@ class PageDetailFragment : Fragment(), MenuProvider {
             }
 
             R.id.action_delete_page -> {
-                viewModel.deletePage()
-                findNavController().navigateUp()
+                confirmPageDelete()
                 true
             }
 
             R.id.action_share_page -> {
-                viewModel.pageModel.value?.let { pageModel ->
-                    val shareImage = ImageManipulation.drawRectanglesOnImage(
-                        requireContext(),
-                        Uri.parse(pageModel.imageUri),
-                        viewModel.boxesModel.value
-                    )
-                    val shareIntent: Intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, "Mira esta foto!")
-                        putExtra(Intent.EXTRA_TITLE, "Comparte tu imagen!")
-                        putExtra(Intent.EXTRA_STREAM, shareImage)
-
-                        type = "image/jpeg"
-                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    }
-
-                    startActivity(Intent.createChooser(shareIntent, null))
-                }
+                sharePage()
                 true
             }
 
             R.id.action_process_page -> {
-                viewModel.processPage()
+                confirmProcessPage()
                 true
             }
 
@@ -220,5 +293,46 @@ class PageDetailFragment : Fragment(), MenuProvider {
     private fun updateMenuVisibility() {
         menu?.setGroupVisible(R.id.group_page_edit_mode, isEditMode)
         menu?.setGroupVisible(R.id.group_page_detail, !isEditMode)
+    }
+
+    private fun confirmPageDelete() {
+        DialogsFactory.confirmationDialog(
+            context = requireContext(),
+            title = "Confirm delete page",
+            question = "Are you sure you want to delete current page?",
+            onConfirmAction = { viewModel.deletePage() },
+            onCancelAction = { dialog -> dialog.dismiss() }
+        )
+    }
+
+    private fun sharePage() {
+        viewModel.pageModel.value?.let { pageModel ->
+            val shareImage = ImageManipulation.drawRectanglesOnImage(
+                requireContext(),
+                Uri.parse(pageModel.imageUri),
+                viewModel.boxesModel.value
+            )
+            val shareIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "Mira esta foto!")
+                putExtra(Intent.EXTRA_TITLE, "Comparte tu imagen!")
+                putExtra(Intent.EXTRA_STREAM, shareImage)
+
+                type = "image/jpeg"
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+
+            startActivity(Intent.createChooser(shareIntent, null))
+        }
+    }
+
+    private fun confirmProcessPage() {
+        DialogsFactory.confirmationDialog(
+            context = requireContext(),
+            title = "Confirm process page",
+            question = "Are you sure you want to current page to process? Current bounding boxes will be override by new ones.",
+            onConfirmAction = { viewModel.processPage() },
+            onCancelAction = { dialog -> dialog.dismiss() }
+        )
     }
 }

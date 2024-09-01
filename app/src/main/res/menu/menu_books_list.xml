@@ -8,17 +8,20 @@
             android:id="@+id/action_select_all"
             android:checkable="true"
             android:icon="@drawable/ic_checkbox_unchecked"
-            android:title="Select all"
+            android:title="Toggle select all"
+            android:iconTint="@color/menuIcon"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_delete_books"
             android:icon="@drawable/ic_confirm_delete"
-            android:title="Edit books list"
+            android:title="Delete selected books"
+            android:iconTint="@color/menuIconDelete"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_disable_edit_mode"
             android:icon="@drawable/ic_close"
-            android:title="Clear selection"
+            android:title="Cancel edition"
+            android:iconTint="@color/menuIcon"
             app:showAsAction="ifRoom" />
     </group>
 
@@ -29,6 +32,7 @@
             android:id="@+id/action_enable_edit_mode"
             android:icon="@drawable/ic_list_edit_mode"
             android:title="Edit books list"
+            android:iconTint="@color/menuIcon"
             app:showAsAction="ifRoom" />
     </group>
 </menu>

@@ -37,20 +37,22 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
 
         binding = FragmentCameraBinding.inflate(inflater)
 
-        binding.btnCloseCamera.setOnClickListener { findNavController().navigateUp() }
-        binding.btnFlipCamera.setOnClickListener { viewModel.flipCamera() }
-        binding.btnToggleFlash.setOnClickListener { viewModel.toggleFlash() }
-        binding.btnShotPhoto.setOnClickListener { viewModel.takePhoto(requireContext()) }
+        binding.apply {
+            btnCloseCamera.setOnClickListener { findNavController().navigateUp() }
+            btnFlipCamera.setOnClickListener { viewModel.flipCamera() }
+            btnToggleFlash.setOnClickListener { viewModel.toggleFlash() }
+            btnShotPhoto.setOnClickListener { viewModel.takePhoto(requireContext()) }
 
-        binding.btnDiscardPhoto.setOnClickListener { viewModel.discardCapturedPage(requireContext()) }
-        binding.btnConfirmPhoto.setOnClickListener { onImageConfirmationAction() }
+            btnDiscardPhoto.setOnClickListener { viewModel.discardCapturedPage(requireContext()) }
+            btnConfirmPhoto.setOnClickListener { onImageConfirmationAction() }
 
-        binding.clLive.visibility = View.GONE
-        binding.clPreview.visibility = View.GONE
-
+            clLive.visibility = View.GONE
+            clPreview.visibility = View.GONE
+        }
 
         return binding.root
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +66,6 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         viewModel.cameraFacing.observe(viewLifecycleOwner) { _ ->
             bindCameraUserCases()
@@ -81,15 +82,17 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
 
         viewModel.cameraState.observe(viewLifecycleOwner) { cameraState ->
             cameraState?.let {
-                when (cameraState) {
-                    CameraState.Live -> {
-                        binding.clLive.visibility = View.VISIBLE
-                        binding.clPreview.visibility = View.GONE
-                    }
+                binding.apply {
+                    when (cameraState) {
+                        CameraState.Live -> {
+                            clLive.visibility = View.VISIBLE
+                            clPreview.visibility = View.GONE
+                        }
 
-                    CameraState.ImageCaptured -> {
-                        binding.clLive.visibility = View.GONE
-                        binding.clPreview.visibility = View.VISIBLE
+                        CameraState.ImageCaptured -> {
+                            clLive.visibility = View.GONE
+                            clPreview.visibility = View.VISIBLE
+                        }
                     }
                 }
             }

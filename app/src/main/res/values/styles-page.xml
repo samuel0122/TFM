@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TFM_DetectorPentagramas.Page.PageItem" parent="TFM_DetectorPentagramas.CustomViews.BorderlessCardView">
+        <item name="cardBackgroundColor">@android:color/transparent</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+    </style>
+
+    <style name="TFM_DetectorPentagramas.Page.PageThumbnailImage" parent="TFM_DetectorPentagramas.CustomViews.BorderlessCardView">
+        <item name="scaleType">fillCenter</item>
+    </style>
+
+    <style name="TFM_DetectorPentagramas.Page.PageDetailImage" parent="TFM_DetectorPentagramas.CustomViews.BorderlessCardView">
+        <item name="android:adjustViewBounds">true</item>
+        <item name="scaleType">fitCenter</item>
+    </style>
+</resources>

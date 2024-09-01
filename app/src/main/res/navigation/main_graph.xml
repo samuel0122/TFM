@@ -60,7 +60,10 @@
         <argument
             android:name="bookId"
             app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="-1" />
+        <argument
+            android:name="isEditing"
+            app:argType="boolean" />
     </dialog>
     <dialog
         android:id="@+id/addPageDialog"

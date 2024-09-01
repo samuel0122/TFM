@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TFM_DetectorPentagramas.CustomViews.BorderlessCardView" parent="Base.Theme.TFM_DetectorPentagramas">
+        <item name="strokeColor">@android:color/transparent</item>
+    </style>
+
+    <style name="TFM_DetectorPentagramas.CustomViews.AddButton" parent="Base.Theme.TFM_DetectorPentagramas">
+        <item name="tint">@color/add_icon_color</item>
+        <item name="backgroundTint">@color/add_icon_background</item>
+    </style>
+</resources>

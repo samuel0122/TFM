@@ -31,6 +31,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id == R.id.cameraFragment) {
+                supportActionBar?.hide()
+            } else {
+                supportActionBar?.show()
+            }
+        }
+
         Permissions.requestNotificationsPermissions(this)
     }
 

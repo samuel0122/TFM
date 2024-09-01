@@ -24,21 +24,35 @@ class EditBookDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.onCreate(args.bookId)
+
+        viewModel.onCreate(args.bookId, args.isEditing)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogEditBookBinding.inflate(layoutInflater)
 
+        binding.apply {
+            if (args.isEditing) {
+                tvHeader.text = "Edit book"
+                btnSubmit.text = "Apply changes"
+            } else {
+                tvHeader.text = "Create a new book"
+                btnSubmit.text = "Create book"
+            }
+        }
+
         setupSpinner()
-        observeViewModel()
         setupClickListeners()
+
+        observeViewModel()
 
         return MaterialAlertDialogBuilder(requireActivity())
             .setView(binding.root)
             .create()
             .apply { window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) }
     }
+
+
     private fun setupSpinner() {
         binding.spDataset.adapter =
             ArrayAdapter(
@@ -49,22 +63,37 @@ class EditBookDialog : DialogFragment() {
             }
     }
 
-    private fun observeViewModel() {
-        viewModel.bookModel.observe(this) { book ->
-            binding.etTitle.setText(book.title)
-            binding.etDescription.setText(book.description)
-            binding.spDataset.setSelection(book.dataset.value)
-        }
-    }
-
     private fun setupClickListeners() {
-        binding.bAddQuantity.setOnClickListener {
+        binding.btnSubmit.setOnClickListener {
             viewModel.onSubmit(
                 title = binding.etTitle.text.toString(),
                 description = binding.etDescription.text.toString(),
                 dataset = binding.spDataset.selectedItemId.toInt()
             )
-            findNavController().navigateUp()
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.bookModel.observe(this) { book ->
+            binding.apply {
+                if (args.isEditing) tvHeader.text = "Edit book: ${book.title}"
+                etTitle.setText(book.title)
+                etDescription.setText(book.description)
+                spDataset.setSelection(book.dataset.value)
+            }
+        }
+
+        viewModel.titleError.observe(this) { titleError ->
+            binding.etTitle.error = titleError
+        }
+
+        viewModel.descriptionError.observe(this) { descriptionError ->
+            binding.etDescription.error = descriptionError
+        }
+
+        viewModel.bookSubmited.observe(this) { isSubmited ->
+            if (isSubmited)
+                findNavController().navigateUp()
         }
     }
 }
