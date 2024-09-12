@@ -25,14 +25,17 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         setSupportActionBar(binding.toolbar)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
+
+        title = "ScoreScanner"
 
         appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.cameraFragment) {
+            if (destination.id == R.id.cameraFragment) {
                 supportActionBar?.hide()
             } else {
                 supportActionBar?.show()
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
 
         Permissions.requestNotificationsPermissions(this)
+
     }
 
     override fun onRequestPermissionsResult(
@@ -53,7 +57,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            Toast.makeText(applicationContext, "App has no permission to post notifications!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                applicationContext,
+                "App has no permission to post notifications!",
+                Toast.LENGTH_LONG
+            ).show()
         } else {
             Permissions.requestNotificationsPermissions(this)
         }
@@ -61,9 +69,5 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
 
-    }
-
-    companion object {
-        private const val TAG = "CameraFragment"
     }
 }

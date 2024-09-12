@@ -150,7 +150,7 @@ class PageDaoTest {
         // Then: Verify that the new page was inserted with returned ID
         val allPages = pageDao.getAllPages()
 
-        val finalPages = initialPages.plusElement(PageEntity(insertResult.toInt(), insertPage.imageUri, insertPage.processed, insertPage.order, insertPage.bookId))
+        val finalPages = initialPages.plusElement(PageEntity(insertResult.toInt(), insertPage.imageUri, insertPage.state, insertPage.order, insertPage.bookId))
 
         assertThat(allPages).hasSize(finalPages.size)
         assertThat(allPages).containsExactlyElementsIn(finalPages)

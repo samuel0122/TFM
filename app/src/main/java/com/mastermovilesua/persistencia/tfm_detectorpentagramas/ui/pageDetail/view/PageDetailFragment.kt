@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuProvider
@@ -48,7 +49,6 @@ class PageDetailFragment : Fragment(), MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentPageDetailBinding.inflate(inflater)
-
 
         // binding.ivPage.transitionName = "pageTransition${args.pageId}"
         // sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.page_transition)
@@ -96,8 +96,15 @@ class PageDetailFragment : Fragment(), MenuProvider {
             cvBoxesCanvas.setOnCanvasItemUpdateListener { canvasItem ->
                 val boxCanvasItem = canvasItem as BoxCanvasItem
                 boxCanvasItem.apply {
-                    x = x.coerceIn(0f, cvBoxesCanvas.width - width)
-                    y = y.coerceIn(0f, cvBoxesCanvas.height - height)
+                    x = if (width <= cvBoxesCanvas.width) x.coerceIn(0f, cvBoxesCanvas.width - width)
+                    else 0f
+                    y = if (height <= cvBoxesCanvas.height) y.coerceIn(0f, cvBoxesCanvas.height - height)
+                    else 0f
+
+                    if (x + width > cvBoxesCanvas.width)
+                        width = cvBoxesCanvas.width - x
+                    if (y + height > cvBoxesCanvas.height)
+                        height = cvBoxesCanvas.height - y
                 }
 
                 viewModel.updateBox(
@@ -122,6 +129,8 @@ class PageDetailFragment : Fragment(), MenuProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as AppCompatActivity).supportActionBar?.title = args.title
 
         activity?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
@@ -314,8 +323,8 @@ class PageDetailFragment : Fragment(), MenuProvider {
             )
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "Mira esta foto!")
-                putExtra(Intent.EXTRA_TITLE, "Comparte tu imagen!")
+                putExtra(Intent.EXTRA_TEXT, "Look at the staffs of this music sheet image!")
+                putExtra(Intent.EXTRA_TITLE, "Share your page.")
                 putExtra(Intent.EXTRA_STREAM, shareImage)
 
                 type = "image/jpeg"

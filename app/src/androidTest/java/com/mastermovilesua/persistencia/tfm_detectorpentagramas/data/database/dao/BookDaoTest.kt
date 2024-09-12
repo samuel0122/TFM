@@ -33,7 +33,7 @@ class BookDaoTest {
 
     private val bookNoId = BookEntity(0, "NoIdBook", "No ID Book", 0)
 
-    private val pageEntity = PageEntity(0, "imageURI", false, 0, 0)
+    private val pageEntity = PageEntity(0, "imageURI", 0, 0, 0)
 
     @Before
     fun setup() {
@@ -295,8 +295,8 @@ class BookDaoTest {
         val bookIdToGet = bookToGet.bookId
 
         val booksPages = listOf(
-            PageEntity(1, pageEntity.imageUri, pageEntity.processed, pageEntity.order, bookIdToGet),
-            PageEntity(2, pageEntity.imageUri, pageEntity.processed, pageEntity.order, bookIdToGet),
+            PageEntity(1, pageEntity.imageUri, pageEntity.state, pageEntity.order, bookIdToGet),
+            PageEntity(2, pageEntity.imageUri, pageEntity.state, pageEntity.order, bookIdToGet),
         )
 
         initialBooks.forEach { bookDao.insertBook(it) }
@@ -457,8 +457,8 @@ class BookDaoTest {
         val bookIdToDelete = initialBooks.first().bookId
 
         val booksPages = listOf(
-            PageEntity(1, pageEntity.imageUri, pageEntity.processed, pageEntity.order, bookIdToDelete),
-            PageEntity(2, pageEntity.imageUri, pageEntity.processed, pageEntity.order, bookIdToDelete),
+            PageEntity(1, pageEntity.imageUri, pageEntity.state, pageEntity.order, bookIdToDelete),
+            PageEntity(2, pageEntity.imageUri, pageEntity.state, pageEntity.order, bookIdToDelete),
         )
 
         initialBooks.forEach { bookDao.insertBook(it) }

@@ -32,7 +32,7 @@ object Permissions {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             EasyPermissions.requestPermissions(
                 host = activity,
-                rationale = "Notifications and background dats sync permission is recommended to notify of background activity.",
+                rationale = "Notifications and background data sync permission are recommended to notify of background activity.",
                 requestCode = REQUEST_CODE_NOTIFICATIONS,
                 perms = arrayOf(
                     android.Manifest.permission.POST_NOTIFICATIONS,

@@ -1,4 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="black">#000000</color>
+    <color name="dark_gray">#444444</color>
+    <color name="gray">#888888</color>
+    <color name="light_gray">#CCCCCC</color>
+    <color name="white">#FFFFFF</color>
 
+    <color name="red">#FF0000</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="orange">#FF8800</color>
+    <color name="green">#00FF00</color>
+    <color name="cian">#00FFFF</color>
+    <color name="blue">#0000FF</color>
+    <color name="magenta">#FF00FF</color>
+
+    <!-- Íconos de añadir -->
+    <color name="add_icon_color">#FFFFFF</color> <!-- Blanco para íconos sobre fondo oscuro -->
+    <color name="add_icon_background">#0D47A1</color> <!-- Fondo azul muy oscuro -->
+
+    <!-- Íconos del menú -->
+    <color name="menuIcon">#E0E0E0</color> <!-- Gris claro para íconos de menú en oscuro -->
+    <color name="menuIconEdit">#FFC107</color> <!-- Amarillo para icono de editar -->
+    <color name="menuIconDelete">#EF5350</color> <!-- Rojo brillante para delete -->
+    <color name="menuIconAdd">#81C784</color> <!-- Verde claro para añadir -->
+
+    <!-- Colores principales -->
+    <color name="colorPrimary">#0D47A1</color> <!-- Azul claro para modo oscuro -->
+    <color name="colorPrimaryVariant">#64B5F6</color> <!-- Variante de azul para modo oscuro -->
+    <color name="colorOnPrimary">#000000</color> <!-- Texto oscuro sobre primary claro -->
+
+    <!-- Colores secundarios -->
+    <color name="colorSecondary">#FFB74D</color> <!-- Naranja más claro para modo oscuro -->
+    <color name="colorSecondaryVariant">#FFA726</color> <!-- Variante de naranja en oscuro -->
+    <color name="colorOnSecondary">#000000</color> <!-- Texto oscuro sobre secundario claro -->
+
+    <!-- Fondo y superficie -->
+    <color name="colorBackground">#001122</color> <!-- Fondo azul muy oscuro -->
+    <color name="colorSurface">#1A1A2E</color> <!-- Superficie ligeramente más clara que el fondo -->
+    <color name="colorOnBackground">#FFFFFF</color> <!-- Texto claro sobre fondo oscuro -->
+    <color name="colorOnSurface">#FFFFFF</color> <!-- Texto claro sobre superficie oscura -->
+
+    <color name="bookColorSurface">#4A6572</color> <!-- Azul grisáceo oscuro para libros -->
+
+    <!-- Colores de error -->
+    <color name="colorError">#CF6679</color> <!-- Error más brillante en oscuro -->
+    <color name="colorOnError">#000000</color> <!-- Texto oscuro sobre error claro -->
+
+    <!-- Colores adicionales -->
+    <color name="colorAccent">#29B6F6</color> <!-- Azul más brillante para acentos en oscuro -->
+    <color name="colorTextPrimary">#E0E0E0</color> <!-- Texto claro principal en oscuro -->
+    <color name="colorTextSecondary">#B0BEC5</color> <!-- Texto secundario gris claro -->
 </resources>

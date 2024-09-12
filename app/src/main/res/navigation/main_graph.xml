@@ -24,8 +24,7 @@
     <fragment
         android:id="@+id/pagesListFragment"
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view.PagesListFragment"
-        android:label="Pages List"
-        tools:layout="@layout/fragment_pages_list" >
+        tools:layout="@layout/fragment_pages_list">
         <action
             android:id="@+id/action_pagesListFragment_to_pageDetailFragment"
             app:destination="@id/pageDetailFragment"
@@ -42,6 +41,9 @@
         <action
             android:id="@+id/action_pagesListFragment_to_editBookDialog"
             app:destination="@id/editBookDialog" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/pageDetailFragment"
@@ -51,6 +53,9 @@
         <argument
             android:name="pageId"
             app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
     <dialog
         android:id="@+id/editBookDialog"

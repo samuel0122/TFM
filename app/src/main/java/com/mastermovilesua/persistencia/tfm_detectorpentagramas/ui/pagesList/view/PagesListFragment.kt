@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -73,7 +74,10 @@ class PagesListFragment : Fragment(), MenuProvider {
                 viewModel.selectPage(page.id)
             } else {
                 findNavController().navigate(
-                    PagesListFragmentDirections.actionPagesListFragmentToPageDetailFragment(pageId = page.id)
+                    PagesListFragmentDirections.actionPagesListFragmentToPageDetailFragment(
+                        pageId = page.id,
+                        title = viewModel.bookModel.value?.title.orEmpty()
+                    )
                     // , FragmentNavigatorExtras(
                     //     view to view.transitionName
                     // )
@@ -87,11 +91,14 @@ class PagesListFragment : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as AppCompatActivity).supportActionBar?.title = args.title
+
         activity?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         viewModel.bookModel.observe(viewLifecycleOwner) { bookModel ->
             binding.apply {
-                tvTitle.text = bookModel.title
+                (activity as AppCompatActivity).supportActionBar?.title = bookModel.title
+                // tvTitle.text = bookModel.title
                 tvDescription.text = bookModel.description
                 tvDataset.text = bookModel.dataset.name
             }

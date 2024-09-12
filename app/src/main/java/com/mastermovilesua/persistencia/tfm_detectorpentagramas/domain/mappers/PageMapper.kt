@@ -4,6 +4,6 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.en
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageState
 
-fun PageEntity.toDomain() = PageItem(pageId, imageUri, PageState.fromInt(processed), order)
+fun PageEntity.toDomain() = PageItem(pageId, imageUri, PageState.fromInt(state), order)
 
 fun PageItem.toDatabase(bookId: Int) = PageEntity(id, imageUri, processState.value, order, bookId)

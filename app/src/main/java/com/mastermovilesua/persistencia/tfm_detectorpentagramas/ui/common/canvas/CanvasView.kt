@@ -13,7 +13,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.canvas
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.canvas.listeners.OnCanvasItemUpdateListener
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.canvas.listeners.OnCanvasItemUpdateListenerConsumer
 
-class CanvasView (
+class CanvasView(
     context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs), GestureDetector.OnGestureListener,
     OnCanvasItemUpdateListenerConsumer,
@@ -38,6 +38,7 @@ class CanvasView (
 
         return gestureDetector.onTouchEvent(event)
     }
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
