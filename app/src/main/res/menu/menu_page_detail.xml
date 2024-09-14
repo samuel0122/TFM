@@ -7,12 +7,12 @@
         <item
             android:id="@+id/action_add_box"
             android:icon="@drawable/ic_edit_add"
-            android:title="Add box"
+            android:title="@string/add_box"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_disable_edit_mode"
             android:icon="@drawable/ic_check"
-            android:title="Finish editing"
+            android:title="@string/finish_editing"
             app:showAsAction="ifRoom" />
     </group>
 
@@ -22,23 +22,23 @@
         <item
             android:id="@+id/action_enable_edit_mode"
             android:icon="@drawable/ic_edit"
-            android:title="Edit page"
+            android:title="@string/edit_page"
             android:iconTint="@color/menuIconEdit"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_delete_page"
             android:icon="@drawable/ic_delete"
-            android:title="Delete page"
+            android:title="@string/delete_page"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_share_page"
             android:icon="@drawable/ic_share"
-            android:title="Share page"
+            android:title="@string/share_page"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_process_page"
             android:icon="@drawable/ic_upload"
-            android:title="Process page"
+            android:title="@string/process_page"
             app:showAsAction="ifRoom" />
     </group>
 </menu>

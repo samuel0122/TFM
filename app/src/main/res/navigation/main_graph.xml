@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/booksListFragment"
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.booksList.view.BooksListFragment"
-        android:label="Books List"
-        tools:layout="@layout/fragment_books_list" >
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_books_list">
         <action
             android:id="@+id/action_booksListFragment_to_pagesListFragment"
             app:destination="@id/pagesListFragment"
@@ -23,8 +23,8 @@
     </fragment>
     <fragment
         android:id="@+id/pagesListFragment"
-        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view.PagesListFragment"
-        tools:layout="@layout/fragment_pages_list">
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.view.BookDetailFragment"
+        tools:layout="@layout/fragment_book_detail">
         <action
             android:id="@+id/action_pagesListFragment_to_pageDetailFragment"
             app:destination="@id/pageDetailFragment"
@@ -48,7 +48,6 @@
     <fragment
         android:id="@+id/pageDetailFragment"
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.view.PageDetailFragment"
-        android:label="Page Detail"
         tools:layout="@layout/fragment_page_detail">
         <argument
             android:name="pageId"
@@ -59,7 +58,7 @@
     </fragment>
     <dialog
         android:id="@+id/editBookDialog"
-        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.editBook.EditBookDialog"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.createEditBook.CreateEditBookDialog"
         android:label="dialog_edit_book"
         tools:layout="@layout/dialog_edit_book" >
         <argument
@@ -72,7 +71,7 @@
     </dialog>
     <dialog
         android:id="@+id/addPageDialog"
-        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view.AddPageDialog"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.view.AddPageDialog"
         android:label="AddPageDialog"
         tools:layout="@layout/dialog_add_page" >
         <argument
@@ -84,7 +83,7 @@
     </dialog>
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view.AddPageCameraFragment"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.view.AddPageCameraFragment"
         android:label="Camera"
         tools:layout="@layout/fragment_camera" >
         <argument

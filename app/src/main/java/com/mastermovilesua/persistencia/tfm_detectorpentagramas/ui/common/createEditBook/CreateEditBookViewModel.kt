@@ -1,9 +1,11 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.editBook
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.createEditBook
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.UpdateBookUseCase
@@ -14,7 +16,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditBookViewModel @Inject constructor(
+class CreateEditBookViewModel @Inject constructor(
+    private val context: Context,
     private val getBookUseCase: GetBookUseCase,
     private val insertBookUseCase: InsertBookUseCase,
     private val updateBookUseCase: UpdateBookUseCase
@@ -59,11 +62,11 @@ class EditBookViewModel @Inject constructor(
             var hasError = false
 
             if (title.isEmpty()) {
-                _titleError.postValue("Title can not be empty.")
+                _titleError.postValue(context.getString(R.string.title_can_not_be_empty))
                 hasError = true
             }
             if (description.isEmpty()) {
-                _descriptionError.postValue("Description can not be empty.")
+                _descriptionError.postValue(context.getString(R.string.description_can_not_be_empty))
                 hasError = true
             }
 

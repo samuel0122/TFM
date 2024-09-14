@@ -1,5 +1,74 @@
 <resources>
-    <string name="app_name">TFM_DetectorPentagramas</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">ScoreScanner</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Book List Screen -->
+    <string name="confirm_delete_selected_books_title">Confirm deletion of selected books</string>
+    <string name="confirm_delete_selected_books">Are you sure you want to delete the selected books?</string>
+
+    <!-- Book Detail Screen -->
+    <string name="confirm_delete_selected_pages_title">Confirm deletion of selected pages</string>
+    <string name="confirm_delete_selected_pages">Are you sure you want to delete the selected pages?</string>
+    <string name="confirm_delete_current_book_title">Confirm deletion of current book</string>
+    <string name="confirm_delete_current_book">Are you sure you want to delete the current book: %s?</string>
+
+    <!-- Add Page Dialog Options -->
+    <string name="select_one_image">SELECT ONE IMAGE</string>
+    <string name="select_multiple_images">SELECT MULTIPLE IMAGES</string>
+    <string name="take_picture">TAKE A PICTURE</string>
+
+    <!-- Camera View -->
+    <string name="camera_permission_granted">Camera permission granted!</string>
+    <string name="camera_permission_request_title">Camera permission required</string>
+    <string name="camera_permission_request">Camera permission is required for the app to function properly. Please open the app settings to modify permissions.</string>
+
+    <!-- Page Detail Page -->
+    <string name="page_is_being_processed">The page is being processed by the server.</string>
+    <string name="page_has_been_processed">The page has been successfully processed by the server.</string>
+    <string name="page_has_failed_to_process">The page failed to be processed by the server.</string>
+    <string name="page_has_not_been_processed">The page has not been processed by the server.</string>
+    <string name="confirm_delete_page_title">Confirm deletion of current page</string>
+    <string name="confirm_delete_page">Are you sure you want to delete the current page?</string>
+    <string name="page_share_message">Check out the staves on this music sheet image!</string>
+    <string name="page_share_title">Share your page</string>
+    <string name="confirm_process_page_title">Confirm processing of current page</string>
+    <string name="confirm_process_page">Are you sure you want to process the current page? Existing bounding boxes will be overwritten by new ones.</string>
+
+    <!-- Create-Edit Book Dialog -->
+    <string name="edit_book_header">Edit book</string>
+    <string name="edit_book_parametrized_header">Edit book: %s</string>
+    <string name="edit_book_button">Apply changes</string>
+    <string name="create_book_header">Create a new book</string>
+    <string name="create_book_button">Create book</string>
+    <string name="title_can_not_be_empty">Title can not be empty.</string>
+    <string name="description_can_not_be_empty">Description cannot be empty.</string>
+    <string name="create_edit_book_hint_title">Title</string>
+    <string name="create_edit_book_hint_description">Description</string>
+
+    <!-- Navigation Labels -->
+    <string name="navigation_books_list_label">Books List</string>
+
+    <!-- Menu Options -->
+    <string name="toggle_select_all">Toggle select all</string>
+    <string name="close_edition">Close edition</string>
+
+    <!-- Menu Options Books List -->
+    <string name="delete_selected_books">Delete selected books</string>
+    <string name="edit_books_list">Edit books list</string>
+
+    <!-- Menu Options Book Detail -->
+    <string name="delete_selected_pages">Delete selected pages</string>
+    <string name="edit_book">Edit book</string>
+    <string name="delete_book">Delete book</string>
+    <string name="edit_pages_list">Edit pages list</string>
+
+    <!-- Menu Options Page Detail -->
+    <string name="add_box">Add box</string>
+    <string name="finish_editing">Finish editing</string>
+    <string name="edit_page">Edit page</string>
+    <string name="delete_page">Delete page</string>
+    <string name="share_page">Share page</string>
+    <string name="process_page">Process page</string>
 </resources>

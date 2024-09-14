@@ -1,6 +1,5 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.editBook
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.createEditBook
 
-import android.R
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,14 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.DialogEditBookBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Dataset
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditBookDialog : DialogFragment() {
-    private val viewModel: EditBookViewModel by viewModels()
-    private val args: EditBookDialogArgs by navArgs()
+class CreateEditBookDialog : DialogFragment() {
+    private val viewModel: CreateEditBookViewModel by viewModels()
+    private val args: CreateEditBookDialogArgs by navArgs()
 
     private lateinit var binding: DialogEditBookBinding
 
@@ -33,11 +33,11 @@ class EditBookDialog : DialogFragment() {
 
         binding.apply {
             if (args.isEditing) {
-                tvHeader.text = "Edit book"
-                btnSubmit.text = "Apply changes"
+                tvHeader.text = getString(R.string.edit_book_header)
+                btnSubmit.text = getString(R.string.edit_book_button)
             } else {
-                tvHeader.text = "Create a new book"
-                btnSubmit.text = "Create book"
+                tvHeader.text = getString(R.string.create_book_header)
+                btnSubmit.text = getString(R.string.create_book_button)
             }
         }
 
@@ -57,9 +57,9 @@ class EditBookDialog : DialogFragment() {
         binding.spDataset.adapter =
             ArrayAdapter(
                 requireContext(),
-                R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_item,
                 Dataset.entries.map { it.name }).apply {
-                setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
     }
 
@@ -76,7 +76,7 @@ class EditBookDialog : DialogFragment() {
     private fun observeViewModel() {
         viewModel.bookModel.observe(this) { book ->
             binding.apply {
-                if (args.isEditing) tvHeader.text = "Edit book: ${book.title}"
+                if (args.isEditing) tvHeader.text = getString(R.string.edit_book_header, book.title)
                 etTitle.setText(book.title)
                 etDescription.setText(book.description)
                 spDataset.setSelection(book.dataset.value)

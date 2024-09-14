@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.camera.CameraFragment
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.viewModel.AddPageCameraViewModel
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.viewModel.AddPageCameraViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

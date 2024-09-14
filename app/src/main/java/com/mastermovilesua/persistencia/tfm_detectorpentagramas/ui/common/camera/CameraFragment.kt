@@ -1,7 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.camera
 
 import android.os.Bundle
-import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -33,8 +32,6 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        Log.d(TAG, "On CREATE VIEW")
-
         binding = FragmentCameraBinding.inflate(inflater)
 
         binding.apply {
@@ -56,8 +53,6 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d(TAG, "On CREATE")
 
         viewModel.onCreate()
 
@@ -116,16 +111,16 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        Toast.makeText(requireContext(), "Camera Permission Granted!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getText(R.string.camera_permission_granted), Toast.LENGTH_SHORT).show()
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             SettingsDialog.Builder(requireActivity())
-                .title("Camera Permission Required")
-                .rationale("Camera permission is required to work correctly. Please, open the app settings to modify app permissions.")
-                .positiveButtonText("OK")
-                .negativeButtonText("Cancel")
+                .title(R.string.camera_permission_request_title)
+                .rationale(R.string.camera_permission_request)
+                .positiveButtonText(R.string.ok)
+                .negativeButtonText(R.string.cancel)
                 .build()
                 .show()
             findNavController().navigateUp()
@@ -172,8 +167,7 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
                 setUpZoomTapToFocusAndExposure()
             }
 
-        } catch (exc: Exception) {
-            Log.e(TAG, "Use case binding failed", exc)
+        } catch (_: Exception) {
         }
     }
 
@@ -231,12 +225,7 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
     }
 
     override fun onDestroy() {
-        Log.d(TAG, "On DESTROY")
         viewModel.onDestroy()
         super.onDestroy()
-    }
-
-    companion object {
-        private const val TAG = "CameraFragment"
     }
 }

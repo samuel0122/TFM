@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -76,8 +75,6 @@ class BooksListFragment : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as AppCompatActivity).supportActionBar?.title = "ScoreScanner"
-
         activity?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         viewModel.booksModel.observe(viewLifecycleOwner) { booksItems ->
@@ -137,8 +134,8 @@ class BooksListFragment : Fragment(), MenuProvider {
 
     private fun confirmDeleteSelectedBooks() {
         DialogsFactory.confirmationDialog(requireContext(),
-            title = "Confirm delete selected books",
-            question = "Are you sure you want to delete the selected books?",
+            title = getString(R.string.confirm_delete_selected_books_title),
+            question = getString(R.string.confirm_delete_selected_books),
             onConfirmAction = { viewModel.deleteBooks() },
             onCancelAction = { dialog -> dialog.dismiss() })
     }

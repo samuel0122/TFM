@@ -59,36 +59,17 @@ class PageDetailFragment : Fragment(), MenuProvider {
             ivProcessedState.elevation = 15f
             ivProcessedState.setOnLongClickListener {
                 viewModel.pageModel.value?.let { page ->
-                    when (page.processState) {
-                        PageState.Processing -> {
-                            Snackbar.make(
-                                it,
-                                "Page is being processed by server.",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                            true
-                        }
-
-                        PageState.Processed -> {
-                            Snackbar.make(
-                                it,
-                                "Page has been successfully processed by server.",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                            true
-                        }
-
-                        PageState.FailedToProcess -> {
-                            Snackbar.make(
-                                it,
-                                "Page has failed to be processed by server.",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                            true
-                        }
-
-                        else -> false
-                    }
+                    Snackbar.make(
+                        it,
+                        when (page.processState) {
+                            PageState.Processing -> R.string.page_is_being_processed
+                            PageState.Processed -> R.string.page_has_been_processed
+                            PageState.FailedToProcess -> R.string.page_has_failed_to_process
+                            PageState.NotProcessed -> R.string.page_has_not_been_processed
+                        },
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    true
                 }
                 false
             }
@@ -96,9 +77,15 @@ class PageDetailFragment : Fragment(), MenuProvider {
             cvBoxesCanvas.setOnCanvasItemUpdateListener { canvasItem ->
                 val boxCanvasItem = canvasItem as BoxCanvasItem
                 boxCanvasItem.apply {
-                    x = if (width <= cvBoxesCanvas.width) x.coerceIn(0f, cvBoxesCanvas.width - width)
+                    x = if (width <= cvBoxesCanvas.width) x.coerceIn(
+                        0f,
+                        cvBoxesCanvas.width - width
+                    )
                     else 0f
-                    y = if (height <= cvBoxesCanvas.height) y.coerceIn(0f, cvBoxesCanvas.height - height)
+                    y = if (height <= cvBoxesCanvas.height) y.coerceIn(
+                        0f,
+                        cvBoxesCanvas.height - height
+                    )
                     else 0f
 
                     if (x + width > cvBoxesCanvas.width)
@@ -307,8 +294,8 @@ class PageDetailFragment : Fragment(), MenuProvider {
     private fun confirmPageDelete() {
         DialogsFactory.confirmationDialog(
             context = requireContext(),
-            title = "Confirm delete page",
-            question = "Are you sure you want to delete current page?",
+            title = getString(R.string.confirm_delete_page_title),
+            question = getString(R.string.confirm_delete_page),
             onConfirmAction = { viewModel.deletePage() },
             onCancelAction = { dialog -> dialog.dismiss() }
         )
@@ -323,8 +310,8 @@ class PageDetailFragment : Fragment(), MenuProvider {
             )
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "Look at the staffs of this music sheet image!")
-                putExtra(Intent.EXTRA_TITLE, "Share your page.")
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.page_share_message))
+                putExtra(Intent.EXTRA_TITLE, getString(R.string.page_share_title))
                 putExtra(Intent.EXTRA_STREAM, shareImage)
 
                 type = "image/jpeg"
@@ -338,8 +325,8 @@ class PageDetailFragment : Fragment(), MenuProvider {
     private fun confirmProcessPage() {
         DialogsFactory.confirmationDialog(
             context = requireContext(),
-            title = "Confirm process page",
-            question = "Are you sure you want to current page to process? Current bounding boxes will be override by new ones.",
+            title = getString(R.string.confirm_process_page_title),
+            question = getString(R.string.confirm_process_page),
             onConfirmAction = { viewModel.processPage() },
             onCancelAction = { dialog -> dialog.dismiss() }
         )

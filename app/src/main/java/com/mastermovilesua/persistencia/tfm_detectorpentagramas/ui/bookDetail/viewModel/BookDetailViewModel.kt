@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.viewModel
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PagesListViewModel @Inject constructor(
+class BookDetailViewModel @Inject constructor(
     private val getBookWithPagesUseCase: GetBookWithPagesUseCase,
     private val insertPageUseCase: InsertPageUseCase,
     private val deletePageUseCase: DeletePageUseCase,

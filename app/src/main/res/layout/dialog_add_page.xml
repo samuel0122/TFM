@@ -8,18 +8,18 @@
         android:id="@+id/btnOneImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SELECT ONE IMAGE" />
+        android:text="@string/select_one_image" />
 
     <Button
         android:id="@+id/btnMultipleImages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SELECT MULTIPLE IMAGES" />
+        android:text="@string/select_multiple_images" />
 
     <Button
         android:id="@+id/btnTakePicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TAKE PICTURE" />
+        android:text="@string/take_picture" />
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.DialogAddPageBinding
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.viewModel.AddPageViewModel
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.viewModel.AddPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

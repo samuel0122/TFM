@@ -1,4 +1,4 @@
-package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.view
+package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.view
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -24,19 +24,19 @@ import androidx.recyclerview.widget.ItemTouchHelper.START
 import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.RecyclerView
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentPagesListBinding
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.FragmentBookDetailBinding
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.viewModel.BookDetailViewModel
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.DialogsFactory
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.components.GridSpacingItemDecoration
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pagesList.viewModel.PagesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PagesListFragment : Fragment(), MenuProvider {
-    private val viewModel: PagesListViewModel by viewModels()
-    private val args: PagesListFragmentArgs by navArgs()
+class BookDetailFragment : Fragment(), MenuProvider {
+    private val viewModel: BookDetailViewModel by viewModels()
+    private val args: BookDetailFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentPagesListBinding
+    private lateinit var binding: FragmentBookDetailBinding
 
     @Inject
     lateinit var pagesGridAdapter: PagesListAdapter
@@ -53,7 +53,7 @@ class PagesListFragment : Fragment(), MenuProvider {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPagesListBinding.inflate(inflater)
+        binding = FragmentBookDetailBinding.inflate(inflater)
 
         changeImageGridNumColumns()
         binding.rvPagesList.apply {
@@ -65,7 +65,7 @@ class PagesListFragment : Fragment(), MenuProvider {
 
         binding.addButton.setOnClickListener { _ ->
             findNavController().navigate(
-                PagesListFragmentDirections.actionPagesListFragmentToAddPageDialog(bookId = args.bookId)
+                BookDetailFragmentDirections.actionPagesListFragmentToAddPageDialog(bookId = args.bookId)
             )
         }
 
@@ -74,7 +74,7 @@ class PagesListFragment : Fragment(), MenuProvider {
                 viewModel.selectPage(page.id)
             } else {
                 findNavController().navigate(
-                    PagesListFragmentDirections.actionPagesListFragmentToPageDetailFragment(
+                    BookDetailFragmentDirections.actionPagesListFragmentToPageDetailFragment(
                         pageId = page.id,
                         title = viewModel.bookModel.value?.title.orEmpty()
                     )
@@ -199,7 +199,7 @@ class PagesListFragment : Fragment(), MenuProvider {
 
             R.id.action_edit_book -> {
                 findNavController().navigate(
-                    PagesListFragmentDirections.actionPagesListFragmentToEditBookDialog(
+                    BookDetailFragmentDirections.actionPagesListFragmentToEditBookDialog(
                         bookId = args.bookId,
                         isEditing = true
                     )
@@ -224,8 +224,8 @@ class PagesListFragment : Fragment(), MenuProvider {
     private fun confirmDeleteSelectedPages() {
         DialogsFactory.confirmationDialog(
             context = requireContext(),
-            title = "Confirm delete selected pages",
-            question = "Are you sure you want to delete the selected pages?",
+            title = getString(R.string.confirm_delete_selected_pages_title),
+            question = getString(R.string.confirm_delete_selected_pages),
             onConfirmAction = { viewModel.deletePages() },
             onCancelAction = { dialog -> dialog.dismiss() }
         )
@@ -234,8 +234,11 @@ class PagesListFragment : Fragment(), MenuProvider {
     private fun confirmDeleteSelectedBook() {
         DialogsFactory.confirmationDialog(
             context = requireContext(),
-            title = "Confirm delete current book",
-            question = "Are you sure you want to delete current book: ${viewModel.bookModel.value?.title}?",
+            title = getString(R.string.confirm_delete_current_book_title),
+            question = getString(
+                R.string.confirm_delete_current_book,
+                viewModel.bookModel.value?.title
+            ),
             onConfirmAction = { viewModel.deleteBook() },
             onCancelAction = { dialog -> dialog.dismiss() }
         )

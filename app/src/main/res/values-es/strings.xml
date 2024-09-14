@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScoreScanner</string>
+
+    <string name="ok">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- Book List Screen -->
+    <string name="confirm_delete_selected_books_title">Confirmar eliminación de los libros seleccionados</string>
+    <string name="confirm_delete_selected_books">¿Estás seguro de que deseas eliminar los libros seleccionados?</string>
+
+    <!-- Book Detail Screen -->
+    <string name="confirm_delete_selected_pages_title">Confirmar eliminación de las páginas seleccionadas</string>
+    <string name="confirm_delete_selected_pages">¿Estás seguro de que deseas eliminar las páginas seleccionadas?</string>
+    <string name="confirm_delete_current_book_title">Confirmar eliminación del libro actual</string>
+    <string name="confirm_delete_current_book">¿Estás seguro de que deseas eliminar el libro actual: %s?</string>
+
+    <!-- Add Page Dialog Options -->
+    <string name="select_one_image">SELECCIONAR UNA IMAGEN</string>
+    <string name="select_multiple_images">SELECCIONAR VARIAS IMÁGENES</string>
+    <string name="take_picture">TOMAR UNA FOTO</string>
+
+    <!-- Camera View -->
+    <string name="camera_permission_granted">¡Permiso de cámara concedido!</string>
+    <string name="camera_permission_request_title">Permiso de cámara requerido</string>
+    <string name="camera_permission_request">El permiso de cámara es necesario para que la aplicación funcione correctamente. Por favor, abre los ajustes de la aplicación para modificar los permisos.</string>
+
+    <!-- Page Detail Page -->
+    <string name="page_is_being_processed">La página está siendo procesada por el servidor.</string>
+    <string name="page_has_been_processed">La página ha sido procesada correctamente por el servidor.</string>
+    <string name="page_has_failed_to_process">No se pudo procesar la página en el servidor.</string>
+    <string name="page_has_not_been_processed">La página no ha sido procesada por el servidor.</string>
+    <string name="confirm_delete_page_title">Confirmar eliminación de la página</string>
+    <string name="confirm_delete_page">¿Estás seguro de que deseas eliminar la página actual?</string>
+    <string name="page_share_message">¡Mira los pentagramas de esta partitura!</string>
+    <string name="page_share_title">Compartir página</string>
+    <string name="confirm_process_page_title">Confirmar procesamiento de la página</string>
+    <string name="confirm_process_page">¿Estás seguro de que deseas procesar la página actual? Las cajas delimitadoras actuales serán sobrescritas por las nuevas.</string>
+
+    <!-- Create-Edit Book Dialog -->
+    <string name="edit_book_header">Editar libro</string>
+    <string name="edit_book_parametrized_header">Editar libro: %s</string>
+    <string name="edit_book_button">Aplicar cambios</string>
+    <string name="create_book_header">Crear un nuevo libro</string>
+    <string name="create_book_button">Crear libro</string>
+    <string name="title_can_not_be_empty">El título no puede estar vacío.</string>
+    <string name="description_can_not_be_empty">La descripción no puede estar vacía.</string>
+    <string name="create_edit_book_hint_title">Título</string>
+    <string name="create_edit_book_hint_description">Descripción</string>
+
+    <!-- Navigation Labels -->
+    <style name="navigation_books_list_label">Listado de libros</style>
+
+    <!-- Menu Options -->
+    <string name="toggle_select_all">Alternar seleccionar todo</string>
+    <string name="close_edition">Cerrar edición</string>
+
+    <!-- Menu Options Books List -->
+    <string name="edit_books_list">Editar lista de libros</string>
+    <string name="delete_selected_books">Eliminar libros seleccionados</string>
+
+    <!-- Menu Options Book Detail -->
+    <string name="edit_book">Editar libro</string>
+    <string name="delete_book">Eliminar libro</string>
+    <string name="edit_pages_list">Editar lista de páginas</string>
+    <string name="delete_selected_pages">Eliminar páginas seleccionadas</string>
+
+    <!-- Menu Options Page Detail -->
+    <string name="edit_page">Editar página</string>
+    <string name="delete_page">Eliminar página</string>
+    <string name="share_page">Compartir página</string>
+    <string name="process_page">Procesar página</string>
+    <string name="add_box">Añadir caja</string>
+    <string name="finish_editing">Finalizar edición</string>
+</resources>
