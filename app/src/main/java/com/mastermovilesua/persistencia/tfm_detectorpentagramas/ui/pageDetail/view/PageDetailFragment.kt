@@ -4,20 +4,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.ImageManipulation
@@ -30,19 +23,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.min
 
 @AndroidEntryPoint
-class PageDetailFragment : Fragment(), MenuProvider {
+class PageDetailFragment : Fragment(), IPageDetailView {
     private val viewModel: PageDetailViewModel by viewModels()
-    private val args: PageDetailFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentPageDetailBinding
+    private var binding: FragmentPageDetailBinding? = null
 
     private var isEditMode: Boolean = false
-    private var menu: Menu? = null
+    private var isViewIdleVisible: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.onCreate(args.pageId)
+        val pageId = arguments?.getInt(Keys.PAGE_ID)!!
+
+        viewModel.onCreate(pageId)
     }
 
     override fun onCreateView(
@@ -53,7 +47,7 @@ class PageDetailFragment : Fragment(), MenuProvider {
         // binding.ivPage.transitionName = "pageTransition${args.pageId}"
         // sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.page_transition)
 
-        binding.apply {
+        binding?.apply {
             // ivPage.transitionName = "pageTransition${args.pageId}"
 
             ivProcessedState.elevation = 15f
@@ -77,15 +71,11 @@ class PageDetailFragment : Fragment(), MenuProvider {
             cvBoxesCanvas.setOnCanvasItemUpdateListener { canvasItem ->
                 val boxCanvasItem = canvasItem as BoxCanvasItem
                 boxCanvasItem.apply {
-                    x = if (width <= cvBoxesCanvas.width) x.coerceIn(
-                        0f,
-                        cvBoxesCanvas.width - width
-                    )
+                    x = if (width <= cvBoxesCanvas.width)
+                        x.coerceIn(0f, cvBoxesCanvas.width - width)
                     else 0f
-                    y = if (height <= cvBoxesCanvas.height) y.coerceIn(
-                        0f,
-                        cvBoxesCanvas.height - height
-                    )
+                    y = if (height <= cvBoxesCanvas.height)
+                        y.coerceIn(0f, cvBoxesCanvas.height - height)
                     else 0f
 
                     if (x + width > cvBoxesCanvas.width)
@@ -111,15 +101,11 @@ class PageDetailFragment : Fragment(), MenuProvider {
             }
         }
 
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (activity as AppCompatActivity).supportActionBar?.title = args.title
-
-        activity?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             // binding.progressBar.visibility =
@@ -128,71 +114,19 @@ class PageDetailFragment : Fragment(), MenuProvider {
         }
 
         viewModel.pageModel.observe(viewLifecycleOwner) { pageModel ->
-            binding.apply {
-                if (pageModel.processState == PageState.Processing) {
-                    shimmer.apply {
-                        startShimmer()
-                        visibility = View.VISIBLE
-                    }
-
-                    clPageDetail.visibility = View.GONE
-
-                    ivProcessedState.apply {
-                        visibility = View.VISIBLE
-                        setImageResource(R.drawable.ic_upload)
-                        setColorFilter(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.gray
-                            )
-                        )
-                    }
-                } else {
-                    ivProcessedState.apply {
-                        when (pageModel.processState) {
-                            PageState.Processed -> {
-                                visibility = View.VISIBLE
-                                setImageResource(R.drawable.ic_check)
-                                setColorFilter(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.green
-                                    )
-                                )
-                            }
-
-                            PageState.FailedToProcess -> {
-                                visibility = View.VISIBLE
-                                setImageResource(R.drawable.ic_close)
-                                setColorFilter(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.red
-                                    )
-                                )
-                            }
-
-                            else -> {
-                                visibility = View.GONE
-                            }
-                        }
-                    }
-
-                    clPageDetail.visibility = View.VISIBLE
-
-                    shimmer.apply {
-                        visibility = View.GONE
-                        stopShimmer()
-                    }
-                }
+            binding?.apply {
+                updateProcessingState(pageModel.processState)
+                updateCanvasVisibility()
 
                 ivPageShimmer.setImageURI(pageModel.imageUri.toUri())
-                ivPage.setImageURI(pageModel.imageUri.toUri())
-                ivPage.post {
-                    alignCanvasToImage()
+                ivPage.apply {
+                    setImageURI(pageModel.imageUri.toUri())
+                    post {
+                        alignCanvasToImage()
 
-                    viewModel.boxesModel.value?.let { boxesModel ->
-                        updateCanvasItems(boxesModel)
+                        viewModel.boxesModel.value?.let { boxesModel ->
+                            updateCanvasItems(boxesModel)
+                        }
                     }
                 }
             }
@@ -203,12 +137,11 @@ class PageDetailFragment : Fragment(), MenuProvider {
         }
 
         viewModel.selectedBoxId.observe(viewLifecycleOwner) { selectedBoxId ->
-            binding.cvBoxesCanvas.selectCanvasItem(selectedBoxId)
+            binding?.apply { cvBoxesCanvas.selectCanvasItem(selectedBoxId) }
         }
 
         viewModel.isEditMode.observe(viewLifecycleOwner) { isEditMode ->
             this.isEditMode = isEditMode
-            updateMenuVisibility()
         }
 
         viewModel.isPageDeleted.observe(viewLifecycleOwner) { isPageDeleted ->
@@ -216,8 +149,72 @@ class PageDetailFragment : Fragment(), MenuProvider {
         }
     }
 
+    private fun updateProcessingState(processState: PageState) {
+        binding?.apply {
+            if (processState == PageState.Processing) {
+                shimmer.apply {
+                    startShimmer()
+                    visibility = View.VISIBLE
+                }
+
+
+                clPageDetail.apply {
+                    visibility = View.GONE
+                }
+
+                ivProcessedState.apply {
+                    visibility = View.VISIBLE
+
+                    setImageResource(R.drawable.ic_upload)
+
+                    setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.gray
+                        )
+                    )
+                }
+            } else {
+                ivProcessedState.apply {
+                    visibility = when (processState) {
+                        PageState.Processed, PageState.FailedToProcess -> View.VISIBLE
+                        else -> View.GONE
+                    }
+
+                    setImageResource(
+                        when (processState) {
+                            PageState.Processed -> R.drawable.ic_check
+                            PageState.FailedToProcess -> R.drawable.ic_close
+                            else -> R.drawable.ic_close
+                        }
+                    )
+
+                    setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            when (processState) {
+                                PageState.Processed -> R.color.green
+                                PageState.FailedToProcess -> R.color.red
+                                else -> R.color.gray
+                            }
+                        )
+                    )
+                }
+
+                clPageDetail.apply {
+                    visibility = View.VISIBLE
+                }
+
+                shimmer.apply {
+                    visibility = View.GONE
+                    stopShimmer()
+                }
+            }
+        }
+    }
+
     private fun alignCanvasToImage() {
-        binding.apply {
+        binding?.apply {
             cvBoxesCanvas.layoutParams = cvBoxesCanvas.layoutParams.apply {
                 val scaleWith: Double =
                     ivPage.width.toDouble() / ivPage.drawable.intrinsicWidth
@@ -232,7 +229,7 @@ class PageDetailFragment : Fragment(), MenuProvider {
     }
 
     private fun updateCanvasItems(boxesModel: List<BoxItem>) {
-        binding.cvBoxesCanvas.run {
+        binding?.cvBoxesCanvas?.run {
             updateCanvasItems(boxesModel.map { boxModel ->
                 boxModel.toCanvas(
                     layoutParams.width.toFloat(),
@@ -243,52 +240,40 @@ class PageDetailFragment : Fragment(), MenuProvider {
         }
     }
 
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_page_detail, menu)
-
-        this.menu = menu
-        updateMenuVisibility()
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            R.id.action_add_box -> {
-                viewModel.insertNewBox()
-                true
-            }
-
-            R.id.action_disable_edit_mode -> {
-                viewModel.disableEditMode()
-                true
-            }
-
-            R.id.action_enable_edit_mode -> {
-                viewModel.enableEditMode()
-                true
-            }
-
-            R.id.action_delete_page -> {
-                confirmPageDelete()
-                true
-            }
-
-            R.id.action_share_page -> {
-                sharePage()
-                true
-            }
-
-            R.id.action_process_page -> {
-                confirmProcessPage()
-                true
-            }
-
-            else -> false
+    private fun updateCanvasVisibility() {
+        binding?.apply {
+            cvBoxesCanvas.visibility =
+                if (isViewIdleVisible && viewModel.pageModel.value?.processState == PageState.Processed) View.VISIBLE else View.GONE
         }
     }
 
-    private fun updateMenuVisibility() {
-        menu?.setGroupVisible(R.id.group_page_edit_mode, isEditMode)
-        menu?.setGroupVisible(R.id.group_page_detail, !isEditMode)
+    override fun setEditMode(isEditMode: Boolean) {
+        if (isEditMode) {
+            viewModel.enableEditMode()
+        } else {
+            viewModel.disableEditMode()
+        }
+    }
+
+    override fun actionAddBox() {
+        viewModel.insertNewBox()
+    }
+
+    override fun actionDeletePage() {
+        confirmPageDelete()
+    }
+
+    override fun actionSharePage() {
+        sharePage()
+    }
+
+    override fun actionProcessPage() {
+        confirmProcessPage()
+    }
+
+    override fun setDisplayCanvas(display: Boolean) {
+        isViewIdleVisible = display
+        updateCanvasVisibility()
     }
 
     private fun confirmPageDelete() {
@@ -330,5 +315,9 @@ class PageDetailFragment : Fragment(), MenuProvider {
             onConfirmAction = { viewModel.processPage() },
             onCancelAction = { dialog -> dialog.dismiss() }
         )
+    }
+
+    companion object Keys {
+        const val PAGE_ID = "pageId"
     }
 }

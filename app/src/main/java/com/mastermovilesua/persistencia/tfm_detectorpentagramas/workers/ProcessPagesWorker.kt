@@ -8,6 +8,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.Notifications
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.BoxRepository
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.PageRepository
@@ -88,8 +89,8 @@ class ProcessPagesWorker @AssistedInject constructor(
             applicationContext,
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,
-            NOTIFICATION_TITLE,
-            "Server is processing page $progress of ${total}."
+            applicationContext.getString(R.string.notification_processing_pages_title),
+            applicationContext.getString(R.string.server_is_processing_page_X_of_Y, progress, total)
         )
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -118,8 +119,5 @@ class ProcessPagesWorker @AssistedInject constructor(
         const val NOTIFICATION_ID = 2
         const val NOTIFICATION_CHANNEL_ID = "process_pages_id"
         const val NOTIFICATION_CHANNEL_NAME = "ProcessPages"
-
-        const val NOTIFICATION_TITLE = "Processing Pages"
-        const val NOTIFICATION_TEXT = "A page is currently being processed by the server..."
     }
 }

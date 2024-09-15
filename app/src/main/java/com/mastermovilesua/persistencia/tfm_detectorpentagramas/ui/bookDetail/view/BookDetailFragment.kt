@@ -74,8 +74,9 @@ class BookDetailFragment : Fragment(), MenuProvider {
                 viewModel.selectPage(page.id)
             } else {
                 findNavController().navigate(
-                    BookDetailFragmentDirections.actionPagesListFragmentToPageDetailFragment(
+                    BookDetailFragmentDirections.actionPagesListFragmentToPagesPagerFragment(
                         pageId = page.id,
+                        bookId = viewModel.bookModel.value!!.id,
                         title = viewModel.bookModel.value?.title.orEmpty()
                     )
                     // , FragmentNavigatorExtras(

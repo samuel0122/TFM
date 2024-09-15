@@ -25,13 +25,6 @@
         android:id="@+id/pagesListFragment"
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.view.BookDetailFragment"
         tools:layout="@layout/fragment_book_detail">
-        <action
-            android:id="@+id/action_pagesListFragment_to_pageDetailFragment"
-            app:destination="@id/pageDetailFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
         <argument
             android:name="bookId"
             app:argType="integer" />
@@ -44,6 +37,13 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <action
+            android:id="@+id/action_pagesListFragment_to_pagesPagerFragment"
+            app:destination="@id/pagesPagerFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/pageDetailFragment"
@@ -86,6 +86,20 @@
         android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.view.AddPageCameraFragment"
         android:label="Camera"
         tools:layout="@layout/fragment_camera" >
+        <argument
+            android:name="bookId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagesPagerFragment"
+        android:name="com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.pageDetail.view.PagesPagerFragment"
+        android:label="PagesPagerFragment" >
+        <argument
+            android:name="pageId"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
         <argument
             android:name="bookId"
             app:argType="integer" />

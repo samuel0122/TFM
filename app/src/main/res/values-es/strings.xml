@@ -72,4 +72,10 @@
     <string name="process_page">Procesar página</string>
     <string name="add_box">Añadir caja</string>
     <string name="finish_editing">Finalizar edición</string>
+
+    <!-- Notifications process pages -->
+    <string name="server_is_processing_page_X_of_Y">El servidor está procesando la página %d de %d.</string>
+    <string name="notification_processing_pages_title">Procesando páginas</string>
+    <string name="notification_processing_page_title">Procesando página</string>
+    <string name="notification_processing_page_message">Una página está siendo procesada por el servidor...</string>
 </resources>

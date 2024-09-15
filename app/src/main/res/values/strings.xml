@@ -71,4 +71,10 @@
     <string name="delete_page">Delete page</string>
     <string name="share_page">Share page</string>
     <string name="process_page">Process page</string>
+
+    <!-- Notifications process pages -->
+    <string name="server_is_processing_page_X_of_Y">Server is processing page %d of %d.</string>
+    <string name="notification_processing_pages_title">Processing pages</string>
+    <string name="notification_processing_page_title">Processing page</string>
+    <string name="notification_processing_page_message">A page is currently being processed by the server...</string>
 </resources>
