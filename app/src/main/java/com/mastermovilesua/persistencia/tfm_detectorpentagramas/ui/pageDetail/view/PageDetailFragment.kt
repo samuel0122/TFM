@@ -29,7 +29,7 @@ class PageDetailFragment : Fragment(), IPageDetailView {
     private var binding: FragmentPageDetailBinding? = null
 
     private var isEditMode: Boolean = false
-    private var isViewIdleVisible: Boolean = false
+    private var isViewIdleVisible: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

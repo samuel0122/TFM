@@ -77,5 +77,5 @@
     <string name="server_is_processing_page_X_of_Y">El servidor está procesando la página %d de %d.</string>
     <string name="notification_processing_pages_title">Procesando páginas</string>
     <string name="notification_processing_page_title">Procesando página</string>
-    <string name="notification_processing_page_message">Una página está siendo procesada por el servidor...</string>
+    <string name="notification_processing_page_message">Una página está siendo procesada por el servidor…</string>
 </resources>

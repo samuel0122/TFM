@@ -65,8 +65,8 @@ class PagesPagerFragment : Fragment(), MenuProvider {
                 ) {
                     override fun onPageSelected(position: Int) {
                         super.onPageSelected(position)
-                        currentPageDetailView?.setDisplayCanvas(true)
                         updatePageIndex()
+                        currentIndex = position
                     }
 
                     override fun onPageScrollStateChanged(state: Int) {
