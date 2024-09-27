@@ -126,6 +126,7 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
             findNavController().navigateUp()
         } else {
             Permissions.requestCameraPermissions(this)
+            findNavController().navigateUp()
         }
     }
 

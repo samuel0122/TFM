@@ -8,7 +8,7 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeleteBox
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeletePageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetPageWithBoxesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertBoxUseCase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.ProcessPageUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.RequestProcessPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.UpdateBoxUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BoxItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.ID
@@ -25,7 +25,7 @@ class PageDetailViewModel @Inject constructor(
     private val insertBoxUseCase: InsertBoxUseCase,
     private val deleteBoxUseCase: DeleteBoxUseCase,
     private val updateBoxUseCase: UpdateBoxUseCase,
-    private val processPageUseCase: ProcessPageUseCase
+    private val requestProcessPageUseCase: RequestProcessPageUseCase
 ) : ViewModel() {
 
     private val _pageModel = MutableLiveData<PageItem>()
@@ -113,7 +113,7 @@ class PageDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            processPageUseCase(pageId)
+            requestProcessPageUseCase(pageId)
 
             _isLoading.postValue(false)
         }

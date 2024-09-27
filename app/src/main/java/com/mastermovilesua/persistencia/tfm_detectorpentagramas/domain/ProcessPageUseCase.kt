@@ -1,62 +1,36 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain
 
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
-import androidx.work.WorkManager
-import androidx.work.workDataOf
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.BookRepository
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.BoxRepository
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.PageRepository
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageState
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.workers.ProcessPageWorker
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.ProcessResult
 import javax.inject.Inject
 
 class ProcessPageUseCase @Inject constructor(
-    private val bookRepository: BookRepository,
     private val pageRepository: PageRepository,
-    private val workManager: WorkManager
+    private val boxRepository: BoxRepository
 ) {
-    suspend operator fun invoke(pageId: Int): Boolean {
-        val page = pageRepository.getPage(pageId) ?: return false
-        if (page.processState == PageState.Processing) return false
+    suspend operator fun invoke(pageId: Int, bookDataset: Int): ProcessResult {
+        val page = pageRepository.getPage(pageId) ?: return ProcessResult.Failed
+        if (page.processState != PageState.WaitingForProcessing) return ProcessResult.Skipped
 
         pageRepository.updatePage(page.apply { processState = PageState.Processing })
 
-        bookRepository.getBookOfPage(pageId)?.let { book ->
-            val workRequestBuilder = OneTimeWorkRequestBuilder<ProcessPageWorker>()
+        val processResult = pageRepository.getProcessedPageBoxes(bookDataset, pageId)
 
-            workRequestBuilder
-                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                .setInputData(
-                    workDataOf(
-                        ProcessPageWorker.Keys.BOOK_DATASET_KEY to book.dataset.value,
-                        ProcessPageWorker.Keys.PAGE_ID_KEY to pageId
-                    )
-                )
+        if (processResult != null) {
+            boxRepository.deleteBoxesFromPage(pageId)
 
-            /*
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                workRequestBuilder.setBackoffCriteria(
-                    backoffPolicy = BackoffPolicy.LINEAR,
-                    duration = java.time.Duration.ofSeconds(10)
-                )
-            } else {
-                workRequestBuilder
-                    .setBackoffCriteria(
-                        backoffPolicy = BackoffPolicy.LINEAR,
-                        10, TimeUnit.SECONDS
-                    )
-            }
-             */
+            processResult.map { box -> boxRepository.insertBox(pageId, box) }
 
-            workManager.enqueueUniqueWork(
-                "ProcessPageWorker",
-                ExistingWorkPolicy.APPEND,
-                workRequestBuilder.build()
-            )
-            return true
+            val pageProcessed = pageRepository.getPage(pageId) ?: return ProcessResult.Failed
+            pageRepository.updatePage(pageProcessed.apply { processState = PageState.Processed })
+        } else {
+            val pageFailed = pageRepository.getPage(pageId) ?: return ProcessResult.Failed
+
+            pageRepository.updatePage(pageFailed.apply { processState = PageState.FailedToProcess })
         }
 
-        return false
+        return ProcessResult.Success
     }
 }

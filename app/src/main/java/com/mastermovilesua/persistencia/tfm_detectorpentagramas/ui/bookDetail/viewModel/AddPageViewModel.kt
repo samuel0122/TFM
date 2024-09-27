@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.ProcessPagesUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.RequestProcessPagesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class AddPageViewModel @Inject constructor(
     private val insertPageUseCase: InsertPageUseCase,
     private val getBookUseCase: GetBookUseCase,
-    private val processPagesUseCase: ProcessPagesUseCase
+    private val requestProcessPagesUseCase: RequestProcessPagesUseCase
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -48,7 +48,7 @@ class AddPageViewModel @Inject constructor(
             }
 
             getBookUseCase(bookId)?.let { book ->
-                processPagesUseCase(book.dataset, pagesId.toTypedArray())
+                requestProcessPagesUseCase(book.dataset, pagesId.toTypedArray())
             }
 
             _isLoading.postValue(false)

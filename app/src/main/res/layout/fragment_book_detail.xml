@@ -14,7 +14,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDescription"
-            style="@style/TFM_DetectorPentagramas.Book.BookDescriptionText"
+            style="@style/TFM_DetectorPentagramas.Book.FullBookDescriptionText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"

@@ -35,6 +35,7 @@
     <string name="page_share_title">Share your page</string>
     <string name="confirm_process_page_title">Confirm processing of current page</string>
     <string name="confirm_process_page">Are you sure you want to process the current page? Existing bounding boxes will be overwritten by new ones.</string>
+    <string name="page_is_waiting_to_be_processed">The page is waiting to be sent to the server to be processed.</string>
 
     <!-- Create-Edit Book Dialog -->
     <string name="edit_book_header">Edit book</string>
@@ -77,4 +78,8 @@
     <string name="notification_processing_pages_title">Processing pages</string>
     <string name="notification_processing_page_title">Processing page</string>
     <string name="notification_processing_page_message">A page is currently being processed by the server...</string>
+
+    <string name="cameraPermissionText">Camera permission is needed to access to the camera.</string>
+    <string name="notificationAndDataSyncPermissionsText">Notifications and background data sync permission are recommended to notify of background activity.</string>
+    <string name="notificationPermissionText">Notifications permission is recommended to notify of background activity.</string>
 </resources>

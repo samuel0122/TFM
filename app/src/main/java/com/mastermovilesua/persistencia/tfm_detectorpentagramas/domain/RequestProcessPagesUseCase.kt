@@ -5,14 +5,26 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.PageRepository
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Dataset
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageState
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.workers.ProcessPagesWorker
 import javax.inject.Inject
 
-class ProcessPagesUseCase @Inject constructor(
+class RequestProcessPagesUseCase @Inject constructor(
+    private val pageRepository: PageRepository,
     private val workManager: WorkManager
 ) {
-    operator fun invoke(pagesDataset: Dataset, pagesId: Array<Int>): Boolean {
+    suspend operator fun invoke(pagesDataset: Dataset, pagesId: Array<Int>): Boolean {
+
+        pagesId.forEach { pageId ->
+            pageRepository.getPage(pageId)?.let { page ->
+                pageRepository.updatePage(page.apply {
+                    processState = PageState.WaitingForProcessing
+                })
+            }
+        }
+
         val workRequestBuilder = OneTimeWorkRequestBuilder<ProcessPagesWorker>()
 
         workRequestBuilder

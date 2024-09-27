@@ -57,6 +57,7 @@ class PageDetailFragment : Fragment(), IPageDetailView {
                         it,
                         when (page.processState) {
                             PageState.Processing -> R.string.page_is_being_processed
+                            PageState.WaitingForProcessing -> R.string.page_is_waiting_to_be_processed
                             PageState.Processed -> R.string.page_has_been_processed
                             PageState.FailedToProcess -> R.string.page_has_failed_to_process
                             PageState.NotProcessed -> R.string.page_has_not_been_processed
@@ -151,63 +152,66 @@ class PageDetailFragment : Fragment(), IPageDetailView {
 
     private fun updateProcessingState(processState: PageState) {
         binding?.apply {
-            if (processState == PageState.Processing) {
-                shimmer.apply {
-                    startShimmer()
-                    visibility = View.VISIBLE
-                }
-
-
-                clPageDetail.apply {
-                    visibility = View.GONE
-                }
-
-                ivProcessedState.apply {
-                    visibility = View.VISIBLE
-
-                    setImageResource(R.drawable.ic_upload)
-
-                    setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.gray
-                        )
-                    )
-                }
-            } else {
-                ivProcessedState.apply {
-                    visibility = when (processState) {
-                        PageState.Processed, PageState.FailedToProcess -> View.VISIBLE
-                        else -> View.GONE
+            when (processState) {
+                PageState.Processing, PageState.WaitingForProcessing -> {
+                    shimmer.apply {
+                        startShimmer()
+                        visibility = View.VISIBLE
                     }
 
-                    setImageResource(
-                        when (processState) {
-                            PageState.Processed -> R.drawable.ic_check
-                            PageState.FailedToProcess -> R.drawable.ic_close
-                            else -> R.drawable.ic_close
-                        }
-                    )
+                    clPageDetail.apply {
+                        visibility = View.GONE
+                    }
 
-                    setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
+                    ivProcessedState.apply {
+                        visibility = View.VISIBLE
+
+                        setImageResource(R.drawable.ic_upload)
+
+                        setColorFilter(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.gray
+                            )
+                        )
+                    }
+                }
+
+                PageState.Processed, PageState.NotProcessed, PageState.FailedToProcess -> {
+                    ivProcessedState.apply {
+                        visibility = when (processState) {
+                            PageState.Processed, PageState.FailedToProcess -> View.VISIBLE
+                            else -> View.GONE
+                        }
+
+                        setImageResource(
                             when (processState) {
-                                PageState.Processed -> R.color.green
-                                PageState.FailedToProcess -> R.color.red
-                                else -> R.color.gray
+                                PageState.Processed -> R.drawable.ic_check
+                                PageState.FailedToProcess -> R.drawable.ic_close
+                                else -> R.drawable.ic_close
                             }
                         )
-                    )
-                }
 
-                clPageDetail.apply {
-                    visibility = View.VISIBLE
-                }
+                        setColorFilter(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                when (processState) {
+                                    PageState.Processed -> R.color.green
+                                    PageState.FailedToProcess -> R.color.red
+                                    else -> R.color.gray
+                                }
+                            )
+                        )
+                    }
 
-                shimmer.apply {
-                    visibility = View.GONE
-                    stopShimmer()
+                    clPageDetail.apply {
+                        visibility = View.VISIBLE
+                    }
+
+                    shimmer.apply {
+                        visibility = View.GONE
+                        stopShimmer()
+                    }
                 }
             }
         }

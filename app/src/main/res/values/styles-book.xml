@@ -37,6 +37,14 @@
         <item name="android:typeface">sans</item>
     </style>
 
+    <style name="TFM_DetectorPentagramas.Book.FullBookDescriptionText" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
     <style name="TFM_DetectorPentagramas.Book.EditBookDialog" parent="TFM_DetectorPentagramas.CustomViews.BorderlessCardView">
         <item name="cardCornerRadius">24dp</item>
         <item name="cardElevation">0dp</item>

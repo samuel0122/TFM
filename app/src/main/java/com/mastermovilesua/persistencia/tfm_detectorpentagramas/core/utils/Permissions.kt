@@ -3,6 +3,7 @@ package com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils
 import android.app.Activity
 import android.os.Build
 import androidx.fragment.app.Fragment
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.vmadalin.easypermissions.EasyPermissions
 
 object Permissions {
@@ -13,7 +14,7 @@ object Permissions {
     fun requestCameraPermissions(activity: Activity) {
         EasyPermissions.requestPermissions(
             host = activity,
-            rationale = "Oiaio",
+            rationale = activity.applicationContext.getString(R.string.cameraPermissionText),
             requestCode = REQUEST_CODE_CAMERA,
             perms = arrayOf(android.Manifest.permission.CAMERA)
         )
@@ -22,7 +23,7 @@ object Permissions {
     fun requestCameraPermissions(fragment: Fragment) {
         EasyPermissions.requestPermissions(
             host = fragment,
-            rationale = "Oiaio",
+            rationale = fragment.context?.getString(R.string.cameraPermissionText).orEmpty(),
             requestCode = REQUEST_CODE_CAMERA,
             perms = arrayOf(android.Manifest.permission.CAMERA)
         )
@@ -32,7 +33,7 @@ object Permissions {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             EasyPermissions.requestPermissions(
                 host = activity,
-                rationale = "Notifications and background data sync permission are recommended to notify of background activity.",
+                rationale = activity.applicationContext.getString(R.string.notificationAndDataSyncPermissionsText),
                 requestCode = REQUEST_CODE_NOTIFICATIONS,
                 perms = arrayOf(
                     android.Manifest.permission.POST_NOTIFICATIONS,
@@ -42,7 +43,7 @@ object Permissions {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             EasyPermissions.requestPermissions(
                 host = activity,
-                rationale = "Notifications permission is recommended to notify of background activity.",
+                rationale = activity.applicationContext.getString(R.string.notificationPermissionText),
                 requestCode = REQUEST_CODE_NOTIFICATIONS,
                 perms = arrayOf(
                     android.Manifest.permission.POST_NOTIFICATIONS
@@ -55,7 +56,7 @@ object Permissions {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             EasyPermissions.requestPermissions(
                 host = fragment,
-                rationale = "Notifications permission is recommended to notify of background activity.",
+                rationale = fragment.context?.getString(R.string.notificationPermissionText).orEmpty(),
                 requestCode = REQUEST_CODE_NOTIFICATIONS,
                 perms = arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
             )

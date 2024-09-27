@@ -1,7 +1,6 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -56,13 +55,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            Toast.makeText(
-                applicationContext,
-                "App has no permission to post notifications!",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
+        if (!EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             Permissions.requestNotificationsPermissions(this)
         }
     }

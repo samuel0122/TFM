@@ -10,9 +10,8 @@ import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.R
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.Notifications
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.BoxRepository
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.PageRepository
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageState
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.ProcessPageUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.ProcessResult
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -20,8 +19,7 @@ import java.net.UnknownHostException
 
 @HiltWorker
 class ProcessPagesWorker @AssistedInject constructor(
-    private val pageRepository: PageRepository,
-    private val boxRepository: BoxRepository,
+    private val processPageUseCase: ProcessPageUseCase,
     @Assisted context: Context,
     @Assisted workerParameters: WorkerParameters,
 ) : CoroutineWorker(context, workerParameters) {
@@ -38,38 +36,12 @@ class ProcessPagesWorker @AssistedInject constructor(
         }
 
         try {
-            pagesId.forEach { pageId ->
-                pageRepository.getPage(pageId)?.let { pageToProcess ->
-                    pageRepository.updatePages(listOf(pageToProcess.apply {
-                        processState = PageState.Processing
-                    }))
-                } ?: return Result.failure()
-            }
-
             pagesId.forEachIndexed { index, pageId ->
                 setForeground(createForegroundInfo(index, pagesId.size))
 
-                val processResult = pageRepository.getProcessedPageBoxes(bookDataset, pageId)
-                Log.d("ProcessPagesWorker", "Got response from server: $processResult")
+                val processResults = processPageUseCase(pageId = pageId, bookDataset = bookDataset)
 
-                processResult?.let { boxes ->
-                    boxRepository.deleteBoxesFromPage(pageId)
-
-                    boxes.map { box -> boxRepository.insertBox(pageId, box) }
-                    Log.d("ProcessPagesWorker", "SUCCESS!")
-
-                    pageRepository.getPage(pageId)?.let { pageToProcess ->
-                        pageRepository.updatePages(listOf(pageToProcess.apply {
-                            processState = PageState.Processed
-                        }))
-                    } ?: return Result.failure()
-                } ?: run {
-                    pageRepository.getPage(pageId)?.let { pageToProcess ->
-                        pageRepository.updatePages(listOf(pageToProcess.apply {
-                            processState = PageState.FailedToProcess
-                        }))
-                    } ?: return Result.failure()
-                }
+                if (processResults == ProcessResult.Failed) return Result.failure()
             }
         } catch (e: Exception) {
             if (e is UnknownHostException) {

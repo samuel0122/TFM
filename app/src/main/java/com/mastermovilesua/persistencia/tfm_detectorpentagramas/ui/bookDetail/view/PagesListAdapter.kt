@@ -35,14 +35,17 @@ class PagesListAdapter @Inject constructor(
                 // root.transitionName = "pageTransition${item.id}"
                 cvHolder.radius = holder.itemView.width * 0.05f
 
-                if (item.processState == PageState.Processing) {
-                    shimmer.visibility = View.VISIBLE
-                    ivPage.visibility = View.GONE
-                    shimmer.startShimmer()
-                } else {
-                    shimmer.stopShimmer()
-                    ivPage.visibility = View.VISIBLE
-                    shimmer.visibility = View.GONE
+                when (item.processState) {
+                    PageState.Processing, PageState.WaitingForProcessing -> {
+                        shimmer.visibility = View.VISIBLE
+                        ivPage.visibility = View.GONE
+                        shimmer.startShimmer()
+                    }
+                    PageState.Processed, PageState.NotProcessed, PageState.FailedToProcess -> {
+                        shimmer.stopShimmer()
+                        ivPage.visibility = View.VISIBLE
+                        shimmer.visibility = View.GONE
+                    }
                 }
 
                 ivPageShimmer.fromUriScaleDown(Uri.parse(item.imageUri), holder.itemView.width)

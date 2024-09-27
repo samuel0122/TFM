@@ -27,6 +27,7 @@
 
     <!-- Page Detail Page -->
     <string name="page_is_being_processed">La página está siendo procesada por el servidor.</string>
+    <string name="page_is_waiting_to_be_processed">La página está esperando para enviarse a procesar por el servidor.</string>
     <string name="page_has_been_processed">La página ha sido procesada correctamente por el servidor.</string>
     <string name="page_has_failed_to_process">No se pudo procesar la página en el servidor.</string>
     <string name="page_has_not_been_processed">La página no ha sido procesada por el servidor.</string>
@@ -78,4 +79,8 @@
     <string name="notification_processing_pages_title">Procesando páginas</string>
     <string name="notification_processing_page_title">Procesando página</string>
     <string name="notification_processing_page_message">Una página está siendo procesada por el servidor…</string>
+
+    <string name="cameraPermissionText">Se necesita permiso para acceder a la cámara.</string>
+    <string name="notificationAndDataSyncPermissionsText">Se recomienda el permiso de notificaciones y sincronización de datos en segundo plano para notificar la actividad en segundo plano.</string>
+    <string name="notificationPermissionText">Se recomienda el permiso de notificaciones para notificar la actividad en segundo plano.</string>
 </resources>
