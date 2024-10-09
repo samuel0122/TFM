@@ -29,7 +29,6 @@ class RequestProcessPagesUseCase @Inject constructor(
 
         val workConstraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
             .build()
 
         val workInputData = workDataOf(
@@ -45,7 +44,7 @@ class RequestProcessPagesUseCase @Inject constructor(
 
         workManager.enqueueUniqueWork(
             "ProcessPagesWorker",
-            ExistingWorkPolicy.APPEND,
+            ExistingWorkPolicy.APPEND_OR_REPLACE,
             workRequest
         )
 

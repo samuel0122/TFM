@@ -76,7 +76,7 @@ class CreateEditBookDialog : DialogFragment() {
     private fun observeViewModel() {
         viewModel.bookModel.observe(this) { book ->
             binding.apply {
-                if (args.isEditing) tvHeader.text = getString(R.string.edit_book_header, book.title)
+                if (args.isEditing) tvHeader.text = getString(R.string.edit_book_parametrized_header, book.title)
                 etTitle.setText(book.title)
                 etDescription.setText(book.description)
                 spDataset.setSelection(book.dataset.value)
@@ -91,7 +91,7 @@ class CreateEditBookDialog : DialogFragment() {
             binding.etDescription.error = descriptionError
         }
 
-        viewModel.bookSubmited.observe(this) { isSubmited ->
+        viewModel.bookSubmitted.observe(this) { isSubmited ->
             if (isSubmited)
                 findNavController().navigateUp()
         }

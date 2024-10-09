@@ -69,7 +69,7 @@ class BookDetailFragment : Fragment(), MenuProvider {
             )
         }
 
-        pagesGridAdapter.setOnItemClickListener { page, view ->
+        pagesGridAdapter.setOnItemClickListener { page, _ ->
             if (isEditMode) {
                 viewModel.selectPage(page.id)
             } else {

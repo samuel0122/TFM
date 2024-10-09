@@ -23,7 +23,7 @@ fun Circle.contains(x: Float, y: Float): Boolean {
     return dx * dx + dy * dy <= this.radius * this.radius
 }
 
-class BoxCanvasItem (
+class BoxCanvasItem(
     override var id: Int,
     var x: Float,
     var y: Float,
@@ -51,7 +51,8 @@ class BoxCanvasItem (
     private val circleVerticalResize: Circle get() = Circle(x + (width / 2f), y + height, 30f)
     private val circleHorizontalResize: Circle get() = Circle(x + width, y + (height / 2f), 30f)
 
-    private val deleteIcon: Drawable? = context?.let { ContextCompat.getDrawable(context, R.drawable.ic_close) }
+    private val deleteIcon: Drawable? =
+        context?.let { ContextCompat.getDrawable(context, R.drawable.ic_close) }
 
     override fun draw(canvas: Canvas) {
         canvas.drawRect(x, y, x + width, y + height, paint)
@@ -112,8 +113,19 @@ class BoxCanvasItem (
     }
 }
 
-fun BoxItem.toCanvas(canvasWidth: Float, canvasHeight: Float, context: Context? = null): BoxCanvasItem =
-    BoxCanvasItem(id, x * canvasWidth, y * canvasHeight, width * canvasWidth, height * canvasHeight, context)
+fun BoxItem.toCanvas(
+    canvasWidth: Float,
+    canvasHeight: Float,
+    context: Context? = null
+): BoxCanvasItem =
+    BoxCanvasItem(
+        id,
+        x * canvasWidth,
+        y * canvasHeight,
+        width * canvasWidth,
+        height * canvasHeight,
+        context
+    )
 
 fun BoxCanvasItem.toDomain(canvasWidth: Float, canvasHeight: Float): BoxItem =
     BoxItem(id, x / canvasWidth, y / canvasHeight, width / canvasWidth, height / canvasHeight)

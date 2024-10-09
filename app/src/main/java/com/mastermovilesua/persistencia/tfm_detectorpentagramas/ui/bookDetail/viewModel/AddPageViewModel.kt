@@ -1,18 +1,19 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.viewModel
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DownloadDefaultBookPagesUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.RequestDownloadSamplePagesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.RequestProcessPagesUseCase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +21,8 @@ class AddPageViewModel @Inject constructor(
     private val insertPageUseCase: InsertPageUseCase,
     private val getBookUseCase: GetBookUseCase,
     private val requestProcessPagesUseCase: RequestProcessPagesUseCase,
-    private val downloadDefaultBookPagesUseCase: DownloadDefaultBookPagesUseCase
+    private val requestDownloadSamplePagesUseCase: RequestDownloadSamplePagesUseCase,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -30,24 +32,34 @@ class AddPageViewModel @Inject constructor(
     val pageInserted: LiveData<Boolean> get() = _pageInserted
 
     private var bookId: Int = 0
+    private var bookTitle: String = ""
 
     fun onCreate(bookId: Int) {
         this.bookId = bookId
 
+        viewModelScope.launch {
+            getBookUseCase(bookId)?.let { book -> bookTitle = book.title }
+        }
+
         _pageInserted.postValue(false)
     }
 
-    fun insertPages(pages: List<PageItem>) {
+    fun insertPages(selectedUris: List<Uri>) {
         viewModelScope.launch {
             _isLoading.postValue(true)
 
-            val pagesId = emptyList<Int>().toMutableList()
+            val pagesId = selectedUris.mapNotNull { selectedUri ->
+                val selectedImage = SaveToMediaStore.loadImageAsByteArray(context, selectedUri)
 
-            pages.forEach { page ->
-                val insertedPageId = insertPageUseCase(bookId, page)
+                selectedImage?.let {
+                    val insertedPageId = insertPageUseCase(
+                        bookId,
+                        selectedUri.lastPathSegment ?: bookTitle,
+                        it
+                    )
 
-                if (insertedPageId > 0) {
-                    pagesId.add(insertedPageId)
+                    if (insertedPageId > 0) insertedPageId
+                    else null
                 }
             }
 
@@ -62,14 +74,11 @@ class AddPageViewModel @Inject constructor(
 
     fun downloadPictures() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            _isLoading.postValue(true)
 
-                _isLoading.postValue(true)
+            _pageInserted.postValue(requestDownloadSamplePagesUseCase(bookId))
 
-                downloadDefaultBookPagesUseCase(bookId)
-
-                _isLoading.postValue(false)
-            }
+            _isLoading.postValue(false)
         }
     }
 }

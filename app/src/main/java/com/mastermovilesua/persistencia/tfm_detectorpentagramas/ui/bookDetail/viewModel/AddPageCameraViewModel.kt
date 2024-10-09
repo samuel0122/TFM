@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.RequestProcessPageUseCase
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.camera.CameraViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,11 +13,10 @@ import javax.inject.Inject
 @HiltViewModel
 class AddPageCameraViewModel @Inject constructor(
     private val insertPageUseCase: InsertPageUseCase,
-    private val requestProcessPageUseCase: RequestProcessPageUseCase
+    private val requestProcessPageUseCase: RequestProcessPageUseCase,
 ) : CameraViewModel() {
 
     private var bookId: Int = 0
-
 
     private val _didInsertPage = MutableLiveData<Boolean>()
 
@@ -32,9 +30,9 @@ class AddPageCameraViewModel @Inject constructor(
 
     fun insertCapturedPage() {
         viewModelScope.launch {
-            pictureUri.value?.let { pictureUri ->
+            pictureBitmap.value?.let { pictureBitmap ->
                 val insertedPageId =
-                    insertPageUseCase(bookId, PageItem(imageUri = pictureUri.toString()))
+                    insertPageUseCase(bookId, "CapturedImage", pictureBitmap)
 
                 if (insertedPageId > 0) {
                     requestProcessPageUseCase(insertedPageId)

@@ -51,7 +51,7 @@
     <string name="create_edit_book_hint_description">Descripción</string>
 
     <!-- Navigation Labels -->
-    <style name="navigation_books_list_label">Listado de libros</style>
+    <string name="navigation_books_list_label">Listado de libros</string>
 
     <!-- Menu Options -->
     <string name="toggle_select_all">Alternar seleccionar todo</string>
@@ -80,6 +80,10 @@
     <string name="notification_processing_pages_title">Procesando páginas</string>
     <string name="notification_processing_page_title">Procesando página</string>
     <string name="notification_processing_page_message">Una página está siendo procesada por el servidor…</string>
+
+    <!-- Notification downloading sample pages -->
+    <string name="downloading_sample_page_for_book_X">Descargando páginas de muestra para el libro: %1$s.</string>
+    <string name="notification_downloading_sample_pages_title">Descargando páginas de muestra</string>
 
     <string name="cameraPermissionText">Se necesita permiso para acceder a la cámara.</string>
     <string name="notificationAndDataSyncPermissionsText">Se recomienda el permiso de notificaciones y sincronización de datos en segundo plano para notificar la actividad en segundo plano.</string>

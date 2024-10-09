@@ -10,9 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.databinding.DialogAddPageBinding
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.bookDetail.viewModel.AddPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,20 +57,12 @@ class AddPageDialog : BottomSheetDialogFragment() {
 
     private val pickImage =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                val imageCopyUri =
-                    SaveToMediaStore.saveImageToInternalStorage(requireContext(), uri)
-                viewModel.insertPages(listOf(PageItem(imageUri = imageCopyUri.toString())))
-            }
+            uri?.let { viewModel.insertPages(listOf(uri)) }
         }
 
     private val pickMultipleImage =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
-            viewModel.insertPages(uris.map { uri ->
-                val imageCopyUri =
-                    SaveToMediaStore.saveImageToInternalStorage(requireContext(), uri)
-                PageItem(imageUri = imageCopyUri.toString())
-            })
+            viewModel.insertPages(uris)
         }
 
     private fun takePhoto() {

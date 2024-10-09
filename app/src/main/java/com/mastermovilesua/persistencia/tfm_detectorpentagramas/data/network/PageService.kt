@@ -21,16 +21,20 @@ class PageService @Inject constructor(
     private val context: Context
 ) {
     suspend fun getBoxes(bookDataset: Int, pageItem: PageItem): PageWithBoxesModel? {
-        val imageFile = SaveToMediaStore.loadTemporalFile(context, pageItem.imageUri.toUri())
+        val imageByteArray =
+            SaveToMediaStore.loadImageAsByteArray(context, pageItem.imageUri.toUri()) ?: return null
+
+        val tempImageFile =
+            SaveToMediaStore.saveImageToTemporalFile(context, imageByteArray) ?: return null
 
         val idRequestBody = RequestBody.create(MediaType.get("text/plain"), pageItem.id.toString())
         val datasetRequestBody =
             RequestBody.create(MediaType.get("text/plain"), bookDataset.toString())
 
-        val requestFile = RequestBody.create(MediaType.get("image/jpeg"), imageFile)
+        val requestFile = RequestBody.create(MediaType.get("image/jpeg"), tempImageFile)
         val body = MultipartBody.Part.createFormData(
             PageApiContract.PAGE_FIELD_IMAGE,
-            imageFile.name,
+            tempImageFile.name,
             requestFile
         )
 

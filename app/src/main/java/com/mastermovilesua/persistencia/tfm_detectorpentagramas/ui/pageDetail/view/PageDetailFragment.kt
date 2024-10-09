@@ -297,17 +297,20 @@ class PageDetailFragment : Fragment(), IPageDetailView {
                 Uri.parse(pageModel.imageUri),
                 viewModel.boxesModel.value
             )
-            val shareIntent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.page_share_message))
-                putExtra(Intent.EXTRA_TITLE, getString(R.string.page_share_title))
-                putExtra(Intent.EXTRA_STREAM, shareImage)
 
-                type = "image/jpeg"
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            shareImage?.let { shareImageUri ->
+                val shareIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, getString(R.string.page_share_message))
+                    putExtra(Intent.EXTRA_TITLE, getString(R.string.page_share_title))
+                    putExtra(Intent.EXTRA_STREAM, shareImageUri)
+
+                    type = "image/jpeg"
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }
+
+                startActivity(Intent.createChooser(shareIntent, null))
             }
-
-            startActivity(Intent.createChooser(shareIntent, null))
         }
     }
 

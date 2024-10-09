@@ -1,13 +1,15 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.ui.common.camera
 
-import android.content.Context
-import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.util.Log
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.MeteringPoint
 import androidx.camera.core.Preview
 import androidx.camera.core.resolutionselector.AspectRatioStrategy
@@ -17,7 +19,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mastermovilesua.persistencia.tfm_detectorpentagramas.core.utils.SaveToMediaStore
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -38,13 +39,13 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
     private val _flashOn = MutableLiveData<Boolean>()
     private val _isCapturingImage = MutableLiveData<Boolean>()
     private val _cameraFacing = MutableLiveData<CameraFacing>()
-    private val _pictureUri = MutableLiveData<Uri>()
+    private val _pictureBitmap = MutableLiveData<Bitmap>()
     private val _cameraState = MutableLiveData<CameraState>()
 
     val flashOn: LiveData<Boolean> get() = _flashOn
     val isCapturingImage: LiveData<Boolean> get() = _isCapturingImage
     val cameraFacing: LiveData<CameraFacing> get() = _cameraFacing
-    val pictureUri: LiveData<Uri> get() = _pictureUri
+    val pictureBitmap: LiveData<Bitmap> get() = _pictureBitmap
     val cameraState: LiveData<CameraState> get() = _cameraState
 
     private var _cameraProvider: ProcessCameraProvider? = null
@@ -65,7 +66,7 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
     fun onCreate() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        pictureUri.value?.let { pictureUriValue -> _pictureUri.postValue(pictureUriValue) }
+        pictureBitmap.value?.let { pictureBitmap -> _pictureBitmap.postValue(pictureBitmap) }
 
         buildCameraSelector()
     }
@@ -127,10 +128,7 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
             .build()
     }
 
-    fun discardCapturedPage(context: Context) {
-        _pictureUri.value?.let { pictureUri ->
-            SaveToMediaStore.deleteImage(context, pictureUri)
-        }
+    fun discardCapturedPage() {
         _cameraState.postValue(CameraState.Live)
     }
 
@@ -206,26 +204,32 @@ open class CameraViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun takePhoto(context: Context) {
+    fun takePhoto() {
         viewModelScope.launch {
             _isCapturingImage.postValue(true)
 
-            val file = SaveToMediaStore.getFileForImageFile(context, SaveToMediaStore.getImageFileName())
-
-            val outputOptions = ImageCapture.OutputFileOptions.Builder(file).build()
-
             imageCapture.takePicture(
-                outputOptions,
                 cameraExecutor,
-                object : ImageCapture.OnImageSavedCallback {
-                    override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                        _pictureUri.postValue(SaveToMediaStore.getImageUriForImageFile(context, file))
+                object : ImageCapture.OnImageCapturedCallback() {
+                    override fun onCaptureSuccess(image: ImageProxy) {
+                        var bitmap = image.toBitmap()
+
+                        if (image.imageInfo.rotationDegrees != 0) {
+                            val matrix = Matrix()
+                            matrix.postRotate(image.imageInfo.rotationDegrees.toFloat())
+                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                        }
+
+                        _pictureBitmap.postValue(bitmap)
                         _cameraState.postValue(CameraState.ImageCaptured)
                         _isCapturingImage.postValue(false)
+
+                        image.close()
                     }
 
                     override fun onError(exception: ImageCaptureException) {
                         _isCapturingImage.postValue(false)
+                        Log.e("CameraCapture", "Error al capturar imagen: ${exception.message}")
                     }
                 }
             )

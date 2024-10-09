@@ -78,7 +78,11 @@
     <string name="server_is_processing_page_X_of_Y">Server is processing page %d of %d.</string>
     <string name="notification_processing_pages_title">Processing pages</string>
     <string name="notification_processing_page_title">Processing page</string>
-    <string name="notification_processing_page_message">A page is currently being processed by the server...</string>
+    <string name="notification_processing_page_message">A page is currently being processed by the server…</string>
+
+    <!-- Notification downloading sample pages -->
+    <string name="downloading_sample_page_for_book_X">Downloading sample pages for the book: %1$s.</string>
+    <string name="notification_downloading_sample_pages_title">Downloading sample pages</string>
 
     <string name="cameraPermissionText">Camera permission is needed to access to the camera.</string>
     <string name="notificationAndDataSyncPermissionsText">Notifications and background data sync permission are recommended to notify of background activity.</string>

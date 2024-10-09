@@ -14,23 +14,31 @@ class ProcessPageUseCase @Inject constructor(
         val page = pageRepository.getPage(pageId) ?: return ProcessResult.Failed
         if (page.processState != PageState.WaitingForProcessing) return ProcessResult.Skipped
 
-        pageRepository.updatePage(page.apply { processState = PageState.Processing })
+        updatePageState(pageId, PageState.Processing)?.let { return it }
 
-        val processResult = pageRepository.getProcessedPageBoxes(bookDataset, pageId)
+        val processResult = try {
+            pageRepository.getProcessedPageBoxes(bookDataset, pageId)
+        } catch (e: Exception) {
+            updatePageState(pageId, PageState.FailedToProcess)?.let { return it }
+            throw e
+        }
 
         if (processResult != null) {
             boxRepository.deleteBoxesFromPage(pageId)
 
             processResult.map { box -> boxRepository.insertBox(pageId, box) }
 
-            val pageProcessed = pageRepository.getPage(pageId) ?: return ProcessResult.Failed
-            pageRepository.updatePage(pageProcessed.apply { processState = PageState.Processed })
+            updatePageState(pageId, PageState.Processed)?.let { return it }
         } else {
-            val pageFailed = pageRepository.getPage(pageId) ?: return ProcessResult.Failed
-
-            pageRepository.updatePage(pageFailed.apply { processState = PageState.FailedToProcess })
+            updatePageState(pageId, PageState.FailedToProcess)?.let { return it }
         }
 
         return ProcessResult.Success
+    }
+
+    private suspend fun updatePageState(pageId: Int, pageState: PageState): ProcessResult? {
+        val page = pageRepository.getPage(pageId) ?: return ProcessResult.Failed
+        pageRepository.updatePage(page.apply { processState = pageState })
+        return null
     }
 }

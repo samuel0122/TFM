@@ -38,9 +38,9 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
             btnCloseCamera.setOnClickListener { findNavController().navigateUp() }
             btnFlipCamera.setOnClickListener { viewModel.flipCamera() }
             btnToggleFlash.setOnClickListener { viewModel.toggleFlash() }
-            btnShotPhoto.setOnClickListener { viewModel.takePhoto(requireContext()) }
+            btnShotPhoto.setOnClickListener { viewModel.takePhoto() }
 
-            btnDiscardPhoto.setOnClickListener { viewModel.discardCapturedPage(requireContext()) }
+            btnDiscardPhoto.setOnClickListener { viewModel.discardCapturedPage() }
             btnConfirmPhoto.setOnClickListener { onImageConfirmationAction() }
 
             clLive.visibility = View.GONE
@@ -71,8 +71,8 @@ abstract class CameraFragment : Fragment(), EasyPermissions.PermissionCallbacks 
             else binding.btnToggleFlash.setImageResource(R.drawable.ic_flash_off)
         }
 
-        viewModel.pictureUri.observe(viewLifecycleOwner) { savedUri ->
-            binding.ivPage.setImageURI(savedUri)
+        viewModel.pictureBitmap.observe(viewLifecycleOwner) { imageBitmap ->
+            binding.ivPage.setImageBitmap(imageBitmap)
         }
 
         viewModel.cameraState.observe(viewLifecycleOwner) { cameraState ->

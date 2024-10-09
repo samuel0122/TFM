@@ -12,28 +12,29 @@ import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.UpdateBoo
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.Dataset
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateEditBookViewModel @Inject constructor(
-    private val context: Context,
     private val getBookUseCase: GetBookUseCase,
     private val insertBookUseCase: InsertBookUseCase,
-    private val updateBookUseCase: UpdateBookUseCase
+    private val updateBookUseCase: UpdateBookUseCase,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _bookModel = MutableLiveData<BookItem>()
     private val _isLoading = MutableLiveData<Boolean>()
     private val _titleError = MutableLiveData<String?>()
     private val _descriptionError = MutableLiveData<String?>()
-    private val _bookSubmited = MutableLiveData<Boolean>()
+    private val _bookSubmitted = MutableLiveData<Boolean>()
 
     val bookModel: LiveData<BookItem> get() = _bookModel
     val isLoading: LiveData<Boolean> get() = _isLoading
     val titleError: LiveData<String?> get() = _titleError
     val descriptionError: LiveData<String?> get() = _descriptionError
-    val bookSubmited: LiveData<Boolean> get() = _bookSubmited
+    val bookSubmitted: LiveData<Boolean> get() = _bookSubmitted
 
     private var isNewBook: Boolean = false
     private var bookId: Int = -1
@@ -85,7 +86,7 @@ class CreateEditBookViewModel @Inject constructor(
                         updateBookUseCase(bookItem)
                     }
 
-                    _bookSubmited.postValue(true)
+                    _bookSubmitted.postValue(true)
                 }
             }
 
