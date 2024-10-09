@@ -1,6 +1,8 @@
 package com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain
 
+import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
@@ -25,22 +27,28 @@ class RequestProcessPagesUseCase @Inject constructor(
             }
         }
 
-        val workRequestBuilder = OneTimeWorkRequestBuilder<ProcessPagesWorker>()
+        val workConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
 
-        workRequestBuilder
+        val workInputData = workDataOf(
+            ProcessPagesWorker.Keys.BOOK_DATASET_KEY to pagesDataset.value,
+            ProcessPagesWorker.Keys.PAGE_ID_KEY to pagesId
+        )
+
+        val workRequest = OneTimeWorkRequestBuilder<ProcessPagesWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-            .setInputData(
-                workDataOf(
-                    ProcessPagesWorker.Keys.BOOK_DATASET_KEY to pagesDataset.value,
-                    ProcessPagesWorker.Keys.PAGE_ID_KEY to pagesId
-                )
-            )
+            .setConstraints(workConstraints)
+            .setInputData(workInputData)
+            .build()
 
         workManager.enqueueUniqueWork(
             "ProcessPagesWorker",
             ExistingWorkPolicy.APPEND,
-            workRequestBuilder.build()
+            workRequest
         )
+
         return true
     }
 }

@@ -7,6 +7,7 @@ import androidx.core.content.FileProvider
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.data.database.contracts.MusicScoreBooksContract
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -30,6 +31,22 @@ object SaveToMediaStore {
 
     fun getImageUriForImageFile(context: Context, file: File): Uri {
         return FileProvider.getUriForFile(context, MusicScoreBooksContract.AUTHORITY, file)
+    }
+
+    fun saveImageToInternalStorage(context: Context, imageBytes: ByteArray, fileName: String): Uri? {
+        val saveFile = getFileForImageFile(context, getImageFileName(fileName))
+        val saveFileUri = getImageUriForImageFile(context, saveFile)
+
+        return try {
+            val saveFileStream = context.contentResolver.openOutputStream(saveFileUri)
+            saveFileStream?.use { output ->
+                output.write(imageBytes)
+                saveFileUri
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
     }
 
     fun saveImageToInternalStorage(

@@ -19,6 +19,7 @@
     <string name="select_one_image">SELECCIONAR UNA IMAGEN</string>
     <string name="select_multiple_images">SELECCIONAR VARIAS IMÁGENES</string>
     <string name="take_picture">TOMAR UNA FOTO</string>
+    <string name="download_images">DESCARGAR IMAGENES</string>
 
     <!-- Camera View -->
     <string name="camera_permission_granted">¡Permiso de cámara concedido!</string>

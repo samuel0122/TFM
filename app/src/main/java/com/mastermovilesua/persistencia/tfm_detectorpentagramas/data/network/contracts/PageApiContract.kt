@@ -17,6 +17,13 @@ object PageApiContract {
     const val API_VERSION = "/api/v1/"
     object GETRequests {
        const val STATUS = "${API_VERSION}status"
+
+        const val DOWNLOADABLE_IMAGES_DATASET_PATH = "dataset"
+        const val DOWNLOADABLE_IMAGES = "${API_VERSION}images/{${DOWNLOADABLE_IMAGES_DATASET_PATH}}"
+
+        const val DOWNLOAD_IMAGE_DATASET_PATH = "dataset"
+        const val DOWNLOAD_IMAGE_FILE_PATH = "file"
+        const val DOWNLOAD_IMAGE = "${API_VERSION}image/{${DOWNLOAD_IMAGE_DATASET_PATH}}/{${DOWNLOAD_IMAGE_FILE_PATH}}"
     }
     object POSTRequests {
         const val PROCESS_IMAGE = "${API_VERSION}process-image"

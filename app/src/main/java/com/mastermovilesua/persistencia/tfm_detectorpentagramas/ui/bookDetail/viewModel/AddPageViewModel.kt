@@ -4,19 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DownloadDefaultBookPagesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.InsertPageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.RequestProcessPagesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AddPageViewModel @Inject constructor(
     private val insertPageUseCase: InsertPageUseCase,
     private val getBookUseCase: GetBookUseCase,
-    private val requestProcessPagesUseCase: RequestProcessPagesUseCase
+    private val requestProcessPagesUseCase: RequestProcessPagesUseCase,
+    private val downloadDefaultBookPagesUseCase: DownloadDefaultBookPagesUseCase
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -53,6 +57,19 @@ class AddPageViewModel @Inject constructor(
 
             _isLoading.postValue(false)
             _pageInserted.postValue(true)
+        }
+    }
+
+    fun downloadPictures() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+
+                _isLoading.postValue(true)
+
+                downloadDefaultBookPagesUseCase(bookId)
+
+                _isLoading.postValue(false)
+            }
         }
     }
 }

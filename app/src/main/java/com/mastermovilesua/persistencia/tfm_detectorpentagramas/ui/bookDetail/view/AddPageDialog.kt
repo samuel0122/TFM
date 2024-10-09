@@ -42,6 +42,8 @@ class AddPageDialog : BottomSheetDialogFragment() {
 
         binding.btnTakePicture.setOnClickListener { takePhoto() }
 
+        binding.btnDownloadPictures.setOnClickListener { viewModel.downloadPictures() }
+
         return binding.root
     }
 

@@ -42,6 +42,12 @@ class PageRepository @Inject constructor(
         }
     }
 
+    suspend fun getDownloadableImagesList(dataset: String): List<String>? =
+        pageService.getDownloadableImagesList(dataset)
+
+    suspend fun downloadImage(dataset: String, file: String): ByteArray? =
+        pageService.downloadImage(dataset, file)
+
     /**
      * @return ID of inserted Page.
      */
