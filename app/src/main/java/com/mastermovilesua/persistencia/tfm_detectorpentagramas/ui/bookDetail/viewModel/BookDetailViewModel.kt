@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeleteBookUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.DeletePageUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.GetBookWithPagesUseCase
+import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.RequestProcessPagesUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.UpdatePageOrderUseCase
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.BookItem
 import com.mastermovilesua.persistencia.tfm_detectorpentagramas.domain.model.PageItem
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BookDetailViewModel @Inject constructor(
     private val getBookWithPagesUseCase: GetBookWithPagesUseCase,
+    private val requestProcessPagesUseCase: RequestProcessPagesUseCase,
     private val deletePageUseCase: DeletePageUseCase,
     private val deleteBookUseCase: DeleteBookUseCase,
     private val updatePageOrderUseCase: UpdatePageOrderUseCase
@@ -87,6 +89,22 @@ class BookDetailViewModel @Inject constructor(
         } else {
             _selectedPagesIds.postValue(pagesModel.value?.map { it.id }?.toSet())
             _isAllSelected.postValue(true)
+        }
+    }
+
+    fun processPages() {
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+
+            selectedPagesIds.value?.let { selectedPages ->
+                requestProcessPagesUseCase(_bookModel.value!!.dataset, selectedPages.toTypedArray())
+            }
+
+            _selectedPagesIds.postValue(emptySet())
+            _isAllSelected.postValue(false)
+            _isEditMode.postValue(false)
+
+            _isLoading.postValue(false)
         }
     }
 

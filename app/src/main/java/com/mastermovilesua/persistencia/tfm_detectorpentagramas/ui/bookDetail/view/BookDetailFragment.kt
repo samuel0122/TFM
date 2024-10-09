@@ -193,6 +193,11 @@ class BookDetailFragment : Fragment(), MenuProvider {
                 true
             }
 
+            R.id.action_process_pages -> {
+                confirmProcessSelectedPages()
+                true
+            }
+
             R.id.action_disable_edit_mode -> {
                 viewModel.disableEditMode()
                 true
@@ -228,6 +233,16 @@ class BookDetailFragment : Fragment(), MenuProvider {
             title = getString(R.string.confirm_delete_selected_pages_title),
             question = getString(R.string.confirm_delete_selected_pages),
             onConfirmAction = { viewModel.deletePages() },
+            onCancelAction = { dialog -> dialog.dismiss() }
+        )
+    }
+
+    private fun confirmProcessSelectedPages() {
+        DialogsFactory.confirmationDialog(
+            context = requireContext(),
+            title = getString(R.string.confirm_process_selected_pages_title),
+            question = getString(R.string.confirm_process_selected_pages),
+            onConfirmAction = { viewModel.processPages() },
             onCancelAction = { dialog -> dialog.dismiss() }
         )
     }

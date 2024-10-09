@@ -3,6 +3,7 @@
     <string name="app_name">ScoreScanner</string>
 
     <string name="ok">Aceptar</string>
+    <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
 
     <!-- Book List Screen -->
@@ -14,6 +15,8 @@
     <string name="confirm_delete_selected_pages">¿Estás seguro de que deseas eliminar las páginas seleccionadas?</string>
     <string name="confirm_delete_current_book_title">Confirmar eliminación del libro actual</string>
     <string name="confirm_delete_current_book">¿Estás seguro de que deseas eliminar el libro actual: %s?</string>
+    <string name="confirm_process_selected_pages_title">Confirmar el procesamiento de las páginas seleccionadas</string>
+    <string name="confirm_process_selected_pages">¿Estás seguro de que quieres enviar las páginas seleccionadas para su procesamiento?</string>
 
     <!-- Add Page Dialog Options -->
     <string name="select_one_image">SELECCIONAR UNA IMAGEN</string>
@@ -66,6 +69,7 @@
     <string name="delete_book">Eliminar libro</string>
     <string name="edit_pages_list">Editar lista de páginas</string>
     <string name="delete_selected_pages">Eliminar páginas seleccionadas</string>
+    <string name="process_selected_pages">Procesar páginas seleccionadas</string>
 
     <!-- Menu Options Page Detail -->
     <string name="edit_page">Editar página</string>
